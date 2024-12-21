@@ -8,6 +8,7 @@ import productcategoryRoutes from './routes/productcategory.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import orderAndDetailsRoutes from './routes/orderAndDetails.routes.js';
 import clientsRoutes from './routes/clients.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use("/api", authRoutes);
 app.use("/api", productRoutes);
 app.use("/api", stateRoutes);
 app.use("/api", clientsRoutes);
