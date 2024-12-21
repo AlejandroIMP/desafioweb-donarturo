@@ -15,6 +15,7 @@ CREATE DATABASE [GDA004-OT-DavidSian];
 
 USE [GDA004-OT-DavidSian];
 
+SELECT * From usuarios;
 -- 2. CREACION DE TABLAS, CAMPOS Y LLAVES PRIMARIAS
 
 -- Creacion de tabla Productos
@@ -39,42 +40,33 @@ ALTER TABLE Productos
 ADD CONSTRAINT PK_Productos_id PRIMARY KEY(idProductos),
 CONSTRAINT DT_Fecha_Creacion_Productos default getdate() for fecha_creacion;
 
--- Creacion de tabla OrdenDetalles
-
-CREATE TABLE OrdenDetalles(
-	idOrdenDetalles int identity(1,1) not null,
-	Orden_idOrden int ,
-	Productos_idProductos int ,
-	cantidad int,
-	precio float,
-	subtotal float
-);
-
--- Creacion de llave primaria
-
-ALTER TABLE OrdenDetalles
-ADD CONSTRAINT PK_OrdenDetalles_id PRIMARY KEY(idOrdenDetalles);
 
 -- Creacion de tabla orden
-
 CREATE TABLE Orden(
-	idOrden int identity(1,1) not null,
-	usuarios_idusuarios int,
-	estados_idestados int ,
-	fecha_creacion datetime,
-	nombre_completo varchar(45),
-	direccion varchar(545),
-	telefono varchar(45),
-	correo_electronico varchar(45),
-	fecha_entrega date,
-	total_orden float,
-	Clientes_idclientes int
+  idOrden INT IDENTITY PRIMARY KEY,
+  idusuarios INT NOT NULL,
+  estados_idestados INT NOT NULL,
+  nombre_completo NVARCHAR(255),
+  direccion NVARCHAR(255),
+  telefono NVARCHAR(50),
+  correo_electronico NVARCHAR(255),
+  fecha_creacion DATETIME DEFAULT GETDATE(),
+  fecha_entrega DATETIME,
+  total_orden DECIMAL(10, 2),
+  Clientes_idClientes INT NOT NULL
 );
 
--- creacion de llave primaria
+-- Creacion de tabla OrdenDetalles
+CREATE TABLE OrdenDetalles(
+	idOrdenDetalles INT IDENTITY PRIMARY KEY,
+  idOrden INT NOT NULL,
+  idProductos INT NOT NULL,
+  cantidad INT NOT NULL,
+  precio DECIMAL(10, 2) NOT NULL,
+  subtotal AS (cantidad * precio) PERSISTED,
+  FOREIGN KEY (idOrden) REFERENCES Orden(idOrden)
+);
 
-ALTER TABLE Orden
-ADD CONSTRAINT PK_Orden_id PRIMARY KEY(idOrden);
 
 -- Creacion de tabla usuarios
 
@@ -764,6 +756,58 @@ END;
 -- exec updateOrden 1, 1, 'Joe Marino', 'Calle 83, avenida 1', '8291-4822', 'ordenmail@gmail.com', '2024-12-12', 312.32, 1;
 
 
+-- Orden Detalles con OpenJson para insertar multiples productos
+
+CREATE PROCEDURE InsertarOrdenConDetalles
+    @idusuarios INT,
+    @estados_idestados INT,
+    @nombre_completo NVARCHAR(255),
+    @direccion NVARCHAR(255),
+    @telefono NVARCHAR(50),
+    @correo_electronico NVARCHAR(255),
+    @fecha_entrega DATETIME,
+    @Clientes_idClientes INT,
+    @DetallesProductos NVARCHAR(MAX) -- JSON con detalles de productos
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Insertar la orden
+        INSERT INTO Orden (
+            idusuarios, estados_idestados, nombre_completo, direccion, telefono, 
+            correo_electronico, fecha_entrega, Clientes_idClientes
+        )
+        VALUES (
+            @idusuarios, @estados_idestados, @nombre_completo, @direccion, 
+            @telefono, @correo_electronico, @fecha_entrega, @Clientes_idClientes
+        );
+
+        DECLARE @idOrden INT = SCOPE_IDENTITY();
+
+        -- Insertar los detalles de productos usando OPENJSON
+        INSERT INTO OrdenDetalles (idOrden, idProductos, cantidad, precio)
+        SELECT 
+            @idOrden AS idOrden,
+            JSON_VALUE(value, '$.idProductos') AS idProductos,
+            JSON_VALUE(value, '$.cantidad') AS cantidad,
+            JSON_VALUE(value, '$.precio') AS precio
+        FROM OPENJSON(@DetallesProductos);
+
+        -- Confirmar transacción
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir transacción en caso de error
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+
+
+
 
 CREATE OR ALTER PROC updateOrden_idusuario(
 	@idOrden int,
@@ -1341,6 +1385,7 @@ exec insertProductos 18, 9, 'Lámpara Inteligente', 'Marca O', 'ZAB234', 300, 2,
 exec insertProductos 1, 1, 'Batería Portátil', 'Marca P', 'CDE567', 800, 1, 40.00, '2024-08-21', NULL;
 exec insertProductos 2, 2, 'Cargador Inalámbrico', 'Marca Q', 'FGH890', 400, 2, 30.00, '2024-08-21', NULL;
 
+USE [GDA004-OT-DavidSian]
 Select * from Productos ;
 
 exec insertOrden 1, 1, 'Juan Perez', 'Calle 1, Ciudad', '1234-5678', 'juanperez@example.com', '2025-01-15', '2024-08-12', 153.75, 5;
