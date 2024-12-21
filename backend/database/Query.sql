@@ -1080,6 +1080,8 @@ END;
 
 -- exec updateCategoriaProductos_nombre 1, 'Un nombre nuevo';
 
+-- ACTIVA O DESACTIVA UN ESTADO
+
 CREATE OR ALTER PROC updateCategoriaProductos_idestados(
 	@idCategoriaProductos int,
 	@nuevoidestado int

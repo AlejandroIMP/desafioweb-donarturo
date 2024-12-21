@@ -1,6 +1,7 @@
 import app from './app.js';
 import {getConnection } from './database/connection.js';
+import 'dotenv/config';
 
-app.listen(3000);
+app.listen(process.env.PORT);
 
-console.log('Server running at http://localhost:3000/');
+console.log('Server running at http://localhost:5000/');
