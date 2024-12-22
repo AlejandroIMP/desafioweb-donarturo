@@ -90,6 +90,8 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(user_pass, salt)
 
+    console.log('Hash length:', hashedPassword.length);
+    
     await pool.request()
       .input('rolId', TYPES.Int, rolId)
       .input('estadoId', TYPES.Int, estadoId)
