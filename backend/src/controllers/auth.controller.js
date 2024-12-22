@@ -23,11 +23,6 @@ export const login = async (req, res) => {
     }
 
     const user = result.recordset[0];
-    
-    // Debug logs
-    console.log('Input password:', user_password);
-    console.log('Stored hashed password:', user.user_password);
-    
     const validatePassword = await bcrypt.compare(user_password, user.user_password);
     
     if (!validatePassword) {
@@ -77,7 +72,7 @@ export const register = async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Email no válido' });
     }
-
+    
     const pool = await getConnection();
 
     const emailExists = await pool.request()
@@ -90,14 +85,12 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(user_pass, salt)
 
-    console.log('Hash length:', hashedPassword.length);
-    
     await pool.request()
       .input('rolId', TYPES.Int, rolId)
       .input('estadoId', TYPES.Int, estadoId)
       .input('correo_electronico', TYPES.VarChar, email)
       .input('nombre', TYPES.VarChar, nombre)
-      .input('contrasenia', TYPES.VarChar, hashedPassword)
+      .input('contrasenia', TYPES.NVarChar(100) , hashedPassword)
       .input('telefono', TYPES.VarChar, telefono)
       .input('fecha', TYPES.Date, fecha ? new Date(fecha) : null)
       .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
