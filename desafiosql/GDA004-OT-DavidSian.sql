@@ -544,27 +544,25 @@ COMMIT TRANSACTION;
 
 CREATE OR ALTER PROC updateOrden(
     @idOrden int,
-    @usuario_id int = NULL,
-    @estados_id int = NULL,
-    @nombre varchar(45) = NULL,
-    @direccion varchar(45) = NULL,
-    @telefono varchar(45) = NULL,
-    @correo varchar(45) = NULL,
-    @fecha_entrega date = NULL,
-    @total_orden float = NULL,
-    @Clientes_id int = NULL
+    @usuario_id int NULL,
+    @estados_id int NULL,
+    @nombre varchar(45) NULL,
+    @direccion varchar(45) NULL,
+    @telefono varchar(45) NULL,
+    @correo varchar(45) NULL,
+    @fecha_entrega date NULL,
+    @Clientes_id int NULL
 )
 AS
 BEGIN
     UPDATE Orden
-    SET usuarios_idusuarios = COALESCE(@usuario_id, usuarios_idusuarios),
+    SET idusuarios = COALESCE(@usuario_id, idusuarios),
         estados_idestados = COALESCE(@estados_id, estados_idestados),
         nombre_completo = COALESCE(@nombre, nombre_completo),
         direccion = COALESCE(@direccion, direccion),
         telefono = COALESCE(@telefono, telefono),
         correo_electronico = COALESCE(@correo, correo_electronico),
         fecha_entrega = COALESCE(@fecha_entrega, fecha_entrega),
-        total_orden = COALESCE(@total_orden, total_orden),
         Clientes_idclientes = COALESCE(@Clientes_id, Clientes_idclientes)
     WHERE idOrden = @idOrden
 END;
@@ -697,7 +695,7 @@ CREATE OR ALTER PROC insertOrden_Detalles(
 )
 AS
 BEGIN
-	INSERT INTO OrdenDetalles (Orden_idOrden, Productos_idProductos, cantidad, precio, subtotal)
+	INSERT INTO OrdenDetalles (idOrden, idProductos, cantidad, precio, subtotal)
 	VALUES (@Orden_idOrden, @Prodcutos_idProductos, @cantidad, @precio, @subtotal);
 END;
 
@@ -716,11 +714,10 @@ CREATE OR ALTER PROC updateOrden_Detalles(
 AS
 BEGIN
     UPDATE OrdenDetalles
-    SET Orden_idOrden = COALESCE(@Orden_idOrden, Orden_idOrden),
-        Productos_idProductos = COALESCE(@Productos_idProductos, Productos_idProductos),
+    SET idOrden = COALESCE(@Orden_idOrden, idOrden),
+        idProductos = COALESCE(@Productos_idProductos, idProductos),
         cantidad = COALESCE(@cantidad, cantidad),
-        precio = COALESCE(@precio, precio),
-        subtotal = COALESCE(@subtotal, subtotal)
+        precio = COALESCE(@precio, precio)
     WHERE idOrdenDetalles = @idOrdenDetalles
 END;
 
@@ -758,7 +755,8 @@ END;
 
 -- exec insertCategoria_Prodcutos 1, 'Manolo Perez', 1;
 
-CREATE OR ALTER PROC updateCategoria_Prodcutos(
+drop proc updateCategoria_Prodcutos
+CREATE OR ALTER PROC updateCategoria_Productos(
     @idCategoria_Productos int,
     @usuarios_idusuarios int,
     @nombre varchar(45),
