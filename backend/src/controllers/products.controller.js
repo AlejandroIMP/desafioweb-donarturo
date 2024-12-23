@@ -1,6 +1,6 @@
 import {getConnection} from '../database/connection.js';
 import pkg from 'mssql';
-const { Int, VarChar, Float, DateTime, Binary } = pkg;
+const TYPES = pkg;
 
 export const getProducts = async (req, res) => {
     const pool = await getConnection();
@@ -54,16 +54,16 @@ export const createProduct = async (req, res) => {
 
         const pool = await getConnection();
         await pool.request()
-            .input('categoriaProductoId', Int, categoriaProductosId)
-            .input('usuarioId', Int, usuarioId)
-            .input('name', VarChar, name)
-            .input('marca', VarChar, marca)
-            .input('codigo', VarChar, codigo)
-            .input('stock', Float, stock)
-            .input('estadoId', Int, estadoId)
-            .input('precio', Float, precio)
-            .input('fechaCreacion', DateTime, fechaCreacion || new Date())
-            .input('foto', Binary, foto)
+            .input('categoriaProductoId', TYPES.Int, categoriaProductosId)
+            .input('usuarioId', TYPES.Int, usuarioId)
+            .input('name', TYPES.VarChar, name)
+            .input('marca', TYPES.VarChar, marca)
+            .input('codigo', TYPES.VarChar, codigo)
+            .input('stock', TYPES.Float, stock)
+            .input('estadoId', TYPES.Int, estadoId)
+            .input('precio', TYPES.Float, precio)
+            .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
+            .input('foto', TYPES.Binary, foto)
             .query('exec insertProductos @categoriaProductoId, @usuarioId, @name, @marca, @codigo, @stock, @estadoId, @precio, @fechaCreacion, @foto;');
         
         res.json({ 
@@ -105,17 +105,17 @@ export const updateProduct = async (req, res) => {
         const pool = await getConnection();
         
         await pool.request()
-            .input('id', Int, id)
-            .input('categoriaProductoId', Int, categoriaProductosId)
-            .input('usuarioId', Int, usuarioId)
-            .input('name', VarChar, name)
-            .input('marca', VarChar, marca)
-            .input('codigo', VarChar, codigo)
-            .input('stock', Float, stock)
-            .input('estadoId', Int, estadoId)
-            .input('precio', Float, precio)
-            .input('fechaCreacion', DateTime, fechaCreacion || new Date())
-            .input('foto', Binary, foto)
+            .input('id', TYPES.Int, id)
+            .input('categoriaProductoId', TYPES.Int, categoriaProductosId)
+            .input('usuarioId', TYPES.Int, usuarioId)
+            .input('name', TYPES.VarChar, name)
+            .input('marca', TYPES.VarChar, marca)
+            .input('codigo', TYPES.VarChar, codigo)
+            .input('stock', TYPES.Float, stock)
+            .input('estadoId', TYPES.Int, estadoId)
+            .input('precio', TYPES.Float, precio)
+            .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
+            .input('foto', TYPES.Binary, foto)
             .query('exec updateProductos @id, @categoriaProductoId, @usuarioId, @name, @marca, @codigo, @stock, @estadoId, @precio, @fechaCreacion, @foto;');
         
         res.json({ 
@@ -133,27 +133,27 @@ export const updateProduct = async (req, res) => {
     res.send('PUT productos/:id');
 };
 
-export const deleteProduct = async (req, res) => {
-    try{
-        const { id } = req.params;
-        const pool = await getConnection();
-        await pool.request()
-            .input('id', Int, id)
-            .query('exec deleteProductos @id');
+// export const deleteProduct = async (req, res) => {
+//     try{
+//         const { id } = req.params;
+//         const pool = await getConnection();
+//         await pool.request()
+//             .input('id', Int, id)
+//             .query('exec deleteProductos @id');
 
-        res.json({
-            success: true,
-            message: 'Producto eliminado correctamente'
-        });
-    } catch{
-        res.status(500).json({
-            success: false,
-            message: 'Error al eliminar el producto',
-            error: error.message
-        });
-    }
+//         res.json({
+//             success: true,
+//             message: 'Producto eliminado correctamente'
+//         });
+//     } catch{
+//         res.status(500).json({
+//             success: false,
+//             message: 'Error al eliminar el producto',
+//             error: error.message
+//         });
+//     }
     
-};
+// };
 
 export const updateProductState = async(req, res) => {
     try{
@@ -163,8 +163,8 @@ export const updateProductState = async(req, res) => {
         const pool = await getConnection();
 
         await pool.request()
-            .input('id', Int, id)
-            .input('estadoId', Int, estadoId)
+            .input('id', TYPES.Int, id)
+            .input('estadoId', TYPES.Int, estadoId)
             .query('exec updateProducto_idestados @id, @estadoId');
 
         res.json({
