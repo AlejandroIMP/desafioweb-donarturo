@@ -5,14 +5,14 @@ import { validateOrder } from "../middleware/validateOrder.js";
 
 const router = Router();
 
-router.get('/order', verifyToken, validateOrder, getOrder);   
+router.get('/order', verifyToken, getOrder);   
 
-router.get('/order/:id', verifyToken, validateOrder, getOrderById);
+router.get('/order/:id', verifyToken, getOrderById);
 
 router.post('/order', verifyToken, validateOrder, createOrder);
 
-router.put('/order/:id', verifyToken, validateOrder, updateOrder);
+router.put('/order/:id', verifyToken, updateOrder);
 
-router.delete('/order/:id', verifyToken, validateOrder, deleteOrder);
+router.delete('/order/:id', verifyToken, deleteOrder);
 
 export default router;
