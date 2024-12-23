@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getClient, getClientById, createClient, updateClient, deleteClient } from "../controllers/clients.controller.js";
+import { getClient, getClientById, createClient, updateClient, updateClientState } from "../controllers/clients.controller.js";
 
 const router = Router();
 
@@ -11,6 +11,6 @@ router.post('/Client', createClient);
 
 router.put('/Client/:id', updateClient);
 
-router.delete('/Client/:id', deleteClient);
+router.patch('/Client/:id', updateClientState);
 
 export default router;

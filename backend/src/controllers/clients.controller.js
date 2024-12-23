@@ -1,13 +1,14 @@
 import {getConnection} from '../database/connection.js';
+import pkg from 'mssql';
+const TYPES = pkg;
 
 export const getClient = async (req, res) => {
     const pool = await getConnection();
 
-    const result = await pool.request().query('SELECT * FROM Clientes');
+    const Clientes = await pool.request().query('SELECT * FROM Clientes');
 
-    console.log(result);
-
-    res.send('GET clientes');
+    res.json(Clientes.recordset);
+    res.send('GET productos');
 };
 
 export const getClientById = async (req, res) => {
@@ -28,14 +29,154 @@ export const getClientById = async (req, res) => {
   }
 };
 
-export const createClient = (req, res) => {
-    res.send('POST clientes');
+export const createClient = async (req, res) => {
+    try {
+        const { 
+            categoriaProductosId, 
+            usuarioId, 
+            name, 
+            marca, 
+            codigo, 
+            stock, 
+            estadoId, 
+            precio, 
+            fechaCreacion, 
+            foto 
+        } = req.body;
+
+        // Validate required fields
+        if (!name || !codigo || !stock || !precio) {
+            return res.status(400).json({ 
+                message: 'Campos obligatorios faltantes' 
+            });
+        }
+
+        const pool = await getConnection();
+        await pool.request()
+            .input('categoriaProductoId', TYPES.Int, categoriaProductosId)
+            .input('usuarioId', TYPES.Int, usuarioId)
+            .input('name', TYPES.VarChar, name)
+            .input('marca', TYPES.VarChar, marca)
+            .input('codigo', TYPES.VarChar, codigo)
+            .input('stock', TYPES.Float, stock)
+            .input('estadoId', TYPES.Int, estadoId)
+            .input('precio', TYPES.Float, precio)
+            .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
+            .input('foto', TYPES.Binary, foto)
+            .query('exec insertProductos @categoriaProductoId, @usuarioId, @name, @marca, @codigo, @stock, @estadoId, @precio, @fechaCreacion, @foto;');
+        
+        res.json({ 
+            success: true,
+            message: 'Producto creado correctamente' 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false,
+            message: 'Error al crear el producto',
+            error: error.message 
+        });
+    }
 };
 
-export const updateClient = (req, res) => {
-    res.send('PUT clientes/:id');
+export const updateClient = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const { 
+            categoriaProductosId, 
+            usuarioId, 
+            name, 
+            marca, 
+            codigo, 
+            stock, 
+            estadoId, 
+            precio, 
+            fechaCreacion, 
+            foto 
+        } = req.body;
+
+        // Validate required fields
+        if (!name || !codigo || !stock || !precio) {
+            return res.status(400).json({ 
+                message: 'Campos obligatorios faltantes' 
+            });
+        }
+
+        const pool = await getConnection();
+        
+        await pool.request()
+            .input('id', TYPES.Int, id)
+            .input('categoriaProductoId', TYPES.Int, categoriaProductosId)
+            .input('usuarioId', TYPES.Int, usuarioId)
+            .input('name', TYPES.VarChar, name)
+            .input('marca', TYPES.VarChar, marca)
+            .input('codigo', TYPES.VarChar, codigo)
+            .input('stock', TYPES.Float, stock)
+            .input('estadoId', TYPES.Int, estadoId)
+            .input('precio', TYPES.Float, precio)
+            .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
+            .input('foto', TYPES.Binary, foto)
+            .query('exec updateProductos @id, @categoriaProductoId, @usuarioId, @name, @marca, @codigo, @stock, @estadoId, @precio, @fechaCreacion, @foto;');
+        
+        res.json({ 
+            success: true,
+            message: 'Producto actualizado correctamente' 
+        });
+
+    }catch{
+        res.status(500).json({
+            success: false,
+            message: 'Error al actualizar el producto',
+            error: error.message
+        })
+    }
+    res.send('PUT productos/:id');
 };
 
-export const deleteClient = (req, res) => {
-    res.send('DELETE clientes/:id');
-};
+// export const deleteClient = async (req, res) => {
+//     try{
+//         const { id } = req.params;
+//         const pool = await getConnection();
+//         await pool.request()
+//             .input('id', Int, id)
+//             .query('exec deleteProductos @id');
+
+//         res.json({
+//             success: true,
+//             message: 'Producto eliminado correctamente'
+//         });
+//     } catch{
+//         res.status(500).json({
+//             success: false,
+//             message: 'Error al eliminar el producto',
+//             error: error.message
+//         });
+//     }
+    
+// };
+
+export const updateClientState = async(req, res) => {
+    try{
+        const { id } = req.params;
+        const { estadoId } = req.body;
+
+        const pool = await getConnection();
+
+        await pool.request()
+            .input('id', TYPES.Int, id)
+            .input('estadoId', TYPES.Int, estadoId)
+            .query('exec updateProducto_idestados @id, @estadoId');
+
+        res.json({
+            success: true,
+            message: 'Estado del producto actualizado correctamente'
+        });
+
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            message: 'Error al actualizar el estado del producto',
+            error: error.message
+        });
+    }
+}
+
