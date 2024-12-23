@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import productRoutes from './routes/products.routes.js';
 import stateRoutes from './routes/state.routes.js';
 import productcategoryRoutes from './routes/productcategory.routes.js';
-import usersRoutes from './routes/users.routes.js';
+// import usersRoutes from './routes/users.routes.js';
 import orderAndDetailsRoutes from './routes/orderAndDetails.routes.js';
 import clientsRoutes from './routes/clients.routes.js';
 import authRoutes from './routes/auth.routes.js';
@@ -23,6 +23,6 @@ app.use("/api", stateRoutes);
 app.use("/api", clientsRoutes);
 app.use("/api", orderAndDetailsRoutes);
 app.use("/api", productcategoryRoutes);
-app.use("/api", usersRoutes);
+// app.use("/api", usersRoutes);
 
 export default app;
