@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon backend/src/index.js"
+    "dev-back": "nodemon backend/src/index.js"
   },
   "keywords": [],
   "author": "",
