@@ -130,7 +130,6 @@ export const updateProduct = async (req, res) => {
             error: error.message
         })
     }
-    res.send('PUT productos/:id');
 };
 
 // export const deleteProduct = async (req, res) => {
