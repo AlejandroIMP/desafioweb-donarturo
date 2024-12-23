@@ -7,8 +7,7 @@ export const getClient = async (req, res) => {
 
     const Clientes = await pool.request().query('SELECT * FROM Clientes');
 
-    res.json(Clientes.recordset);
-    res.send('GET productos');
+    res.status(200).json(Clientes.recordset);
 };
 
 export const getClientById = async (req, res) => {
@@ -24,6 +23,7 @@ export const getClientById = async (req, res) => {
       } else {
           res.status(404).json({ message: 'Cliente no encontrado' });
       }
+      res.status(200).json(result.recordset);
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
@@ -32,20 +32,15 @@ export const getClientById = async (req, res) => {
 export const createClient = async (req, res) => {
     try {
         const { 
-            categoriaProductosId, 
-            usuarioId, 
-            name, 
-            marca, 
-            codigo, 
-            stock, 
-            estadoId, 
-            precio, 
-            fechaCreacion, 
-            foto 
+            razon_s,
+            nombre_comercial,
+            direccion,
+            telefono,
+            email
         } = req.body;
 
         // Validate required fields
-        if (!name || !codigo || !stock || !precio) {
+        if (!razon_s || !direccion || !telefono || !email) {
             return res.status(400).json({ 
                 message: 'Campos obligatorios faltantes' 
             });
@@ -53,26 +48,21 @@ export const createClient = async (req, res) => {
 
         const pool = await getConnection();
         await pool.request()
-            .input('categoriaProductoId', TYPES.Int, categoriaProductosId)
-            .input('usuarioId', TYPES.Int, usuarioId)
-            .input('name', TYPES.VarChar, name)
-            .input('marca', TYPES.VarChar, marca)
-            .input('codigo', TYPES.VarChar, codigo)
-            .input('stock', TYPES.Float, stock)
-            .input('estadoId', TYPES.Int, estadoId)
-            .input('precio', TYPES.Float, precio)
-            .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
-            .input('foto', TYPES.Binary, foto)
-            .query('exec insertProductos @categoriaProductoId, @usuarioId, @name, @marca, @codigo, @stock, @estadoId, @precio, @fechaCreacion, @foto;');
+            .input('razon_s', TYPES.VarChar, razon_s)
+            .input('nombre_comercial', TYPES.VarChar, nombre_comercial)
+            .input('direccion', TYPES.VarChar, direccion)
+            .input('telefono', TYPES.VarChar, telefono)
+            .input('email', TYPES.VarChar, email)
+            .query('exec insertClientes @razon_s, @nombre_comercial, @direccion, @telefono, @email;');
         
-        res.json({ 
+        res.status(201).json({ 
             success: true,
-            message: 'Producto creado correctamente' 
+            message: 'Cliente creado correctamente' 
         });
     } catch (error) {
         res.status(500).json({ 
             success: false,
-            message: 'Error al crear el producto',
+            message: 'Error al crear el Cliente',
             error: error.message 
         });
     }
@@ -81,43 +71,26 @@ export const createClient = async (req, res) => {
 export const updateClient = async (req, res) => {
     try{
         const { id } = req.params;
-        const { 
-            categoriaProductosId, 
-            usuarioId, 
-            name, 
-            marca, 
-            codigo, 
-            stock, 
-            estadoId, 
-            precio, 
-            fechaCreacion, 
-            foto 
+        const {
+            razon_s,
+            nombre_comercial,
+            direccion,
+            telefono,
+            email
         } = req.body;
 
-        // Validate required fields
-        if (!name || !codigo || !stock || !precio) {
-            return res.status(400).json({ 
-                message: 'Campos obligatorios faltantes' 
-            });
-        }
-
         const pool = await getConnection();
-        
+
         await pool.request()
             .input('id', TYPES.Int, id)
-            .input('categoriaProductoId', TYPES.Int, categoriaProductosId)
-            .input('usuarioId', TYPES.Int, usuarioId)
-            .input('name', TYPES.VarChar, name)
-            .input('marca', TYPES.VarChar, marca)
-            .input('codigo', TYPES.VarChar, codigo)
-            .input('stock', TYPES.Float, stock)
-            .input('estadoId', TYPES.Int, estadoId)
-            .input('precio', TYPES.Float, precio)
-            .input('fechaCreacion', TYPES.DateTime, fechaCreacion || new Date())
-            .input('foto', TYPES.Binary, foto)
-            .query('exec updateProductos @id, @categoriaProductoId, @usuarioId, @name, @marca, @codigo, @stock, @estadoId, @precio, @fechaCreacion, @foto;');
+            .input('razon_s', TYPES.VarChar, razon_s)
+            .input('nombre_comercial', TYPES.VarChar, nombre_comercial)
+            .input('direccion', TYPES.VarChar, direccion)
+            .input('telefono', TYPES.VarChar, telefono)
+            .input('email', TYPES.VarChar, email)
+            .query('exec updateClientes @id, @razon_s, @nombre_comercial, @direccion, @telefono, @email');
         
-        res.json({ 
+        res.status(200).json({ 
             success: true,
             message: 'Producto actualizado correctamente' 
         });
@@ -125,11 +98,10 @@ export const updateClient = async (req, res) => {
     }catch{
         res.status(500).json({
             success: false,
-            message: 'Error al actualizar el producto',
+            message: 'Error al actualizar el cliente',
             error: error.message
         })
     }
-    res.send('PUT productos/:id');
 };
 
 // export const deleteClient = async (req, res) => {
@@ -154,29 +126,29 @@ export const updateClient = async (req, res) => {
     
 // };
 
-export const updateClientState = async(req, res) => {
-    try{
-        const { id } = req.params;
-        const { estadoId } = req.body;
+// export const updateClientState = async(req, res) => {
+//     try{
+//         const { id } = req.params;
+//         const { estadoId } = req.body;
 
-        const pool = await getConnection();
+//         const pool = await getConnection();
 
-        await pool.request()
-            .input('id', TYPES.Int, id)
-            .input('estadoId', TYPES.Int, estadoId)
-            .query('exec updateProducto_idestados @id, @estadoId');
+//         await pool.request()
+//             .input('id', TYPES.Int, id)
+//             .input('estadoId', TYPES.Int, estadoId)
+//             .query('exec updateClientes_idestados @id, @estadoId');
 
-        res.json({
-            success: true,
-            message: 'Estado del producto actualizado correctamente'
-        });
+//         res.json({
+//             success: true,
+//             message: 'Estado del producto actualizado correctamente'
+//         });
 
-    }catch(error){
-        res.status(500).json({
-            success: false,
-            message: 'Error al actualizar el estado del producto',
-            error: error.message
-        });
-    }
-}
+//     }catch(error){
+//         res.status(500).json({
+//             success: false,
+//             message: 'Error al actualizar el estado del producto',
+//             error: error.message
+//         });
+//     }
+// }
 
