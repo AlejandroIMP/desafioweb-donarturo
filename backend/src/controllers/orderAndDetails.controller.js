@@ -7,9 +7,7 @@ export const getOrder = async (req, res) => {
 
     const result = await pool.request().query('SELECT * FROM Orden');
 
-    console.log(result);
-
-    return res.json(result.recordset);
+    return res.status(200).json(result.recordset);
 };
 
 export const getOrderById = async (req, res) => {
@@ -109,8 +107,36 @@ export const createOrder = async (req, res) => {
   }
 };
 
-export const updateOrder = (req, res) => {
-    res.send('PUT clientes/:id');
+export const updateOrder = async(req, res) => {
+  try{
+      const { id } = req.params;
+      const { idusuarios, estados_idestados, nombre_completo, direccion, telefono, correo_electronico, fecha_entrega, Clientes_idClientes } = req.body;
+
+      const pool = await getConnection();
+
+      await pool.request()
+          .input('id', TYPES.Int, id)
+          .input('idusuarios', TYPES.Int, idusuarios)
+          .input('estados_idestados', TYPES.Int, estados_idestados)
+          .input('nombre_completo', TYPES.NVarChar(255), nombre_completo)
+          .input('direccion', TYPES.NVarChar(255), direccion)
+          .input('telefono', TYPES.NVarChar(50), telefono)
+          .input('correo_electronico', TYPES.NVarChar(255), correo_electronico)
+          .input('fecha_entrega', TYPES.DateTime, fecha_entrega)
+          .input('Clientes_idClientes', TYPES.Int, Clientes_idClientes)
+          .query('exec updateOrden @id, @idusuarios, @estados_idestados, @nombre_completo, @direccion, @telefono, @correo_electronico, @fecha_entrega, @Clientes_idClientes');
+
+      res.json({
+          success: true,
+          message: 'Orden actualizada correctamente'
+      });
+  }catch(error){
+      res.status(500).json({
+          success: false,
+          message: 'Error al actualizar la orden',
+          error: error.message
+      });
+  }
 };
 
 export const updateOrderState = async(req, res) => {
@@ -123,7 +149,7 @@ export const updateOrderState = async(req, res) => {
     await pool.request()
         .input('id', TYPES.Int, id)
         .input('estadoId', TYPES.Int, estadoId)
-        .query('exec updateOrder_idestados @id, @estadoId');
+        .query('exec updateOrden_idestado @id, @estadoId');
 
     res.json({
         success: true,
@@ -138,7 +164,3 @@ export const updateOrderState = async(req, res) => {
     });
 }
 }
-
-export const deleteOrder = (req, res) => {
-    res.send('DELETE clientes/:id');
-};

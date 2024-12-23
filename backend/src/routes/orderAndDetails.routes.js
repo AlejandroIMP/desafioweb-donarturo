@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOrder, getOrderById, createOrder, updateOrder, deleteOrder } from "../controllers/orderAndDetails.controller.js";
+import { getOrder, getOrderById, createOrder, updateOrder, updateOrderState } from "../controllers/orderAndDetails.controller.js";
 import { verifyToken } from "../middleware/auth.js";
 import { validateOrder } from "../middleware/validateOrder.js";
 
@@ -13,6 +13,6 @@ router.post('/order', verifyToken, validateOrder, createOrder);
 
 router.put('/order/:id', verifyToken, updateOrder);
 
-router.delete('/order/:id', verifyToken, deleteOrder);
+router.patch('/order/:id', verifyToken, updateOrderState);
 
 export default router;
