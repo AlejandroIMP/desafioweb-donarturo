@@ -1,13 +1,13 @@
 import {getConnection} from '../database/connection.js';
+import pkg from 'mssql';
+const TYPES = pkg;
 
 export const getState = async (req, res) => {
     const pool = await getConnection();
 
-    const result = await pool.request().query('SELECT * FROM Estados');
+    const states = await pool.request().query('SELECT * FROM Estados');
 
-    console.log(result);
-
-    res.send('GET estados');
+    res.status(200).json(states.recordset);
 };
 
 export const getStateById = async (req, res) => {
@@ -16,26 +16,63 @@ export const getStateById = async (req, res) => {
       const pool = await getConnection();
       const result = await pool.request()
           .input('id', id)
-          .query('SELECT * FROM Estados WHERE idEstado = @id');  
+          .query('SELECT * FROM estados WHERE idestados = @id');  
       
-      if (result.recordset.length > 0) {
-          res.json(result.recordset[0]);
-      } else {
-          res.status(404).json({ message: 'State no encontrado' });
+      if (!result.recordset.length > 0) {
+        res.status(404).json({ message: 'State no encontrado' });
       }
+
+      res.status(200).json(result.recordset);
+
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
 };
 
-export const createState = (req, res) => {
-    res.send('POST State');
+export const createState = async(req, res) => {
+  try{
+    const { nombre } = req.body;
+
+    // Validate required fields
+    if (!nombre) {
+        return res.status(400).json({ 
+            message: 'Campos obligatorios faltantes' 
+        });
+    }
+
+    const pool = await getConnection();
+
+    await pool.request()
+        .input('nombre', TYPES.VarChar, nombre)
+        .query('exec insertNewEstado @nombre');
+    
+    res.status(201).json({ message: 'Estado creado correctamente' });
+
+  }catch(error){
+    res.status(500).json({ message: error.message });
+  }
 };
 
-export const updateState = (req, res) => {
-    res.send('PUT State/:id');
-};
-
-export const deleteState = (req, res) => {
-    res.send('DELETE State/:id');
+export const updateState = async(req, res) => {
+    try{
+        const { id } = req.params;
+        const { nombre } = req.body;
+    
+        if (!nombre) {
+            return res.status(400).json({ 
+                message: 'Campos obligatorios faltantes' 
+            });
+        }
+    
+        const pool = await getConnection();
+    
+        await pool.request()
+            .input('id', TYPES.Int, id)
+            .input('nombre', TYPES.VarChar, nombre)
+            .query('exec updateEstado_Nombre @id, @nombre');
+        
+        res.status(200).json({ message: 'Estado actualizado correctamente' });
+    }catch(error){
+        res.status(500).json({ message: error.message });
+    } 
 };
