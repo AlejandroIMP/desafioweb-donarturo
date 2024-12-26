@@ -61,6 +61,18 @@ This is the API for the e-commerce. Includes all necesary CRUD's
 ```http
   POST /api/productos
 ```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `rolId` | `int` | **Required**. Your rol in the system |
+| `estadoId` | `int` | **Required**. Your state in the system |
+| `email` | `string` | **Required**. Your email |
+| `nombre` | `string` | **Required**. Your complete name |
+| `user_pass` | `int` | **Required**. Your password |
+| `telefono` | `int` |  Your phone number |
+| `fecha` | `string` |  Date |
+| `clientesId` | `string` |  Clients if exist |
+
 #### Actualizar un producto 
 
 ```http
