@@ -2,9 +2,15 @@
   "name": "desafioweb",
   "version": "1.0.0",
   "main": "index.js",
+  "workspaces":[
+    "frontend",
+    "backend"
+  ],
   "type": "module",
   "scripts": {
-    "dev-back": "nodemon backend/src/index.js"
+    "dev-front": "cd frontend && npm run dev",
+    "dev-back": "nodemon backend/src/index.js",
+    "dev": "npm run dev-front & npm run dev-back"
   },
   "keywords": [],
   "author": "",
