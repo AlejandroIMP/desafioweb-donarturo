@@ -3,13 +3,13 @@ import { getClient, getClientById, createClient, updateClient } from "../control
 
 const router = Router();
 
-router.get('/client', getClient);   
+router.get('/client', verifyToken, getClient);   
 
-router.get('/client/:id', getClientById);
+router.get('/client/:id', verifyToken, getClientById);
 
-router.post('/client', createClient);
+router.post('/client', verifyToken, createClient);
 
-router.put('/client/:id', updateClient);
+router.put('/client/:id', verifyToken, updateClient);
 
 // router.patch('/client/:id', updateClientState);
 

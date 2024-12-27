@@ -3,12 +3,12 @@ import { getState, getStateById, createState, updateState } from "../controllers
 
 const router = Router();
 
-router.get('/estados', getState);   
+router.get('/estados', verifyToken, getState);   
 
-router.get('/estados/:id', getStateById);
+router.get('/estados/:id', verifyToken, getStateById);
 
-router.post('/estados', createState);
+router.post('/estados', verifyToken, createState);
 
-router.put('/estados/:id', updateState);
+router.put('/estados/:id', verifyToken, updateState);
 
 export default router;
