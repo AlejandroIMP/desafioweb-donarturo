@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getState, getStateById, createState, updateState } from "../controllers/state.controller.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = Router();
 
