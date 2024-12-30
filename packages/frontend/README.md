@@ -4,6 +4,26 @@ This template provides a minimal setup to get React working in Vite with HMR and
 
 Currently, two official plugins are available:
 
+```plaintext
+pages/
+├── auth/
+│   ├── Login/index.tsx
+│   └── Register/index.tsx
+├── cliente/
+│   ├── Home/index.tsx  
+│   ├── Cart/index.tsx  (Carrito de compras)
+│   ├── Orders/index.tsx  (Historial de pedidos)
+│   └── Order/index.tsx (Detalles de un pedido específico, opcional)
+├── operador/
+│   ├── Home/index.tsx   
+│   ├── ManageProducts/index.tsx  (Gestión de productos)
+│   ├── ManageClients/index.tsx  (Gestión de clientes)
+│   ├── ManageCategories/index.tsx (Gestión de categorías)
+│   ├── ManageUsers/index.tsx (Gestión de usuarios y roles)
+│   └── OrderApproval/index.tsx (Aprobación/Entrega de pedidos)
+├── NotFound/index.tsx  (Página de error para rutas no encontradas)
+```
+
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
