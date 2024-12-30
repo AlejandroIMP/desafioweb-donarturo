@@ -7,7 +7,7 @@ Un proyecto el cual esta elaborado desde cero siguiendo los requerimientos del d
 ```plaintext
 packages/
 ├── backend/
-│   ├── public/
+│   ├── POSTMAN/
 │   └── src/
 ├── frontend/
 │   ├── public/
