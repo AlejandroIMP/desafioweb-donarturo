@@ -4,12 +4,9 @@
 Un proyecto el cual esta elaborado desde cero siguiendo los requerimientos del desafio web360 por optimatecnologia.
 
 
-
-
-
 ## Tech Stack
 
-**Client:** React, TailwindCSS
+**Client:** React, CSS, MUI Components
 
 **Server:** Node, Express, Microsoft SQL Server
 
@@ -40,6 +37,17 @@ Start the backend server
   npm run dev-back
 ```
 
+Start the frontend server
+
+```bash
+  npm run dev-front
+```
+
+Start the both servers
+
+```bash
+  npm run dev
+```
 
 ## Environment Variables
 

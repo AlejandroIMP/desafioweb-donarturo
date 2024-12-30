@@ -3,16 +3,28 @@
   "version": "1.0.0",
   "main": "index.js",
   "workspaces": [
-    "package/*"
+    "packages/frontend",
+    "packages/backend"
   ],
   "type": "module",
   "scripts": {
-    "dev-front": "npm run dev --workspace=frontend",
-    "dev-back": "npm run dev --workspace=backend",
+    "dev-front": "cd packages/frontend && npm run dev",
+    "dev-back": "cd packages/backend && npm run dev",
     "dev": "npm run dev-front & npm run dev-back"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "reflect-metadata": "^0.2.2",
+    "sequelize": "^7.0.0-alpha.9"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.7"
+  }
 }

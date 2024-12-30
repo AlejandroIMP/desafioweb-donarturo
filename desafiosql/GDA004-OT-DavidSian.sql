@@ -9,6 +9,9 @@
 	6. INSERTAR DATOS EN LAS TABLAS UTILIZANDO LOS PROCEDIMIENTOS
 */
 
+
+DROP DATABASE [GDA004-OT-DavidSian];
+
 -- 1. CREACION DE BASE DE DATOS
 
 CREATE DATABASE [GDA004-OT-DavidSian];
@@ -20,18 +23,21 @@ SELECT * From usuarios;
 
 -- Creacion de tabla Productos
 
+ALTER TABLE Productos
+ALTER COLUMN foto NVARCHAR(100);
+
 CREATE TABLE Productos(
-	idProductos int identity(1,1) not null,
-	CategoriaProductos_idCategoriaProductos int ,
+	idProductos INT IDENTITY(1,1) not null,
+	CategoriaProductos_idCategoriaProductos INT ,
 	usuarios_idusuarios int,
-	nombre varchar(45),
-	marca varchar(45),
-	codigo varchar(45),
-	stock float,
-	estados_idestados int,
-	precio float,
-	fecha_creacion datetime,
-	foto binary
+	nombre NVARCHAR(45),
+	marca NVARCHAR(45),
+	codigo NVARCHAR(45),
+	stock INT,
+	estados_idestados INT,
+	precio DECIMAL(10,2),
+	fecha_creacion DATETIME DEFAULT GETDATE(),
+	foto VARBINARY(max)
 );
 
 -- Creacion de llave primaria
@@ -59,28 +65,27 @@ CREATE TABLE Orden(
 -- Creacion de tabla OrdenDetalles
 CREATE TABLE OrdenDetalles(
 	idOrdenDetalles INT IDENTITY PRIMARY KEY,
-  idOrden INT NOT NULL,
-  idProductos INT NOT NULL,
-  cantidad INT NOT NULL,
-  precio DECIMAL(10, 2) NOT NULL,
-  subtotal AS (cantidad * precio) PERSISTED,
-  FOREIGN KEY (idOrden) REFERENCES Orden(idOrden)
+	idOrden INT NOT NULL,
+	idProductos INT NOT NULL,
+	cantidad INT NOT NULL,
+	precio DECIMAL(10, 2) NOT NULL,
+	subtotal AS (cantidad * precio) PERSISTED,
+	FOREIGN KEY (idOrden) REFERENCES Orden(idOrden)
 );
-
 
 -- Creacion de tabla usuarios
 
 CREATE TABLE usuarios(
-	idusuarios int identity(1,1) not null,
-	rol_idrol int,
-	estados_idestados int,
-	correo_electronico varchar(45),
-	nombre_completo varchar(60),
-	user_password varchar(45),
-	telefono varchar(45),
-	fecha_nacimiento date,
-	fecha_creacion datetime,
-	Clientes_idClientes int 
+	idusuarios INT identity(1,1) not null,
+	rol_idrol INT,
+	estados_idestados INT,
+	correo_electronico NVARCHAR(45),
+	nombre_completo NVARCHAR(60),
+	user_password NVARCHAR(100),
+	telefono NVARCHAR(45),
+	fecha_nacimiento DATE,
+	fecha_creacion DATETIME DEFAULT GETDATE(),
+	Clientes_idClientes INT 
 );
 
 -- Creacion de llave primaria
@@ -91,11 +96,11 @@ ADD CONSTRAINT PK_usuarios_id PRIMARY KEY(idusuarios);
 -- Creacion de tabla Productos
 
 CREATE TABLE CategoriaProductos(
-	idCategoriaProductos int identity(1,1) not null,
-	usuarios_idusuarios int,
-	nombre varchar(45),
-	estados_idestados int,
-	fecha_creacion datetime
+	idCategoriaProductos INT identity(1,1) not null,
+	usuarios_idusuarios INT,
+	nombre NVARCHAR(45),
+	estados_idestados INT,
+	fecha_creacion DATETIME DEFAULT GETDATE()
 );
 
 -- Creacion de llave primaria
@@ -106,8 +111,8 @@ ADD CONSTRAINT PK_CategoriaProductos_id PRIMARY KEY(idCategoriaProductos);
 -- Creacion de tabla rol
 
 CREATE TABLE rol(
-	idrol int identity(1,1) not null,
-	nombre varchar(45),
+	idrol INT identity(1,1) not null,
+	nombre NVARCHAR(45),
 );
 
 -- Creacion de llave primaria
@@ -118,8 +123,8 @@ ADD CONSTRAINT PK_rol_id PRIMARY KEY(idrol);
 -- Creacion de tabla estados
 
 CREATE TABLE estados(
-	idestados int identity(1,1) not null,
-	nombre varchar(45),
+	idestados INT identity(1,1) not null,
+	nombre NVARCHAR(45),
 );
 
 -- Creacion de llave primaria
@@ -131,11 +136,11 @@ ADD CONSTRAINT PK_estados_id PRIMARY KEY(idestados);
 
 CREATE TABLE Clientes(
 	idClientes int identity(1,1) not null,
-	razon_social varchar(45),
-	nombre_comercial varchar(45),
-	direccion_entrega varchar(45),
-	telefono varchar(45),
-	email varchar(45),
+	razon_social NVARCHAR(45),
+	nombre_comercial NVARCHAR(45),
+	direccion_entrega NVARCHAR(45),
+	telefono NVARCHAR(45),
+	email NVARCHAR(45),
 );
 
 -- Creacion de llave primaria
@@ -570,9 +575,7 @@ END;
 
 -- exec updateOrden 1, 1, 1, 'Joe Marino', 'Calle 83, avenida 1', '8291-4822', 'ordenmail@gmail.com', '2024-12-12', 312.32, 1;
 
-
 -- Orden Detalles con OpenJson para insertar multiples productos
-
 
 CREATE OR ALTER PROCEDURE InsertarOrdenConDetallesJSON
     @idusuarios INT,
@@ -604,15 +607,46 @@ BEGIN
         DECLARE @idOrden INT = SCOPE_IDENTITY();
 
         -- Insertar los detalles de productos usando OpenJSON
-        INSERT INTO OrdenDetalles (idOrden, idProductos, cantidad, precio)
+        DECLARE @Detalles TABLE (idProductos INT, cantidad INT, precio DECIMAL(18, 2));
+
+        INSERT INTO @Detalles (idProductos, cantidad, precio)
         SELECT 
-            @idOrden AS idOrden,
             JSON_VALUE(value, '$.idProductos') AS idProductos,
             JSON_VALUE(value, '$.cantidad') AS cantidad,
             JSON_VALUE(value, '$.precio') AS precio
         FROM OPENJSON(@DetallesProductos);
 
-		-- Calcular el total_orden sumando los subtotales de OrdenDetalles
+        -- Verificar stock y reducir la cantidad solicitada del stock
+        DECLARE @StockInsuficiente BIT = 0;
+
+        -- Verificar si hay suficiente stock para cada producto
+        SELECT @StockInsuficiente = 1
+        FROM @Detalles d
+        JOIN Productos p ON d.idProductos = p.idProductos
+        WHERE p.stock < d.cantidad;
+
+        IF @StockInsuficiente = 1
+        BEGIN
+            ROLLBACK TRANSACTION;
+            THROW 50000, 'Stock insuficiente para uno o más productos.', 1;
+        END
+
+        -- Reducir el stock de cada producto
+        UPDATE p
+        SET p.stock = p.stock - d.cantidad
+        FROM @Detalles d
+        JOIN Productos p ON d.idProductos = p.idProductos;
+
+        -- Insertar los detalles de productos
+        INSERT INTO OrdenDetalles (idOrden, idProductos, cantidad, precio)
+        SELECT 
+            @idOrden AS idOrden,
+            idProductos,
+            cantidad,
+            precio
+        FROM @Detalles;
+
+        -- Calcular el total_orden sumando los subtotales de OrdenDetalles
         UPDATE Orden
         SET total_orden = (
             SELECT SUM(cantidad * precio)
@@ -632,6 +666,7 @@ BEGIN
         THROW;
     END CATCH
 END;
+
 
 
 DECLARE @DetallesProductos1 NVARCHAR(MAX) = '[
