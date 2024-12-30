@@ -3,6 +3,27 @@
 
 Un proyecto el cual esta elaborado desde cero siguiendo los requerimientos del desafio web360 por optimatecnologia.
 
+## Routes
+```plaintext
+pages/
+├── auth/
+│   ├── Login.jsx
+│   └── Register.jsx
+├── cliente/
+│   ├── Home.jsx  (Catálogo de productos para clientes)
+│   ├── Cart.jsx  (Carrito de compras)
+│   ├── OrderHistory.jsx  (Historial de pedidos)
+│   └── OrderDetails.jsx (Detalles de un pedido específico, opcional)
+├── operador/
+│   ├── Home.jsx  (Historial de pedidos para operadores)
+│   ├── ManageProducts.jsx  (Gestión de productos)
+│   ├── ManageClients.jsx  (Gestión de clientes)
+│   ├── ManageCategories.jsx (Gestión de categorías)
+│   ├── ManageUsers.jsx (Gestión de usuarios y roles)
+│   └── OrderApproval.jsx (Aprobación/Entrega de pedidos)
+├── Error404.jsx  (Página de error para rutas no encontradas)
+└── LandingPage.jsx  (Página inicial, redirige según el rol)
+```
 
 ## Tech Stack
 
