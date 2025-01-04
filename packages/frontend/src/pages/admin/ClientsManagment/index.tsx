@@ -1,10 +1,10 @@
-import Layout from '/components/Layout';
+import AdminLayout from '@/components/AdminLayout';
 
 const ClientsManagment = () => {
   return (
-	<Layout>
+	<AdminLayout>
 	  Clients
-	</Layout>
+	</AdminLayout>
   );
 };
 

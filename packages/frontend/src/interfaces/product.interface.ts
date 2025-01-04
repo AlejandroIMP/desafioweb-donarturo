@@ -8,6 +8,6 @@ export interface IProduct {
   stock: number;
   estados_idestados: number;
   precio: number;
-  fecha_creacion?: Date;
-  foto: number;
+  fecha_creacion?: string;
+  foto: string;
 }

@@ -1,10 +1,10 @@
-import Layout from '/components/Layout';
+import ClientLayout from '@/components/ClientLayout';
 
 const Cart = () => {
   return (
-    <Layout>
+    <ClientLayout>
       <h1>Cart</h1>
-    </Layout>
+    </ClientLayout>
   );
 };
 

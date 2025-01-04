@@ -10,3 +10,23 @@ export interface IUser {
   fecha_creacion?: Date;
   Clientes_idClientes: number;
 }
+
+export interface LoginResponse {
+  success: boolean;
+  token: string;
+  user: {
+    rol: number;
+    email: string;
+  };
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface Country {
+  code: string;
+  label: string;
+  prefix: string;
+}

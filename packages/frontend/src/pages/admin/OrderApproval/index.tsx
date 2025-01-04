@@ -1,10 +1,10 @@
-import Layout from '/components/Layout'
+import AdminLayout from '@/components/AdminLayout'
 
 const OrderApproval = () => {
   return (
-    <Layout>
+    <AdminLayout>
       OrderApproval
-    </Layout>
+    </AdminLayout>
   )
 };
 

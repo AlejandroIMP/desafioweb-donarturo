@@ -1,10 +1,10 @@
-import Layout from 'components/Layout';
+import ClientLayout from '@/components/ClientLayout';
 
 const Home = () => {
   return (
-    <Layout>
-      <div>Home</div>
-    </Layout>
+    <ClientLayout>
+      <h2>Home</h2>
+    </ClientLayout>
   );
 };
 

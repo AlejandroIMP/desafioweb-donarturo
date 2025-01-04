@@ -1,9 +1,13 @@
-import Layout from 'components/Layout';
+import Layout from '@/components/ClientLayout';
+import RegisterForm from '@/components/RegisterForm';
+import ToggleColorMode from '@/components/ToggleColorMode';
 
 const Register = () => {
   return (
     <Layout>
-      <h1>Register</h1>
+      <h2>Register</h2>
+      <RegisterForm />
+      <ToggleColorMode />
     </Layout>
   );
 };

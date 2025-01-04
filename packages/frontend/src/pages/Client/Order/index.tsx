@@ -1,10 +1,10 @@
-import Layout from "/components/Layout";
+import ClientLayout from "@/components/ClientLayout";
 
 const Order = () => {
   return (
-    <Layout>
+    <ClientLayout>
       <h1>Order</h1>
-    </Layout>
+    </ClientLayout>
   );
 };
 
