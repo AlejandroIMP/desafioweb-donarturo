@@ -11,6 +11,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { correo_electronico, user_password } = req.body;
 
+    console.log('Login attempt:', { correo_electronico });
+
     if (!correo_electronico || !user_password) {
       res.status(404).json({
         success: false,
@@ -20,18 +22,27 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const theUser = await User.findOne({
-      where: { correo_electronico: correo_electronico },
-      rejectOnEmpty: true,
+      where: { correo_electronico }
     });
+
+    if (!theUser) {
+      res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+      return;
+    }
 
     const validatePassword = await bcrypt.compare(user_password, theUser.user_password);
     
     if (!validatePassword) {
       res.status(401).json({ 
+        success: false,
         message: 'Contraseña incorrecta'
       });
       return;
     }
+
 
     const payload: TokenPayload = {
       id: theUser.idusuarios,
@@ -46,6 +57,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.json({ 
+      success: true,
       message: 'Login exitoso',
       token,
       user: {
@@ -69,7 +81,7 @@ export const register = async (req:Request, res:Response): Promise<void> => {
     const userData: IUser = req.body;
     
     
-    if(!userData.rol_idrol || !userData.correo_electronico || !userData.user_password ){
+    if(!userData.correo_electronico || !userData.user_password ){
       res.status(400).json({message: 'Rol, E-mail y contrasenia son requeridos'});
       return;
     }
@@ -96,6 +108,8 @@ export const register = async (req:Request, res:Response): Promise<void> => {
     const hashedPassword = await bcrypt.hash(userData.user_password, salt)
 
     userData.user_password = hashedPassword;
+    userData.rol_idrol = 2;
+    userData.estados_idestados = 1;
     
     const newUser = await User.create(userData);
 

@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database/connection';
 import { IUser } from '../interfaces/auth.interface';
 
-type UserCreationAttributes = Optional<IUser, 'idusuarios' | 'fecha_creacion'>;
+type UserCreationAttributes = Optional<IUser, 'idusuarios' | 'fecha_creacion' | 'Clientes_idClientes'>;
 
 class User extends Model<IUser, UserCreationAttributes> implements IUser {
   declare idusuarios: number;
@@ -65,7 +65,7 @@ User.init(
     },
     Clientes_idClientes: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'clientes',
         key: 'idClientes'

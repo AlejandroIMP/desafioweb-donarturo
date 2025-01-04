@@ -1,6 +1,6 @@
 export interface IUser {
   idusuarios?: number;
-  rol_idrol: number;
+  rol_idrol?: number;
   estados_idestados: number;
   correo_electronico: string;
   nombre_completo: string;
@@ -8,5 +8,5 @@ export interface IUser {
   telefono: string;
   fecha_nacimiento: Date;
   fecha_creacion?: Date;
-  Clientes_idClientes: number;
+  Clientes_idClientes?: number;
 }
