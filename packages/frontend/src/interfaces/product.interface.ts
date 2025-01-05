@@ -11,3 +11,9 @@ export interface IProduct {
   fecha_creacion?: string;
   foto: string;
 }
+
+export interface ProductResponse {
+  success: boolean;
+  data: IProduct[];
+  count: number;
+}
