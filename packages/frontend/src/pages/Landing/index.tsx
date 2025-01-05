@@ -1,10 +1,10 @@
-import Layout from "@/components/ClientLayout";
+import LandingLayout from '@/layouts/LandingLayout';
 
 const Landing = () => {
   return (
-    <Layout>
+    <LandingLayout>
       <h1>Landing Page</h1>
-    </Layout>
+    </LandingLayout>
   );
 };
 

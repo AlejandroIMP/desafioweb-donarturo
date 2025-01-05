@@ -1,0 +1,1 @@
+export { useClientContext } from '@/hooks/context/useClientContext';

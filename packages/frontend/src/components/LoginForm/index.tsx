@@ -3,9 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginFormData, loginSchema } from '@/schemas/auth.schemas';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Checkbox } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import axios from 'axios';
-import { useAuth } from '@/context/authContext';
 import { LoginResponse } from '@/interfaces/auth.interface';
 import { navigateByRole } from '@/utils/loginUtils';
 
@@ -16,7 +15,6 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const { setEmail } = useAuth();
   const {
     register,
     handleSubmit,
@@ -24,7 +22,7 @@ const LoginForm = () => {
     reset
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: 'onChange'
+    mode: 'onChange',
   });
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -38,17 +36,16 @@ const LoginForm = () => {
         correo_electronico: data.correo_electronico,
         user_password: data.user_password
       });
+
+
       if (response.data.success && response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('role', String(response.data.user.rol));
-        if (data.rememberMe) {
-          setEmail(data.correo_electronico);
-        }
-        
+        localStorage.setItem('email', response.data.user.email);
+
         reset({
           correo_electronico: '',
-          user_password: '',
-          rememberMe: false
+          user_password: ''
         });
         const redirectPath = navigateByRole(response.data.user.rol);
 
@@ -107,12 +104,6 @@ const LoginForm = () => {
           <span className='auth-message-error'>{errors.user_password.message}</span>
         )}
       </div>
-      <div>
-        <label>
-          <Checkbox {...register('rememberMe')} disabled={isLoading} />
-          Recordar email
-        </label>
-      </div>
       <div className='auth-buttons'>
         <Button
           type="submit"
@@ -128,7 +119,7 @@ const LoginForm = () => {
           onClick={handleRegister}
           disabled={isLoading}
         >
-          Registrarse
+          ¿No tienes cuenta? Regístrate
         </Button>
         <Button
           variant="text"

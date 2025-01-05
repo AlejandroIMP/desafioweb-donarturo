@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '@/context/authContext';
 
 const NavbarAdmin = () => {
 
-  const { email } = useAuth();
+  const email = localStorage.getItem('email');
 
   console.log(email);
+  
   return (
     <nav>
       <ul>
@@ -56,12 +56,20 @@ const NavbarAdmin = () => {
             {email}
           </NavLink>
         </li>
-      </ul>
-      <ul>
         <li>
           <NavLink to='/home'>
             Store
           </NavLink>
+        </li>
+        <li>
+        <NavLink to='/auth/login'
+          onClick={() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('email');
+          }}
+        >
+          Cerrar sesion
+        </NavLink>
         </li>
       </ul>
     </nav>

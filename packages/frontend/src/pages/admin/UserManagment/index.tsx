@@ -1,4 +1,4 @@
-import AdminLayout from '@/components/ClientLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 
 const UserManagment = () => {
   return (
