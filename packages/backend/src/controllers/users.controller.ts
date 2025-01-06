@@ -44,9 +44,47 @@ export const getUserById = async (req:Request, res:Response): Promise<void> => {
   }
 };
 
-// export const createUser = async(req:Request, res:Response): Promise<void> => {
+export const createUser = async(req:Request, res:Response): Promise<void> => {
+  try{
+    const userData: IUser = req.body;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userData.correo_electronico)) {
+      res.status(400).json({ message: 'Email no válido' });
+      return;
+    }
+
+    const emailExists = await User.findOne({
+      where: { correo_electronico: userData.correo_electronico }
+    });
+
+    if (emailExists){
+      res.status(400).json({
+        success: false,
+        message: 'El correo electronico ya esta registrado'
+      });
+      return;
+    };
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(userData.user_password, salt)
+
+    userData.user_password = hashedPassword;
+
+    const user = await User.create(userData);
+    res.status(201).json({
+      success: true,
+      message: 'Usuario creado correctamente',
+      data: user
+    });
+  }catch(error){
+    res.status(500).json({
+      success: false,
+      message: 'Error al crear el usuario',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
   
-// };
+};
 
 export const updateUser = async(req:Request, res:Response): Promise<void> => {
   try{

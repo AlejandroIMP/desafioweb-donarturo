@@ -92,7 +92,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 
     res.status(201).json({
       success: true,
-      data: { idOrden },
+      data: idOrden ,
       message: 'Orden creada exitosamente'
     });
 
@@ -164,4 +164,27 @@ export const updateOrderState = async(req: Request, res: Response): Promise<void
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
+}
+
+export const getOrderByUser = async(req: Request, res: Response): Promise<void> => {
+  try{
+    const userData = req.user;
+    const orders = await Order.findAll({
+      where: {
+        idusuarios: userData?.idusuarios
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      data: orders,
+      count: orders.length
+    });
+  } catch(error){
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener ordenes',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  };
 }

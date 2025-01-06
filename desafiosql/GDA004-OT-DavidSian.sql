@@ -17,8 +17,6 @@ DROP DATABASE [GDA004-OT-DavidSian];
 CREATE DATABASE [GDA004-OT-DavidSian];
 
 USE [GDA004-OT-DavidSian];
-
-SELECT * From usuarios;
 -- 2. CREACION DE TABLAS, CAMPOS Y LLAVES PRIMARIAS
 
 -- Creacion de tabla Productos
