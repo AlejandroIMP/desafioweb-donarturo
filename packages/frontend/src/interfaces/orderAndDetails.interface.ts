@@ -1,13 +1,13 @@
 export interface IOrder {
-  idOrden?: number;
+  idOrden: number;
   idusuarios: number;
   estados_idestados: number;
   nombre_completo: string;
   direccion: string;
   telefono: string;
   correo_electronico: string;
-  fecha_creacion?: Date;
-  fecha_entrega: Date;
+  fecha_creacion: string;
+  fecha_entrega: string;
   total_orden: number;
   Clientes_idClientes: number;
 }
@@ -23,12 +23,11 @@ export interface IOrderDetails {
 
 interface DetalleProducto {
   idProductos: number;
-  cantidad: number;
+  cantidad?: number;
   precio: number;
 }
 
 export interface OrderRequest {
-  idusuarios?: number;
   estados_idestados: number;
   nombre_completo: string;
   direccion: string;
@@ -37,4 +36,18 @@ export interface OrderRequest {
   fecha_entrega: string;
   Clientes_idClientes: number;
   DetallesProductos: DetalleProducto[];
+}
+
+export interface OrderResponse {
+  success: boolean;
+  message: string;
+  data: {
+    idOrder: number;
+  }
+}
+
+export interface OrderResponseGet {
+  success: boolean;
+  message: string;
+  data: IOrder[]
 }
