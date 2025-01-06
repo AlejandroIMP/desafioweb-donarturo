@@ -11,12 +11,14 @@ const Home = () => {
 
   if (error) return <div>Error: {error.message}</div>;
 
+  const activeProducts = products.filter((product) => product.estados_idestados === 1);
+
   return (
     <ClientLayout>
       <h2>Home</h2>
       <section className='main-products--container'>
         {
-          products.map((product) => (
+          activeProducts.map((product) => (
             <Card 
               key={product.idProductos}
               product={product}

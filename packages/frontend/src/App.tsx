@@ -7,15 +7,17 @@ import AdminHome from "@/pages/admin/AdminHome";
 import CategoryManagment from "@/pages/admin/CategoryManagment";
 import ProductManagment from "@/pages/admin/ProductManagment";
 import UserManagment from "@/pages/admin/UserManagment";
-import ClientsManagment from "@/pages/admin/ClientsManagment"; // Fix path
-import OrdersManagment from "@/pages/admin/OrdersManagment"; // Fix path
-import OrderApproval from "@/pages/admin/OrderApproval"; // Fix path
+import ClientsManagment from "@/pages/admin/ClientsManagment"; 
+import OrdersManagment from "@/pages/admin/OrdersManagment"; 
+import OrderApproval from "@/pages/admin/OrderApproval"; 
 // Client routes
 import Cart from "@/pages/Client/Cart";
 import Home from "@/pages/Client/Home";
 import Order from "@/pages/Client/Order";
 import Orders from "@/pages/Client/Orders";
 import NotFound from "@/pages/NotFound";
+
+import CheckoutSideMenu from "@/components/CheckoutSideMenu";
 
 import { PrivateRoute, PublicRoute } from "@/utils/authUtils";
 
@@ -153,6 +155,7 @@ const App = () => {
 
         <Route path="/*" element={<NotFound />} />
       </Routes>
+      <CheckoutSideMenu />
     </BrowserRouter>
   );
 };

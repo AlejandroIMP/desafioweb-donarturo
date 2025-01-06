@@ -17,3 +17,7 @@ export interface ProductResponse {
   data: IProduct[];
   count: number;
 }
+
+export interface CartProduct extends IProduct {
+  quantity?: number;
+}

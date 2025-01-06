@@ -1,0 +1,18 @@
+.checkout--side--menu{
+  display: none;
+  position: fixed;
+  flex-direction: column;
+  right: 0;
+  border: 1px solid #e5e5e5;
+  border-radius: 1rem;
+  bottom: 0;
+  right: 0;
+  width: 360px;
+  height: calc(100vh - 10rem);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.open{
+  display: flex;
+}

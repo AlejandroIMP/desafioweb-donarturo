@@ -1,7 +1,9 @@
 import { NavLink } from "react-router";
-
+import { useClientContext } from "@/hooks";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const NavbarHome = () => {
+  const { count } = useClientContext();
 
   const email = localStorage.getItem('email');
   return (
@@ -18,7 +20,10 @@ const NavbarHome = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to='/Cart'>Cart</NavLink>
+          <NavLink to='/Cart'>
+            <AddShoppingCartIcon />
+            {count}
+          </NavLink>
         </li>
         <li>
           <NavLink to='/Orders'>Orders</NavLink>
