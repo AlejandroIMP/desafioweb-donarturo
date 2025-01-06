@@ -1,8 +1,9 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { getProducts } from '../services/products.service';
+import { getOrdersByUser } from '@/services/orders.service';
 import { IProduct, CartProduct } from '../interfaces/product.interface';
 import { ClientContextType } from '@/interfaces/clientrol.interface';
-import { OrderRequest } from '@/interfaces/orderAndDetails.interface';
+import { IOrder } from '@/interfaces/orderAndDetails.interface';
 
 
 export const ClientContext = createContext<ClientContextType>({} as ClientContextType);
@@ -67,6 +68,22 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
     ]);
   };
 
+  const [userOrders, setUserOrders] = useState<IOrder[]>([]);
+
+  const idUsuario = localStorage.getItem('idUsuario');
+
+  const getUserOrders = async () => {
+    try {
+      const response = await getOrdersByUser(Number(idUsuario));
+      setUserOrders(response.data);
+    } catch (error) {
+      setError(error instanceof Error ? error : new Error('Failed to fetch orders'));
+    }
+  }
+
+  useEffect(() => {
+    getUserOrders();
+  }, []);
 
   return (
     <ClientContext.Provider value={{ 
@@ -78,6 +95,9 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
 
       totalPrice,
       setTotalPrice,
+
+      userOrders,
+      getUserOrders,
 
       openCheckoutSideMenu,
       setOpenCheckoutSideMenu,
