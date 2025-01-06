@@ -22,36 +22,44 @@ export const getProducts = async (): Promise<ProductResponse> => {
   }
 }
 
-export const getProduct = async (id: string): Promise<IProduct> => {
+export const getProduct = async (id: string): Promise<ProductResponse> => {
   try{
-    const response = await axios.get<IProduct>(`${apiBaseUrl}products/${id}`);
+    const timestamp = new Date().getTime();
+    const response = await axios.get<ProductResponse>(`${apiBaseUrl}productos/${id}`, { 
+      headers: getHeaders(),
+      params: { _t: timestamp }
+    });
     return response.data;
   } catch (error){
     throw error;
   }
 }
 
-export const createProduct = async (product: IProduct): Promise<IProduct> => {
+export const createProduct = async (product: IProduct): Promise<ProductResponse> => {
   try{
-    const response = await axios.post<IProduct>(`${apiBaseUrl}products`, product);
+    const timestamp = new Date().getTime();
+    const response = await axios.post<ProductResponse>(`${apiBaseUrl}productos`, product, { 
+      headers: getHeaders(),
+      params: { _t: timestamp }
+    });
     return response.data;
   } catch (error){
     throw error;
   }
 }
 
-export const updateProduct = async (product: IProduct): Promise<IProduct> => {
+export const updateProduct = async (id: string, product: IProduct): Promise<ProductResponse> => {
   try{
-    const response = await axios.put<IProduct>(`${apiBaseUrl}products/${product.idProductos}`, product);
+    const response = await axios.put<ProductResponse>(`${apiBaseUrl}productos/${id}`, product, { headers: getHeaders() });
     return response.data;
   } catch (error){
     throw error;
   }
 }
 
-export const updateProductState = async (id: string, state: number): Promise<IProduct> => {
+export const updateProductState = async (id: string, state: number): Promise<ProductResponse> => {
   try{
-    const response = await axios.patch<IProduct>(`${apiBaseUrl}products/${id}`, {state});
+    const response = await axios.patch<ProductResponse>(`${apiBaseUrl}products/${id}`, {state}, { headers: getHeaders() });
     return response.data;
   } catch (error){
     throw error;
