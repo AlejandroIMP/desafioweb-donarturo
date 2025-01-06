@@ -3,7 +3,17 @@ import { useClientContext } from "@/hooks";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const NavbarHome = () => {
-  const { count } = useClientContext();
+  const { count, setCount, setCartProducts, closeCheckoutSideMenuHandler } = useClientContext();
+
+  const Logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
+    localStorage.removeItem('id');
+    setCount(0);
+    setCartProducts([]);
+    closeCheckoutSideMenuHandler();
+  }
 
   const email = localStorage.getItem('email');
   return (
@@ -31,8 +41,7 @@ const NavbarHome = () => {
         <li>
           <NavLink to='/auth/login'
             onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('email');
+              Logout();
             }}
           >
             Cerrar sesion

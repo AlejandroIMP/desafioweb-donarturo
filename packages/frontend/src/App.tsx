@@ -7,16 +7,17 @@ import AdminHome from "@/pages/admin/AdminHome";
 import CategoryManagment from "@/pages/admin/CategoryManagment";
 import ProductManagment from "@/pages/admin/ProductManagment";
 import UserManagment from "@/pages/admin/UserManagment";
-import ClientsManagment from "@/pages/admin/ClientsManagment"; 
-import OrdersManagment from "@/pages/admin/OrdersManagment"; 
-import OrderApproval from "@/pages/admin/OrderApproval"; 
+import ClientsManagment from "@/pages/admin/ClientsManagment";
+import OrdersManagment from "@/pages/admin/OrdersManagment";
+import OrderApproval from "@/pages/admin/OrderApproval";
 // Client routes
 import Cart from "@/pages/Client/Cart";
 import Home from "@/pages/Client/Home";
 import Order from "@/pages/Client/Order";
 import Orders from "@/pages/Client/Orders";
-import NotFound from "@/pages/NotFound";
+import Checkout from "./pages/Client/Checkout";
 
+import NotFound from "@/pages/NotFound";
 import CheckoutSideMenu from "@/components/CheckoutSideMenu";
 
 import { PrivateRoute, PublicRoute } from "@/utils/authUtils";
@@ -30,7 +31,7 @@ const App = () => {
           <PublicRoute>
             <Landing />
           </PublicRoute>
-        } 
+        }
         />
         <Route path="/auth/login" element={
           <PublicRoute>
@@ -149,6 +150,14 @@ const App = () => {
             roles={[1, 2, 3]}
           >
             <Order />
+          </PrivateRoute>
+        } />
+
+        <Route path="/checkout" element={
+          <PrivateRoute
+            roles={[1, 2, 3]}
+          >
+            <Checkout />
           </PrivateRoute>
         } />
 

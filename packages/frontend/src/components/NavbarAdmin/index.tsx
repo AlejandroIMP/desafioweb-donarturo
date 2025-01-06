@@ -1,10 +1,20 @@
 import { NavLink } from 'react-router-dom';
+import { useClientContext } from '@/hooks';
 
 const NavbarAdmin = () => {
+  const { setCount, setCartProducts, closeCheckoutSideMenuHandler } = useClientContext();
 
   const email = localStorage.getItem('email');
 
-  console.log(email);
+  const Logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('role');
+    localStorage.removeItem('id');
+    setCount(0);
+    setCartProducts([]);
+    closeCheckoutSideMenuHandler();
+  }
   
   return (
     <nav>
@@ -40,11 +50,6 @@ const NavbarAdmin = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/login">
-            Logout
-          </NavLink>
-        </li>
-        <li>
           <NavLink to="/admin/order/approval">
             Order Approval
           </NavLink>
@@ -64,8 +69,7 @@ const NavbarAdmin = () => {
         <li>
         <NavLink to='/auth/login'
           onClick={() => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('email');
+            Logout();
           }}
         >
           Cerrar sesion

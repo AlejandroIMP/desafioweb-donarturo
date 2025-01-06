@@ -42,6 +42,7 @@ const LoginForm = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('role', String(response.data.user.rol));
         localStorage.setItem('email', response.data.user.email);
+        localStorage.setItem('idusuario', String(response.data.user.id));
 
         reset({
           correo_electronico: '',

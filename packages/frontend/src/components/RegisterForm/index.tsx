@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { RegisterResponse } from '@/interfaces/auth.interface';
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js';
-import { countries } from '@/utils/registerUtils';
 import './index.css';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -18,7 +16,6 @@ const RegisterForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState('GT');
   const [selectedRole, setSelectedRole] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState(1);
   const [selectedClient, setSelectedClient] = useState(null);
@@ -28,22 +25,12 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors, isDirty, isValid },
     reset,
-    setValue,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(RegisterSchema),
     mode: 'onChange'
   });
 
-  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value;
-    const country = countries.find(c => c.code === selectedCountry);
 
-    const phoneNumber = parsePhoneNumberFromString(value, { defaultCountry: country?.code as CountryCode });
-
-    if (phoneNumber) {
-      setValue('telefono', phoneNumber.formatInternational());
-    }
-  };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -150,22 +137,9 @@ const RegisterForm = () => {
         )}
       </div>
       <div>
-        <Select
-          value={selectedCountry}
-          variant="outlined"
-          onChange={(e) => setSelectedCountry(e.target.value)}
-          disabled={isLoading}
-        >
-          {countries.map((country) => (
-            <MenuItem key={country.code} value={country.code}>
-              {country.label} ({country.prefix})
-            </MenuItem>
-          ))}
-        </Select>
         <TextField
           {...register('telefono')}
           variant="outlined"
-          onChange={handlePhoneChange}
           type="tel"
           placeholder="Teléfono"
           autoComplete="tel"
