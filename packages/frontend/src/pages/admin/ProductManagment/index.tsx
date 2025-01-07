@@ -118,7 +118,7 @@ const ProductManagment = () => {
         ) : error ? (
           <div className="error-state">Error loading products</div>
         ) : (
-          <table className="product-table">
+          <table className="management-table">
             <thead>
               <tr>
                 <th>Id</th>
