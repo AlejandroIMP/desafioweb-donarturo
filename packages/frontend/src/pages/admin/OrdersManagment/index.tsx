@@ -96,13 +96,13 @@ const OrdersManagment = () => {
     <AdminLayout>
       <div className='management-container'>
         <div className='management-header'>
-          <h1 className="management-title">Manejo de usuarios</h1>
+          <h1 className="management-title">Manejo de ordenes</h1>
           <Button
             variant='contained'
             color='primary'
             onClick={handleOpenModalAdd}
           >
-            Agregar usuario
+            Agregar orden
           </Button>
         </div>
         {

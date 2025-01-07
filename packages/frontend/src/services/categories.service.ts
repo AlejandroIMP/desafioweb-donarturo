@@ -19,3 +19,13 @@ export const getCategories = async (): Promise<ProductCategoryResponseGet> => {
     throw error instanceof Error ? error : new Error('Unknown error');
   }
 }
+
+export const updateCategoryState = async (id: number, state: number): Promise<void> => {
+  try {
+    await axios.put(`${apiBaseUrl}/productcategory/${id}`, { estados_idestados: state }, {
+      headers: getHeaders()
+    });
+  } catch (error) {
+    throw error instanceof Error ? error : new Error('Unknown error');
+  }
+}

@@ -50,7 +50,7 @@ const NavbarAdmin = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/admin/order/approval">
+          <NavLink to="/admin/orders/approval">
             Order Approval
           </NavLink>
         </li>
