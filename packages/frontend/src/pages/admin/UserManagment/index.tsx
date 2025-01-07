@@ -26,7 +26,6 @@ const UserManagment = () => {
   return (
     <AdminLayout>
       <div>UserManagment</div>
-
         {
           loading ? (
             <p>Loading...</p>

@@ -1,0 +1,84 @@
+.user-management {
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.user-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.user-status {
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-table th,
+.user-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.user-table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.user-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .user-table thead {
+    display: none;
+  }
+
+  .user-table {
+    min-width: 300px !important;
+  }
+
+  .user-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .user-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+  }
+
+  .user-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+
+  .user-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
