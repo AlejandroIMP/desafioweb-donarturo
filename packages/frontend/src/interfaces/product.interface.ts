@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface IProduct {
   idProductos: number;
   CategoriaProductos_idCategoriaProductos: number;
@@ -8,7 +10,7 @@ export interface IProduct {
   stock: number;
   estados_idestados: number;
   precio: number;
-  fecha_creacion?: string;
+  fecha_creacion: string;
   foto: string;
 }
 
@@ -20,4 +22,16 @@ export interface ProductResponse {
 
 export interface CartProduct extends IProduct {
   quantity?: number;
+}
+
+export interface IProductCreate {
+  CategoriaProductos_idCategoriaProductos: number;
+  usuarios_idusuarios: string;
+  nombre: string;
+  marca: string;
+  codigo: string;
+  stock: string;
+  estados_idestados: string;
+  precio: string;
+  foto: string;
 }

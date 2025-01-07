@@ -1,0 +1,141 @@
+.product-management {
+  padding: 1rem;
+  overflow-x: auto;
+}
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.product-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product-table th,
+.product-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.product-table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.product-status {
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.status-active {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.status-inactive {
+  background: #feeced;
+  color: #dc3545;
+}
+
+.product-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+@media screen and (max-width: 768px) {
+  .product-table thead {
+    display: none;
+  }
+
+  .product-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .product-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+  }
+
+  .product-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+
+  .product-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product-photo {
+    justify-content: center !important;
+  }
+
+  td:nth-child(5), 
+  td:nth-child(6), 
+  td:nth-child(7) {
+    display: none;
+  }
+}
+
+/* Tablet */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .product-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-table {
+    font-size: 0.9rem;
+  }
+
+  td:nth-child(6), 
+  td:nth-child(7) {
+    display: none;
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 1025px) {
+  .product-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-management {
+    padding: 2rem;
+  }
+
+  .product-table td, 
+  .product-table th {
+    padding: 1rem;
+  }
+}

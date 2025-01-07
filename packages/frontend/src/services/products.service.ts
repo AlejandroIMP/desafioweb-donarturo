@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IProduct, ProductResponse } from '@/interfaces/product.interface'
+import { IProductCreate } from '@/interfaces/product.interface'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,7 +23,7 @@ export const getProducts = async (): Promise<ProductResponse> => {
   }
 }
 
-export const getProduct = async (id: string): Promise<ProductResponse> => {
+export const getProduct = async (id: number): Promise<ProductResponse> => {
   try{
     const timestamp = new Date().getTime();
     const response = await axios.get<ProductResponse>(`${apiBaseUrl}productos/${id}`, { 
@@ -35,8 +36,9 @@ export const getProduct = async (id: string): Promise<ProductResponse> => {
   }
 }
 
-export const createProduct = async (product: IProduct): Promise<ProductResponse> => {
+export const createProduct = async (product: IProductCreate): Promise<ProductResponse> => {
   try{
+
     const timestamp = new Date().getTime();
     const response = await axios.post<ProductResponse>(`${apiBaseUrl}productos`, product, { 
       headers: getHeaders(),
@@ -48,7 +50,7 @@ export const createProduct = async (product: IProduct): Promise<ProductResponse>
   }
 }
 
-export const updateProduct = async (id: string, product: IProduct): Promise<ProductResponse> => {
+export const updateProduct = async (id: number, product: IProductCreate): Promise<ProductResponse> => {
   try{
     const response = await axios.put<ProductResponse>(`${apiBaseUrl}productos/${id}`, product, { headers: getHeaders() });
     return response.data;
@@ -57,9 +59,9 @@ export const updateProduct = async (id: string, product: IProduct): Promise<Prod
   }
 }
 
-export const updateProductState = async (id: string, state: number): Promise<ProductResponse> => {
+export const updateProductState = async (id: number, estados_idestados: number): Promise<ProductResponse> => {
   try{
-    const response = await axios.patch<ProductResponse>(`${apiBaseUrl}products/${id}`, {state}, { headers: getHeaders() });
+    const response = await axios.patch<ProductResponse>(`${apiBaseUrl}productos/${id}`, {estados_idestados}, { headers: getHeaders() });
     return response.data;
   } catch (error){
     throw error;
