@@ -1,0 +1,12 @@
+.not-found{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--nav-text);
+    background-color: var(--nav-bg);
+    text-align: center;
+    flex-direction: column;
+}

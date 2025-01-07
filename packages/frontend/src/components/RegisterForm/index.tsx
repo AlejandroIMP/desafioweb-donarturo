@@ -82,10 +82,10 @@ const RegisterForm = () => {
           placeholder="Nombre"
           autoComplete="new-name"
           disabled={isLoading}
+          fullWidth
+          error={!!errors.nombre_completo}
+          helperText={errors.nombre_completo ? errors.nombre_completo.message : null}
         />
-        {errors.nombre_completo && (
-          <span className='auth-message-error' >{errors.nombre_completo.message}</span>
-        )}
       </div>
       <div>
         <TextField
@@ -95,10 +95,10 @@ const RegisterForm = () => {
           placeholder="Email"
           autoComplete="new-email"
           disabled={isLoading}
+          fullWidth
+          error={!!errors.correo_electronico}
+          helperText={errors.correo_electronico ? errors.correo_electronico.message : null}
         />
-        {errors.correo_electronico && (
-          <span className='auth-message-error' >{errors.correo_electronico.message}</span>
-        )}
       </div>
       <div>
         <div>
@@ -109,6 +109,8 @@ const RegisterForm = () => {
             placeholder="Password"
             autoComplete='current-password'
             disabled={isLoading}
+            error={!!errors.user_password}
+            helperText={errors.user_password ? errors.user_password.message : null}
           />
           <Button
             type="button"
@@ -117,9 +119,6 @@ const RegisterForm = () => {
             {showPassword ? '👁️' : '👁️‍🗨️'}
           </Button>
         </div>
-        {errors.user_password && (
-          <span className='auth-message-error'>{errors.user_password.message}</span>
-        )}
       </div>
       <div>
         <div>
@@ -130,11 +129,10 @@ const RegisterForm = () => {
             placeholder="Confirmar contraseña"
             autoComplete='new-password'
             disabled={isLoading}
+            error={!!errors.confirm_password}
+            helperText={errors.confirm_password ? errors.confirm_password.message : null}
           />
         </div>
-        {errors.confirm_password && (
-          <span className='auth-message-error'>{errors.confirm_password.message}</span>
-        )}
       </div>
       <div>
         <TextField
@@ -144,10 +142,10 @@ const RegisterForm = () => {
           placeholder="Teléfono"
           autoComplete="tel"
           disabled={isLoading}
+          fullWidth
+          error={!!errors.telefono}
+          helperText={errors.telefono ? errors.telefono.message : null}
         />
-        {errors.telefono && (
-          <span className='auth-message-error'>{errors.telefono.message}</span>
-        )}
       </div>
       <div>
         <TextField
@@ -157,10 +155,10 @@ const RegisterForm = () => {
           placeholder="Fecha de nacimiento"
           autoComplete="new-birthdate"
           disabled={isLoading}
+          fullWidth
+          error={!!errors.fecha_nacimiento}
+          helperText={errors.fecha_nacimiento ? errors.fecha_nacimiento.message : null}
         />
-        {errors.fecha_nacimiento && (
-          <span className='auth-message-error'>{errors.fecha_nacimiento.message}</span>
-        )}
       </div>
       <div className='auth-select-hidden'>
         <TextField className='auth-select-hidden'>
@@ -182,7 +180,6 @@ const RegisterForm = () => {
             disabled={isLoading}
           >
             <MenuItem value={1}>Cliente</MenuItem>
-            <MenuItem value={2}>Administrador</MenuItem>
           </Select>
         </TextField>
         <TextField className='auth-select-hidden'>

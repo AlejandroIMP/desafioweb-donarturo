@@ -7,6 +7,7 @@ import { TextField, Button } from '@mui/material';
 import axios from 'axios';
 import { LoginResponse } from '@/interfaces/auth.interface';
 import { navigateByRole } from '@/utils/loginUtils';
+import './index.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -80,6 +81,7 @@ const LoginForm = () => {
           placeholder="Email"
           autoComplete="new-email"
           disabled={isLoading}
+          fullWidth
         />
         {errors.correo_electronico && (
           <span className='auth-message-error' >{errors.correo_electronico.message}</span>
@@ -115,7 +117,7 @@ const LoginForm = () => {
           {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
         </Button>
         <Button
-          variant="contained"
+          variant="text"
           color="primary"
           onClick={handleRegister}
           disabled={isLoading}
