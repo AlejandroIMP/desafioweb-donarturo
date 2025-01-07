@@ -1069,3 +1069,60 @@ exec insertProductos 18, 9, 'Lámpara Inteligente', 'Marca O', 'ZAB234', 300, 2,
 exec insertProductos 1, 1, 'Batería Portátil', 'Marca P', 'CDE567', 800, 1, 40.00, '2024-08-21', NULL;
 exec insertProductos 2, 2, 'Cargador Inalámbrico', 'Marca Q', 'FGH890', 400, 2, 30.00, '2024-08-21', NULL;
 
+
+CREATE TRIGGER trg_UpdateProductStatus
+ON CategoriaProductos
+AFTER UPDATE
+AS
+BEGIN
+    -- Verificar si se actualizó el campo 'estados_idestados'
+    IF UPDATE(estados_idestados)
+    BEGIN
+        -- Actualizar los productos relacionados si la categoría se marca como inactiva
+        UPDATE P
+        SET P.estados_idestados = 2 -- Estado inactivo para los productos
+        FROM Productos P
+        INNER JOIN CategoriaProductos C ON P.CategoriaProductos_idCategoriaProductos = C.idCategoriaProductos
+        WHERE C.estados_idestados = 2; 
+    END
+END;
+GO
+
+CREATE OR ALTER TRIGGER trg_AjustarStockEnCambioEstado
+ON Orden
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Verificar si el estado cambió a 'Rechazado' 
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        JOIN deleted d ON i.idOrden = d.idOrden
+        WHERE i.estados_idestados = 4
+          AND d.estados_idestados <> 4
+    )
+    BEGIN
+        -- Revertir el stock para los productos relacionados con las órdenes rechazadas
+        UPDATE p
+        SET p.stock = p.stock + od.cantidad
+        FROM Productos p
+        JOIN OrdenDetalles od ON p.idProductos = od.idProductos
+        JOIN inserted i ON od.idOrden = i.idOrden
+        WHERE i.estados_idestados = 4;
+    END
+
+    -- Verificar si el estado cambió a 'Activo' o cualquier otro estado que no requiere ajuste
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        JOIN deleted d ON i.idOrden = d.idOrden
+        WHERE i.estados_idestados NOT IN (4) 
+          AND d.estados_idestados <> i.estados_idestados
+    )
+    BEGIN
+        -- No realizar cambios en el stock
+        RETURN;
+    END
+END;
