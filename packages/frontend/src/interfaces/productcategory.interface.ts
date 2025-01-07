@@ -3,5 +3,11 @@ export interface IProductCategory {
   usuarios_idusuarios: number;
   nombre: string;
   estados_idestados: number;
-  fecha_creacion: Date;
+  fecha_creacion: string;
+}
+
+export interface ProductCategoryResponseGet {
+  success: boolean;
+  data: IProductCategory[];
+  count: number; 
 }
