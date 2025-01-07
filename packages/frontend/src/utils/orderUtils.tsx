@@ -14,7 +14,7 @@ export const formattedState = (state: number) => {
     case 2:
       return 'Inactivo';
     case 3:
-      return 'En proces';
+      return 'En proceso';
     default:
       return 'Desconocido';
   }
