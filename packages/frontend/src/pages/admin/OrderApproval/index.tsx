@@ -3,6 +3,7 @@ import { IOrder } from '@/interfaces/orderAndDetails.interface';
 import { getAllOrders, updateOrderState } from '@/services/orders.service';
 import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
+import { Button } from '@mui/material';
 
 const OrderApproval = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -24,14 +25,27 @@ const OrderApproval = () => {
   }, []);
 
   const OrdersNeedsApproval = orders.filter(order => order.estados_idestados !== 1);
-  console.log(OrdersNeedsApproval);
+
+  const acceptOrder = (orderId: number) => {
+    updateOrderState(orderId, 1);
+    location.reload();
+  }
+
+  const rejectOrder = (orderId: number) => {
+    updateOrderState(orderId, 4);
+    location.reload();
+  }
 
   return (
     <AdminLayout>
       OrderApproval
       {
-        loading ? 'Loading...' : error ? 'Error' : (
-          <table>
+        loading ? (
+          <div className="loading-state">Loading products...</div>
+        ) : error ? (
+          <div className="error-state">Error loading products</div>
+        ) : (
+          <table className="management-table">
             <thead>
               <tr>
                 <th>Order ID</th>
@@ -50,10 +64,20 @@ const OrderApproval = () => {
                     <td>{order.Clientes_idClientes}</td>
                     <td>{formattedDate(order.fecha_entrega)}</td>
                     <td>{order.total_orden}</td>
-                    <td>{formattedState(order.estados_idestados)}</td>
+                    <td data-label="Estado">
+                      <span className={`product-status ${order.estados_idestados === 1 ? 'status-active' : 'status-inactive'}`}>
+                        {formattedState(order.estados_idestados)}
+                      </span>
+                    </td>
                     <td>
-                      <button onClick={() => updateOrderState(order.idOrden, 1)}>Approve</button>
-                      <button onClick={() => updateOrderState(order.idOrden, 2)}>Reject</button>
+                      <Button
+                        variant='text'
+                        color='success'
+                        onClick={() => acceptOrder(order.idOrden)}>Aprobar</Button>
+                      <Button
+                        variant='text'
+                        color='error'
+                        onClick={() => rejectOrder(order.idOrden)}>Rechazar</Button>
                     </td>
                   </tr>
                 ))

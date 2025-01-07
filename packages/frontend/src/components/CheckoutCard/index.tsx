@@ -11,8 +11,8 @@ interface CardProps {
 }
 
 const CheckoutCard = ({ product }: CardProps) => {
-  const [quantity, setQuantity] = useState(1);
   const { setCartProducts } = useClientContext();
+  const [quantity, setQuantity] = useState(product.quantity?? 1);
 
   const removeProductHandler = () => {
     setCartProducts((prev: CartProduct[]) => 

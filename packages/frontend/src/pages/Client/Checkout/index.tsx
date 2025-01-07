@@ -43,6 +43,8 @@ const Checkout = () => {
       precio: (product.precio),
     }));
 
+    console.log(products)
+
     data.fecha_entrega = calculateDeliveryDate();
 
     const newOrder: OrderSchemaForm = {
@@ -52,9 +54,11 @@ const Checkout = () => {
       telefono: data.telefono,
       correo_electronico: data.correo_electronico,
       fecha_entrega: data.fecha_entrega,
-      Clientes_idClientes: 0,
+      Clientes_idClientes: 1,
       DetallesProductos: products,
     };
+
+    console.log(newOrder)
 
     try {
       const response: OrderResponse = await postOrder(newOrder);

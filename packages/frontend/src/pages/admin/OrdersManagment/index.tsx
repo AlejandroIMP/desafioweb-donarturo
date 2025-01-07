@@ -97,13 +97,7 @@ const OrdersManagment = () => {
       <div className='management-container'>
         <div className='management-header'>
           <h1 className="management-title">Manejo de ordenes</h1>
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={handleOpenModalAdd}
-          >
-            Agregar orden
-          </Button>
+
         </div>
         {
           loading ? (

@@ -15,6 +15,8 @@ export const formattedState = (state: number) => {
       return 'Inactivo';
     case 3:
       return 'En proceso';
+    case 4:
+      return 'Rechazado';
     default:
       return 'Desconocido';
   }
@@ -23,9 +25,9 @@ export const formattedState = (state: number) => {
 export const formattedRole = (role: number) => {
   switch (role) {
     case 1:
-      return 'Admin';
+      return 'Operador';
     case 2:
-      return 'User';
+      return 'Usuario';
     case 3:
       return 'Cliente';
     default:
