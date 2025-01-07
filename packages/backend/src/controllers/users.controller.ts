@@ -106,22 +106,24 @@ export const updateUser = async(req:Request, res:Response): Promise<void> => {
       return;
     }
 
+
     const emailExists = await User.findOne({
       where: { correo_electronico: userData.correo_electronico }
     });
 
-    if (emailExists){
+    if (emailExists && emailExists.idusuarios !== user.idusuarios){
       res.status(400).json({
         success: false,
         message: 'El correo electronico ya esta registrado'
       });
       return;
-    };
+    }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(userData.user_password, salt)
-
-    userData.user_password = hashedPassword;    
+    if(userData.user_password){
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(userData.user_password, salt)
+      userData.user_password = hashedPassword;
+    }   
 
     await user.update(userData);
     res.status(200).json({

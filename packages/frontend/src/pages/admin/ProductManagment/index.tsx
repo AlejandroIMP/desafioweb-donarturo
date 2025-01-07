@@ -13,7 +13,7 @@ const ProductManagment = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [openModalAdd, setOpenModalAdd] = useState(false);
+  const [openModalAddP, setopenModalAddP] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct>({
     idProductos: 0,
@@ -69,12 +69,12 @@ const ProductManagment = () => {
 
   
 
-  const handleOpenModalAdd = () => {
-    setOpenModalAdd(true);
+  const handleopenModalAddP = () => {
+    setopenModalAddP(true);
   };
 
   const handleCloseModalAdd = () => {
-    setOpenModalAdd(false);
+    setopenModalAddP(false);
   };
 
   const desactivarProducto = async(id: number) => {
@@ -97,18 +97,19 @@ const ProductManagment = () => {
     }
   }
 
+  const isProductActive = (product: IProduct) => product.estados_idestados === 1;
 
   return (
     <AdminLayout>
-      <div className="product-management">
-        <div className="product-header">
-          <h1 className="product-title">Products Management</h1>
+      <div className="management-container">
+        <div className="management-header">
+          <h1 className="management-title">Manejo de productos</h1>
           <Button
             variant="contained"
             color="primary"
-            onClick={handleOpenModalAdd}
+            onClick={handleopenModalAddP}
           >
-            Add Product
+            Añadir Producto
           </Button>
         </div>
 
@@ -160,6 +161,7 @@ const ProductManagment = () => {
                     <Button
                       variant="text"
                       color="success"
+                      disabled={isProductActive(product)}
                       onClick={() => activarProducto(product.idProductos)}
                     >
                       Activar
@@ -167,6 +169,7 @@ const ProductManagment = () => {
                     <Button
                       variant="text"
                       color="error"
+                      disabled={!isProductActive(product)}
                       onClick={() => desactivarProducto(product.idProductos)}
                     >
                       Desactivar
@@ -201,7 +204,7 @@ const ProductManagment = () => {
           </div>
         </Dialog>
         <Dialog
-          open={openModalAdd}
+          open={openModalAddP}
           onClose={handleCloseModalAdd}
           maxWidth="md"
           fullWidth

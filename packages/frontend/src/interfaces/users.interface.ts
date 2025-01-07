@@ -1,25 +1,24 @@
 import { IUser } from '@/interfaces/auth.interface';
 
-export interface createUserDta {
+export interface IUserCreate {
   rol_idrol: number;
   estados_idestados: number;
   correo_electronico: string;
-  user_password: string;
   nombre_completo: string;
+  user_password: string;
   telefono: string;
   fecha_nacimiento: string;
-  Clientes_idClientes: number;
+  Clientes_idClientes: number | null;
 }
 
-export interface updateUserDta {
+export interface IUserUpdate {
   rol_idrol: number;
   estados_idestados: number;
   correo_electronico: string;
-  user_password: string;
   nombre_completo: string;
   telefono: string;
   fecha_nacimiento: string;
-  Clientes_idClientes: string;
+  Clientes_idClientes?: number;
 }
 
 export interface userResponsePost {

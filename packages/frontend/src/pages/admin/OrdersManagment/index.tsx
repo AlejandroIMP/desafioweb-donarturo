@@ -1,13 +1,30 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { IOrder } from '@/interfaces/orderAndDetails.interface';
-import { getAllOrders } from '@/services/orders.service';
+import { getAllOrders, updateOrderState } from '@/services/orders.service';
 import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
+import { Dialog, IconButton, Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const OrdersManagment = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [openModalAdd, setOpenModalAdd] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [SelectedOrder, setSelectedOrder] = useState<IOrder>({
+    idOrden: 0,
+    fecha_creacion: '',
+    fecha_entrega: '',
+    total_orden: 0,
+    estados_idestados: 0,
+    idusuarios: 0,
+    nombre_completo: '',
+    direccion: '',
+    telefono: '',
+    correo_electronico: '',
+    Clientes_idClientes: 0
+  });
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -23,49 +40,186 @@ const OrdersManagment = () => {
     fetchOrders();
   }, []);
 
+  const handleOpenModalEdit = (order: IOrder) => {
+    setSelectedOrder(order);
+    setOpenModalEdit(true);
+  };
+
+  const handleCloseModalEdit = () => {
+    setSelectedOrder({
+      idOrden: 0,
+      fecha_creacion: '',
+      fecha_entrega: '',
+      total_orden: 0,
+      estados_idestados: 0,
+      idusuarios: 0,
+      nombre_completo: '',
+      direccion: '',
+      telefono: '',
+      correo_electronico: '',
+      Clientes_idClientes: 0
+    });
+    setOpenModalEdit(false);
+  };
+
+  const handleOpenModalAdd = () => {
+    setOpenModalAdd(true);
+  };
+
+  const handleCloseModalAdd = () => {
+    setOpenModalAdd(false);
+  };
+
+  const desactivarOrden = async (id: number) => {
+    try {
+      await updateOrderState(id, 2);
+      location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const activarOrden = async (id: number) => {
+    try {
+      await updateOrderState(id, 1);
+      location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const isOrderActive = (order: IOrder) => {
+    return order.estados_idestados === 1;
+  }
+
   return (
     <AdminLayout>
-      Orders
-      {
-        loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>There was an error</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Estado</th>
-                <th>Fecha de creación</th>
-                <th>Fecha de entrega</th>
-                <th>Usuario</th>
-                <th>Nombre</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
-                <th>Email</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.idOrden}>
-                  <td>{order.idOrden}</td>
-                  <td>{formattedState(order.estados_idestados)}</td>
-                  <td>{formattedDate(order.fecha_creacion)}</td>
-                  <td>{formattedDate(order.fecha_entrega)}</td>
-                  <td>{order.idusuarios}</td>
-                  <td>{order.nombre_completo}</td>
-                  <td>{order.direccion}</td>
-                  <td>{order.telefono}</td>
-                  <td>{order.correo_electronico}</td>
-                  <td>{formattedPrice(Number(order.total_orden))}</td>
+      <div className='management-container'>
+        <div className='management-header'>
+          <h1 className="management-title">Manejo de usuarios</h1>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleOpenModalAdd}
+          >
+            Agregar usuario
+          </Button>
+        </div>
+        {
+          loading ? (
+            <div className='loading-state'>Cargando Ordenes...</div>
+          ) : error ? (
+            <div className='error-state'>Ha habido un error al cargar ordenes</div>
+          ) : (
+            <table className='management-table'>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Estado</th>
+                  <th>Fecha de creación</th>
+                  <th>Fecha de entrega</th>
+                  <th>Usuario</th>
+                  <th>Nombre</th>
+                  <th>Direccion</th>
+                  <th>Telefono</th>
+                  <th>Email</th>
+                  <th>Total</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )
-      }
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.idOrden}>
+                    <td aria-label='id'>{order.idOrden}</td>
+                    <td data-label="Estado">
+                      <span className={`product-status ${order.estados_idestados === 1 ? 'status-active' : 'status-inactive'}`}>
+                        {formattedState(order.estados_idestados)}
+                      </span>
+                    </td>
+                    <td aria-label='creacion'>{formattedDate(order.fecha_creacion)}</td>
+                    <td aria-label='entrega'>{formattedDate(order.fecha_entrega)}</td>
+                    <td aria-label='usuario'>{order.idusuarios}</td>
+                    <td aria-label='nombre'>{order.nombre_completo}</td>
+                    <td aria-label='direccion'>{order.direccion}</td>
+                    <td aria-label='Telefono'>{order.telefono}</td>
+                    <td aria-label='Corre'>{order.correo_electronico}</td>
+                    <td aria-label='Total'>{formattedPrice(Number(order.total_orden))}</td>
+                    <td className='product-actions'>
+                      <Button
+                        variant='text'
+                        color='primary'
+                        onClick={() => handleOpenModalEdit(order)}
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="success"
+                        disabled={isOrderActive(order)}
+                        onClick={() => activarOrden(order.idOrden)}
+                      >
+                        Activar
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="error"
+                        disabled={!isOrderActive(order)}
+                        onClick={() => desactivarOrden(order.idOrden)}
+                      >
+                        Desactivar
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        }
+        <Dialog
+          open={openModalEdit}
+          onClose={handleCloseModalEdit}
+          maxWidth="md"
+          fullWidth
+        >
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '8px'
+          }}>
+            <IconButton
+              onClick={handleCloseModalEdit}
+              size="small"
+            >
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <div>
+            
+          </div>
+        </Dialog>
+        <Dialog
+          open={openModalAdd}
+          onClose={handleCloseModalAdd}
+          maxWidth="md"
+          fullWidth
+        >
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '8px'
+          }}>
+            <IconButton
+              onClick={handleCloseModalAdd}
+              size="small"
+            >
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <div>
+            
+          </div>
+        </Dialog>
+      </div>
     </AdminLayout>
   );
 };

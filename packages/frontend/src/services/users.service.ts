@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { userResponsePost } from '@/interfaces/users.interface'
 import { IUser, userResponseGet } from '@/interfaces/auth.interface'
-
+import { UpdateUserForm, CreateUserForm } from '@/schemas/user.schemas';
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const getHeaders = () => ({
@@ -28,25 +29,25 @@ export const getUser = async (id: string): Promise<IUser> => {
   }
 }
 
-export const createUser = async (product: IUser): Promise<IUser> => {
+export const createUser = async (product: CreateUserForm): Promise<userResponsePost> => {
   try{
-    const response = await axios.post<IUser>(`${apiBaseUrl}usuarios`, product, { headers: getHeaders() });
+    const response = await axios.post<userResponsePost>(`${apiBaseUrl}usuarios`, product, { headers: getHeaders() });
     return response.data;
   } catch (error){
     throw error;
   }
 }
 
-export const updateUsers = async (product: IUser): Promise<IUser> => {
+export const updateUsers = async (id:number, user: UpdateUserForm): Promise<userResponsePost> => {
   try{
-    const response = await axios.put<IUser>(`${apiBaseUrl}usuarios/${product.idusuarios}`, product, { headers: getHeaders() });
+    const response = await axios.put<userResponsePost>(`${apiBaseUrl}usuarios/${id}`, user, { headers: getHeaders() });
     return response.data;
   } catch (error){
     throw error;
   }
 }
 
-export const updateUsersState = async (id: string, estados_idestados: number): Promise<IUser> => {
+export const updateUsersState = async (id: number, estados_idestados: number): Promise<IUser> => {
   try{
     const response = await axios.patch<IUser>(`${apiBaseUrl}usuarios/${id}`, {estados_idestados}, { headers: getHeaders() });
     return response.data;
