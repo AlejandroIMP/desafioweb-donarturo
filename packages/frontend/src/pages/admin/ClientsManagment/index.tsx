@@ -4,6 +4,8 @@ import { getClients } from '@/services/clients.service';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ClientCreateForm from '@/components/ClientCreateForm';
+import ClientUpdateForm from '@/components/ClientUpdateForm';
 
 
 const ClientsManagment = () => {
@@ -139,7 +141,7 @@ const ClientsManagment = () => {
             </IconButton>
           </div>
           <div>
-            
+            <ClientUpdateForm client={SelectedClient} onClose={handleCloseModalEdit} />
           </div>
         </Dialog>
         <Dialog
@@ -161,7 +163,7 @@ const ClientsManagment = () => {
             </IconButton>
           </div>
           <div>
-            
+            <ClientCreateForm />
           </div>
         </Dialog>
 			</div>

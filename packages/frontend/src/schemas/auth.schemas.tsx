@@ -27,7 +27,9 @@ export const RegisterSchema = z.object({
   nombre_completo: z.string()
     .nonempty('Nombre requerido'),
   telefono: z.string()
-    .nonempty('Teléfono requerido').min(8, 'Numero de telefono invalido').max(9, 'Número de teléfono inválido'),
+  .min(8, 'Teléfono debe tener al menos 8 caracteres')
+  .max(9, 'Teléfono no debe exceder 9 caracteres')
+  .regex(/^\d{4}-\d{4}$/, 'Formato inválido. Use: XXXX-XXXX'),
   fecha_nacimiento: z.string()
     .nonempty('Fecha de nacimiento requerida')
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Fecha de nacimiento inválida')

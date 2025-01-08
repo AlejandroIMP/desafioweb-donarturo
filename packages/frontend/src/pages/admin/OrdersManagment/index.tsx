@@ -5,12 +5,12 @@ import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtil
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import OrderFormUpdate from '@/components/OrderUpdateForm';
 
 const OrdersManagment = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [openModalAdd, setOpenModalAdd] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [SelectedOrder, setSelectedOrder] = useState<IOrder>({
     idOrden: 0,
@@ -62,13 +62,6 @@ const OrdersManagment = () => {
     setOpenModalEdit(false);
   };
 
-  const handleOpenModalAdd = () => {
-    setOpenModalAdd(true);
-  };
-
-  const handleCloseModalAdd = () => {
-    setOpenModalAdd(false);
-  };
 
   const desactivarOrden = async (id: number) => {
     try {
@@ -188,31 +181,10 @@ const OrdersManagment = () => {
             </IconButton>
           </div>
           <div>
-            
+            <OrderFormUpdate order={SelectedOrder} />
           </div>
         </Dialog>
-        <Dialog
-          open={openModalAdd}
-          onClose={handleCloseModalAdd}
-          maxWidth="md"
-          fullWidth
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: '8px'
-          }}>
-            <IconButton
-              onClick={handleCloseModalAdd}
-              size="small"
-            >
-              <CloseIcon />
-            </IconButton>
-          </div>
-          <div>
-            
-          </div>
-        </Dialog>
+        
       </div>
     </AdminLayout>
   );

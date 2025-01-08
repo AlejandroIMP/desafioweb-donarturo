@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OrderResponse, OrderResponseGet } from '@/interfaces/orderAndDetails.interface';
-import { OrderSchemaForm } from '@/schemas/order.schemas';
+import { OrderSchemaForm, OrderSchemaUpdateForm } from '@/schemas/order.schemas';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -47,7 +47,7 @@ export const getAllOrders = async (): Promise<OrderResponseGet> => {
   }
 }
 
-export const updateOrder = async (id: number, data: OrderSchemaForm): Promise<OrderResponse> => {
+export const updateOrder = async (id: number, data: OrderSchemaUpdateForm): Promise<OrderResponse> => {
   try {
     const response = await axios.put<OrderResponse>(`${apiBaseUrl}order/${id}`, data, { headers: getHeaders() });
     return response.data;

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { IProductCategory, ProductCategoryResponseGet } from '@/interfaces/productcategory.interface';
+import { CategoryUpdateFormSchema } from '@/schemas/categories.schemas';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,6 +16,26 @@ export const getCategories = async (): Promise<ProductCategoryResponseGet> => {
       headers: getHeaders()
     });
     return response.data;
+  } catch (error) {
+    throw error instanceof Error ? error : new Error('Unknown error');
+  }
+}
+
+export const createCategory = async (category: CategoryUpdateFormSchema): Promise<void> => {
+  try {
+    await axios.post(`${apiBaseUrl}/productcategory`, category, {
+      headers: getHeaders()
+    });
+  } catch (error) {
+    throw error instanceof Error ? error : new Error('Unknown error');
+  }
+}
+
+export const updateCategory = async (id: number, category: CategoryUpdateFormSchema): Promise<void> => {
+  try {
+    await axios.put(`${apiBaseUrl}/productcategory/${id}`, category, {
+      headers: getHeaders()
+    });
   } catch (error) {
     throw error instanceof Error ? error : new Error('Unknown error');
   }

@@ -12,7 +12,9 @@ export const OrderSchema = z.object({
   nombre_completo:  z.string().nonempty('Nombre requerido'),
   direccion: z.string().nonempty('Dirección requerida'),
   telefono: z.string()
-    .nonempty('Teléfono requerido').min(8, 'Numero de telefono invalido').max(9, 'Número de teléfono inválido'),
+  .min(8, 'Teléfono debe tener al menos 8 caracteres')
+  .max(9, 'Teléfono no debe exceder 9 caracteres')
+  .regex(/^\d{4}-\d{4}$/, 'Formato inválido. Use: XXXX-XXXX'),
   correo_electronico: z.string()
     .email('Email inválido')
     .nonempty('Email requerido')
@@ -24,3 +26,21 @@ export const OrderSchema = z.object({
 
 export type OrderSchemaForm = z.infer<typeof OrderSchema>;
 
+export const OrderSchemaUpdate = z.object({
+  idusuario: z.number().int().positive().optional(),
+  estados_idestados: z.number().transform(val => Number(val)),
+  nombre_completo:  z.string().nonempty('Nombre requerido'),
+  direccion: z.string().nonempty('Dirección requerida'),
+  telefono: z.string()
+  .min(8, 'Teléfono debe tener al menos 8 caracteres')
+  .max(9, 'Teléfono no debe exceder 9 caracteres')
+  .regex(/^\d{4}-\d{4}$/, 'Formato inválido. Use: XXXX-XXXX'),
+  correo_electronico: z.string()
+    .email('Email inválido')
+    .nonempty('Email requerido')
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email inválido, ingrese un correo real'),
+  fecha_entrega: z.string().optional(),
+  Clientes_idClientes: z.string().optional().nullable(),
+})
+
+export type OrderSchemaUpdateForm = z.infer<typeof OrderSchemaUpdate>;

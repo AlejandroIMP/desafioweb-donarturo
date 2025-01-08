@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdateUserForm, updateUserSchema } from "@/schemas/user.schemas";
-import { updateUsers } from "@/services/users.service";
-import { Button, TextField, Select, MenuItem } from "@mui/material";
-import { IUser } from "@/interfaces/auth.interface";
-import { useState } from "react";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UpdateUserForm, updateUserSchema } from '@/schemas/user.schemas';
+import { updateUsers } from '@/services/users.service';
+import { Button, TextField, Select, MenuItem } from '@mui/material';
+import { IUser } from '@/interfaces/auth.interface';
 
 interface UserFormUpdateProps {
   usuario: IUser;
@@ -13,50 +13,47 @@ interface UserFormUpdateProps {
 const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
   const [valueState, setValueState] = useState(usuario.estados_idestados);
   const [valueRol, setValueRol] = useState(usuario.rol_idrol);
-  
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<UpdateUserForm>({
+
+  const { register, handleSubmit, formState: { errors } } = useForm<UpdateUserForm>({
     resolver: zodResolver(updateUserSchema),
     mode: 'onChange',
     defaultValues: {
-      rol_idrol: valueRol,
-      estados_idestados: valueState,
+      idusuarios: usuario.idusuarios,
+      rol_idrol: usuario.rol_idrol,
+      estados_idestados: usuario.estados_idestados,
       correo_electronico: usuario.correo_electronico,
       nombre_completo: usuario.nombre_completo,
       telefono: usuario.telefono,
       fecha_nacimiento: usuario.fecha_nacimiento,
-      Clientes_idClientes: usuario.Clientes_idClientes || 0
+      Clientes_idClientes: usuario.Clientes_idClientes?.toString()
     }
   });
 
-  const onSubmit = async(data: UpdateUserForm) => {
-    console.log(data);
-    Number(data.rol_idrol);
-    Number(data.estados_idestados);
-    Number(data.Clientes_idClientes);
+  const onSubmit = async (data: UpdateUserForm) => {
     try {
-      console.log(data);
-      await updateUsers(usuario.idusuarios, data);
-      reset();
+      const formattedData = {
+        ...data,
+        rol_idrol: Number(data.rol_idrol),
+        estados_idestados: Number(data.estados_idestados),
+        Clientes_idClientes: data.Clientes_idClientes?.toString() || null
+      };
+
+      await updateUsers(usuario.idusuarios, formattedData);
+      
       location.reload();
     } catch (error) {
-      throw error instanceof Error ? error : new Error('Unknown error occurred');
+      console.error('Error updating user:', error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        label="Idusuarios"
+        label="ID"
         type="number"
         fullWidth
-        disabled={true}
+        disabled
         defaultValue={usuario.idusuarios}
-      />
-      <TextField
-        label="Fecha de creacion"
-        fullWidth
-        disabled={true}
-        defaultValue={usuario.fecha_creacion}
       />
       <Select
         {...register("rol_idrol")}
@@ -66,11 +63,10 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
         value={valueRol}
         onChange={(e) => setValueRol(Number(e.target.value))}
       >
-        <MenuItem value="1">Operador</MenuItem>
-        <MenuItem value="2">Usuario</MenuItem>
-        <MenuItem value="3">Cliente</MenuItem>
+        <MenuItem value={"1"}>Operador</MenuItem>
+        <MenuItem value={"2"}>Usuario</MenuItem>
+        <MenuItem value={"3"}>Cliente</MenuItem>
       </Select>
-      
       <Select
         {...register("estados_idestados")}
         label="Estado"
@@ -79,61 +75,49 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
         value={valueState}
         onChange={(e) => setValueState(Number(e.target.value))}
       >
-        <MenuItem value="1">Activo</MenuItem>
-        <MenuItem value="2">Inactivo</MenuItem>
+        <MenuItem value={"1"}>Activo</MenuItem>
+        <MenuItem value={"2"}>Inactivo</MenuItem>
       </Select>
-
       <TextField
         {...register("correo_electronico")}
-        label="Correo electronico"
+        label="Email"
         fullWidth
-        defaultValue={usuario.correo_electronico}
         error={!!errors.correo_electronico}
-        helperText={errors.correo_electronico ? errors.correo_electronico.message : null}
+        helperText={errors.correo_electronico?.message}
       />
       <TextField
         {...register("nombre_completo")}
-        label="Nombre completo"
+        label="Nombre"
         fullWidth
-        defaultValue={usuario.nombre_completo}
         error={!!errors.nombre_completo}
-        helperText={errors.nombre_completo ? errors.nombre_completo.message : null}
+        helperText={errors.nombre_completo?.message}
       />
       <TextField
         {...register("telefono")}
-        label="Telefono"
-        defaultValue={usuario.telefono}
+        label="Teléfono"
         fullWidth
         error={!!errors.telefono}
-        helperText={errors.telefono ? errors.telefono.message : null}
+        helperText={errors.telefono?.message}
       />
       <TextField
         {...register("fecha_nacimiento")}
-        label="Fecha de nacimiento"
+        label="Fecha Nacimiento"
+        type="date"
         fullWidth
-        defaultValue={usuario.fecha_nacimiento}
+        InputLabelProps={{ shrink: true }}
         error={!!errors.fecha_nacimiento}
-        helperText={errors.fecha_nacimiento ? errors.fecha_nacimiento.message : null}
-      />
-      <TextField
-        {...register("Clientes_idClientes")}
-        label="Cliente"
-        type="number"
-        defaultValue={usuario.Clientes_idClientes}
-        fullWidth
-        error={!!errors.Clientes_idClientes}
-        helperText={errors.Clientes_idClientes ? errors.Clientes_idClientes.message : null}
+        helperText={errors.fecha_nacimiento?.message}
       />
       <Button
+        type="submit"
         variant="contained"
         color="primary"
-        type="submit"
-        disabled={Object.keys(errors).length > 0}
+        fullWidth
       >
-        Actualizar
+        Actualizar Usuario
       </Button>
     </form>
   );
-}
+};
 
 export default UserFormUpdate;

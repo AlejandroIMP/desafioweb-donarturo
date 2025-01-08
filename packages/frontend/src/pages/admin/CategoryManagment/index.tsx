@@ -5,7 +5,8 @@ import { formattedDate, formattedState } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
+import CategoryUpdateForm from '@/components/CategoryUpdateForm';
+import CategoryCreateForm from '@/components/CategoryCreateForm';
 
 const CategoryManagment = () => {
   const [categories, setCategories] = useState<IProductCategory[]>([]);
@@ -13,14 +14,14 @@ const CategoryManagment = () => {
   const [error, setError] = useState(false);
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [SelectedCategory, setSelectedCategory] = useState<IProductCategory>({
+  const [selectedCategory, setSelectedCategory] = useState<IProductCategory>({
     idCategoriaProductos: 0,
     usuarios_idusuarios: 0,
     nombre: '',
     estados_idestados: 0,
     fecha_creacion: ''
   });
-
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -125,7 +126,7 @@ const CategoryManagment = () => {
                       <td>{formattedDate(category.fecha_creacion)}</td>
                       <td>
                         <Button
-                          variant='contained'
+                          variant='text'
                           color='primary'
                           onClick={() => handleOpenModalEdit(category)}
                         >
@@ -155,7 +156,50 @@ const CategoryManagment = () => {
             </div>
           )
         }
-
+        <Dialog
+          open={openModalEdit}
+          onClose={handleCloseModalEdit}
+          maxWidth="md"
+          fullWidth
+        >
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '8px'
+          }}>
+            <IconButton
+              onClick={handleCloseModalEdit}
+              size="small"
+            >
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <div>
+            <CategoryUpdateForm category={selectedCategory} onClose={handleCloseModalEdit}/>
+          </div>
+        </Dialog>
+        <Dialog
+          open={openModalAdd}
+          onClose={handleCloseModalAdd}
+          maxWidth="md"
+          fullWidth
+        >
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '8px'
+          }}>
+            <IconButton
+              onClick={handleCloseModalAdd}
+              size="small"
+            >
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <div>
+            <CategoryCreateForm />
+          </div>
+        </Dialog>
       </div>
     </AdminLayout>
   );

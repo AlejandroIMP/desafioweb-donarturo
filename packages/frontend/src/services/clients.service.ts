@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IClient, ClientResponseGet } from '@/interfaces/clients.interface';
+import { IClient, ClientResponseGet, IClientCreate } from '@/interfaces/clients.interface';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -20,5 +20,26 @@ export const getClients = async (): Promise<ClientResponseGet> => {
   }
 };
 
+export const createClient = async (clientData: IClientCreate): Promise<ClientResponseGet> => {
+  try{
+    const response = await axios.post(`${apiBaseUrl}/client`, clientData, {
+      headers: getHeaders()
+    });
+    return response.data;
+  } catch(error){
+    throw error instanceof Error ? error : new Error('Unknown error occurred');
+  }
+};
+
+export const updateClient = async (id:number, clientData: IClientCreate): Promise<ClientResponseGet> => {
+  try{
+    const response = await axios.put(`${apiBaseUrl}/client/${id}`, clientData, {
+      headers: getHeaders()
+    });
+    return response.data;
+  } catch(error){
+    throw error instanceof Error ? error : new Error('Unknown error occurred');
+  }
+};
 
 
