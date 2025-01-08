@@ -1,0 +1,104 @@
+:root[data-theme="light"] {
+  --order-bg: #ffffff;
+  --order-text: #333333;
+  --order-shadow: rgba(0,0,0,0.1);
+  --order-hover: #f8f9fa;
+  --order-border: #e9ecef;
+  --order-pending: #ffd43b;
+  --order-approved: #51cf66;
+  --order-delivered: #339af0;
+  --order-cancelled: #ff6b6b;
+}
+
+:root[data-theme="dark"] {
+  --order-bg: #212529;
+  --order-text: #f8f9fa;
+  --order-shadow: rgba(0,0,0,0.2);
+  --order-hover: #343a40;
+  --order-border: #495057;
+  --order-pending: #fab005;
+  --order-approved: #40c057;
+  --order-delivered: #228be6;
+  --order-cancelled: #fa5252;
+}
+
+.order--card {
+  background: var(--order-bg);
+  color: var(--order-text);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid var(--order-border);
+  box-shadow: 0 2px 4px var(--order-shadow);
+}
+
+.order--card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--order-shadow);
+  background: var(--order-hover);
+}
+
+.order--card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--order-text);
+}
+
+.order--card p {
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order--card p:last-child {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--order-border);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.order--status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.order--status.pending {
+  background: var(--order-pending);
+  color: #000;
+}
+
+.order--status.approved {
+  background: var(--order-approved);
+  color: #fff;
+}
+
+.order--status.delivered {
+  background: var(--order-delivered);
+  color: #fff;
+}
+
+.order--status.cancelled {
+  background: var(--order-cancelled);
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .order--card {
+    padding: 1rem;
+  }
+
+  .order--card h2 {
+    font-size: 1.1rem;
+  }
+
+  .order--card p {
+    font-size: 0.9rem;
+  }
+}

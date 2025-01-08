@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {  CartProduct } from '@/interfaces/product.interface';
+import { CartProduct } from '@/interfaces/product.interface';
 import { useClientContext } from '@/hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,19 +12,19 @@ interface CardProps {
 
 const CheckoutCard = ({ product }: CardProps) => {
   const { setCartProducts } = useClientContext();
-  const [quantity, setQuantity] = useState(product.quantity?? 1);
+  const [quantity, setQuantity] = useState(product.quantity ?? 1);
 
   const removeProductHandler = () => {
-    setCartProducts((prev: CartProduct[]) => 
+    setCartProducts((prev: CartProduct[]) =>
       prev.filter((item: CartProduct) => item.idProductos !== product.idProductos)
     );
   };
 
 
   const updateQuantity = (newQuantity: number) => {
-    setCartProducts(prev => 
-      prev.map(item => 
-        item.idProductos === product.idProductos 
+    setCartProducts(prev =>
+      prev.map(item =>
+        item.idProductos === product.idProductos
           ? { ...item, quantity: newQuantity }
           : item
       )
@@ -53,8 +53,8 @@ const CheckoutCard = ({ product }: CardProps) => {
         <figure>
           <img src={product.foto} alt={product.nombre} />
         </figure>
-        <p>{product.nombre}</p>
       </div>
+      <p>{product.nombre}</p>
       <div className='quantity-controls'>
         <button onClick={decreaseQuantity} disabled={quantity <= 1}>
           <RemoveIcon />
@@ -64,12 +64,19 @@ const CheckoutCard = ({ product }: CardProps) => {
           <AddIcon />
         </button>
       </div>
-      <div>
+      <div className='checkout--card__price'>
         <p>${product.precio * quantity}</p>
-        <button onClick={removeProductHandler}>
-          <CloseIcon />
-        </button>
       </div>
+      <div>
+        <p>stock</p>
+        <p>{product.stock}</p>
+      </div>
+      <CloseIcon
+        color='error'
+        onClick={removeProductHandler}
+        sx={{ cursor: 'pointer' }}
+      />
+
     </div>
   );
 };

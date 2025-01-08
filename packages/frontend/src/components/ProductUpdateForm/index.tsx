@@ -159,7 +159,7 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
         type='submit'
         variant='contained'
       >
-        Crear Producto
+        Actualizar Producto
       </Button>
     </form>
   );

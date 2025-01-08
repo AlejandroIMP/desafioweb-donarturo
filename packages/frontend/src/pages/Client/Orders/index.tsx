@@ -1,38 +1,37 @@
 import ClientLayout from '@/layouts/ClientLayout';
 import { useClientContext } from '@/hooks';
+import OrderCard from '@/components/OrderCard';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button } from '@mui/material';
 import { useNavigate } from 'react-router';
-import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
 
 const Orders = () => {
   const { userOrders } = useClientContext();
-  const navigate = useNavigate();
-
+  const Navigate = useNavigate();
   if (!userOrders.length) {
     return (
       <ClientLayout>
         <h1>Orders</h1>
         <p>No orders found</p>
+        <Button
+variant='contained' color='secondary' onClick={() => Navigate('/home')}
+        >
+          Ir atras
+        </Button>
       </ClientLayout>
     );
   }
 
   return (
     <ClientLayout>
-      <h1>Orders</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <ArrowBackIcon style={{ cursor:'pointer'}} onClick={() => Navigate('/home')} />
+        <h1>Orders</h1>
+      </div>
       <section className="orders--container">
         {
           userOrders.map(order => (
-            <div key={order.idOrden} className="order--card"
-              onClick={() => {
-                navigate(`/orders/${order.idOrden}`);
-              }}
-            >
-              <h2>Order: {order.idOrden}</h2>
-              <p>Fecha de entrega: {formattedDate(order.fecha_entrega)}</p>
-              <p>Fecha de creacion: {formattedDate(order.fecha_creacion)}</p>
-              <p>Order state: {formattedState(order.estados_idestados)}</p>
-              <p>Total: Q {formattedPrice(order.total_orden)}</p>
-            </div>
+            <OrderCard key={order.idOrden} {...order} />
           ))
         }
       </section>

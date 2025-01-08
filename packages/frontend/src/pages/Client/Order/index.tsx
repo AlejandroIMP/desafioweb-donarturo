@@ -2,10 +2,10 @@ import ClientLayout from '@/layouts/ClientLayout';
 import { IOrder } from '@/interfaces/orderAndDetails.interface';
 import { useClientContext } from '@/hooks';
 import { updateOrderState } from '@/services/orders.service';
-import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
 import { Button } from '@mui/material';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import OrderCard from '@/components/OrderCard';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Order = () => {
   const { userOrders } = useClientContext();
@@ -62,24 +62,26 @@ const Order = () => {
 
   return (
     <ClientLayout>
-      <h1>Order</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <ArrowBackIcon style={{ cursor:'pointer'}} onClick={() => Navigate(-1)} />
+        <h1>Order</h1>
+      </div>
       {
-        <div>
-          <h2>Order: {Order.idOrden}</h2>
-          <p>Fecha de entrega: {formattedDate(Order.fecha_entrega)}</p>
-          <p>Fecha de creacion: {formattedDate(Order.fecha_creacion)}</p>
-          <p>Order state: {formattedState(Order.estados_idestados)}</p>
-          <p>Total: Q{formattedPrice(Order.total_orden)}</p>
-          <Button
-            variant='contained'
-            color='error'
-            disabled={Order.estados_idestados === 2}
-            onClick={() => {
-              inactiveOrder(Order.idOrden), location.reload()
-            }
-            }>Cancelar Orden</Button>
-        </div>
+        <OrderCard
+          key={Order.idOrden}
+          {...Order} />
       }
+      <Button
+        variant='contained'
+        color='error'
+        disabled={Order.estados_idestados === 2}
+        onClick={() => {
+          inactiveOrder(Order.idOrden), location.reload()
+          }
+        }
+      >
+        Cancelar Orden
+      </Button>
     </ClientLayout>
   );
 };

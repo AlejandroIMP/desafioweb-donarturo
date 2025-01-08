@@ -4,27 +4,16 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useState, useEffect } from "react";
 import { Menu, IconButton, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PeopleIcon from '@mui/icons-material/People';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import CategoryIcon from '@mui/icons-material/Category';
-import GroupIcon from '@mui/icons-material/Group';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import './index.css';
 
 const NavbarHome = () => {
   const { count, setCount, setCartProducts, closeCheckoutSideMenuHandler } = useClientContext();
   const [theme, setTheme] = useState(localStorage.getItem('theme-mode') || 'system');
   const [mainMenuAnchor, setMainMenuAnchor] = useState<null | HTMLElement>(null);
-  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
 
   const handleMainMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMainMenuAnchor(event.currentTarget);
   };
-
-  const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setUserMenuAnchor(event.currentTarget);
-  };
-
 
   useEffect(() => {
     const updateTheme = () => {
@@ -67,7 +56,7 @@ const NavbarHome = () => {
             </NavLink>
           </li>
           <li className='nav-item'>
-            <NavLink to='/Cart' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            <NavLink to='/Cart' className={({ isActive }) => isActive ? 'nav-link active cart--link--container' : 'nav-link cart--link--container'}>   
               {count}
               <AddShoppingCartIcon />
               Carrito
