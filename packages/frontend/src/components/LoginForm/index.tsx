@@ -49,9 +49,11 @@ const LoginForm = () => {
           correo_electronico: '',
           user_password: ''
         });
+
         const redirectPath = navigateByRole(response.data.user.rol);
 
         navigate(redirectPath, { replace: true });
+        location.reload();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

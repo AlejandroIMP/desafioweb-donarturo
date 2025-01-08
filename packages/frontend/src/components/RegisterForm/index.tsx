@@ -57,6 +57,7 @@ const RegisterForm = () => {
               email: data.correo_electronico
             }
           });
+          
         }, 2000);
       }
     } catch (error) {
@@ -166,7 +167,7 @@ const RegisterForm = () => {
             {...register('estados_idestados')}
             value={selectedStatus}
             variant="outlined"
-            disabled={isLoading}
+            disabled={true}
           >
             <MenuItem value={1}>Activo</MenuItem>
             <MenuItem value={2}>Inactivo</MenuItem>
@@ -177,7 +178,7 @@ const RegisterForm = () => {
             {...register('Clientes_idClientes')}
             value={selectedRole}
             variant="outlined"
-            disabled={isLoading}
+            disabled={true}
           >
             <MenuItem value={1}>Cliente</MenuItem>
           </Select>
@@ -187,7 +188,7 @@ const RegisterForm = () => {
             {...register('Clientes_idClientes')}
             value={selectedClient}
             variant="outlined"
-            disabled={isLoading}
+            disabled={true}
           >
             <MenuItem value={1}>Cliente</MenuItem>
           </Select>
