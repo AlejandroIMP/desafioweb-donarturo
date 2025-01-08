@@ -2,9 +2,9 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database/connection';
 import { IOrder, IOrderDetails } from '../interfaces/orderAndDetails.interface';
 
-type OrderCreationAttributes = Optional<IOrder, 'idOrden' | 'fecha_creacion'>;
+export type OrderCreationAttributes = Optional<IOrder, 'idOrden' | 'fecha_creacion'>;
 
-class Order extends Model<IOrder, OrderCreationAttributes> implements IOrder {
+export class Order extends Model<IOrder, OrderCreationAttributes> implements IOrder {
   declare idOrden: number;
   declare idusuarios: number;
   declare estados_idestados: number;
@@ -88,9 +88,9 @@ Order.init(
   }
 )
 
-type OrderDetailsCreationAttributes = Optional<IOrderDetails, 'idOrdenDetalles'>;
+export type OrderDetailsCreationAttributes = Optional<IOrderDetails, 'idOrdenDetalles'>;
 
-class OrderDetail extends Model<IOrderDetails, OrderDetailsCreationAttributes> implements IOrderDetails {
+export class OrderDetail extends Model<IOrderDetails, OrderDetailsCreationAttributes> implements IOrderDetails {
   declare idOrdenDetalles: number;
   declare idOrden: number;
   declare idProductos: number;
@@ -144,4 +144,3 @@ OrderDetail.init(
   }
 )
 
-export default Order;

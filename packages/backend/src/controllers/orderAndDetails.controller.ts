@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Order from '../models/orderAndDetails.models';
+import {Order, OrderDetail} from '../models/orderAndDetails.models';
 import { OrderRequest, IOrder } from '../interfaces/orderAndDetails.interface';
 import sequelize from '../database/connection';
 import { QueryTypes } from 'sequelize';
@@ -187,4 +187,36 @@ export const getOrderByUser = async(req: Request, res: Response): Promise<void> 
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   };
+}
+
+export const getOrderDetailsById = async(req: Request, res: Response): Promise<void> => {
+  try{
+    const { id } = req.params;
+
+    if(!id){
+      res.status(400).json({
+        success: false,
+        message: 'ID de orden no proporcionado'
+      });
+      return;
+    }
+    const orderDetails = await OrderDetail.findAll({
+      where: {
+        idOrden: id
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      data: orderDetails,
+      count: orderDetails.length
+    });
+  } catch(error){
+    
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener los detalles de la orden',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 }
