@@ -74,6 +74,7 @@ const Checkout = () => {
 
         setTimeout(() => {
           navigate(`/`);
+          location.reload();
         }, 3000);
       }
     } catch (error) {

@@ -55,7 +55,7 @@ const AdminHome = () => {
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Client</th>
+                <th>user</th>
                 <th>Order Date</th>
                 <th>Total</th>
                 <th>State</th>
@@ -67,7 +67,7 @@ const AdminHome = () => {
                 ordersNeedsDelivered.map(order => (
                   <tr key={order.idOrden}>
                     <td>{order.idOrden}</td>
-                    <td>{order.Clientes_idClientes}</td>
+                    <td>{order.idusuarios}</td>
                     <td>{formattedDate(order.fecha_entrega)}</td>
                     <td>Q{order.total_orden}</td>
                     <td data-label="Estado">

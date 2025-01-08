@@ -4,7 +4,7 @@ import { useClientContext } from '@/hooks';
 import { updateOrderState } from '@/services/orders.service';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router';
-import OrderCard from '@/components/OrderCard';
+import OrderWIthDetails from '@/components/OrderWithDetailsCard';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Order = () => {
@@ -69,7 +69,7 @@ const Order = () => {
         <h1>Order</h1>
       </div>
       {
-        <OrderCard
+        <OrderWIthDetails
           key={Order.idOrden}
           {...Order} />
       }
