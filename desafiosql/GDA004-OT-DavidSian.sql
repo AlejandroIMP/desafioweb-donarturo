@@ -1070,7 +1070,7 @@ exec insertProductos 1, 1, 'Batería Portátil', 'Marca P', 'CDE567', 800, 1, 40
 exec insertProductos 2, 2, 'Cargador Inalámbrico', 'Marca Q', 'FGH890', 400, 2, 30.00, '2024-08-21', NULL;
 
 
-CREATE TRIGGER trg_UpdateProductStatus
+CREATE OR ALTER TRIGGER trg_UpdateProductStatus
 ON CategoriaProductos
 AFTER UPDATE
 AS
