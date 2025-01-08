@@ -36,7 +36,7 @@ const Order = () => {
     if (!confirm) {
       return;
     }
-    const newState: number = 4;
+    const newState: number = 6;
     try {
       updateOrderState(id, newState);
       alert('Orden Cancelada');
