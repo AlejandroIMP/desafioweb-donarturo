@@ -5,10 +5,11 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router';
 
 const Cart = () => {
-  const { cartProducts, setCartProducts, totalPrice } = useClientContext();
+  const { cartProducts, setCartProducts, totalPrice, setCount } = useClientContext();
 
   const handleCancelPurchase = () => {
     setCartProducts([]);
+    setCount(0)
   };
 
 
