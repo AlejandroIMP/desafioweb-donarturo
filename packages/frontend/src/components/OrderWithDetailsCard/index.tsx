@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import './index.css'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useClientContext } from '@/hooks';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,6 +15,8 @@ const getHeaders = () => ({
 });
 
 const OrderWIthDetails = (order: IOrder) => {
+  const { products } = useClientContext();
+
   const [orderDetails, setOrderDetails] = useState<IOrderDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -30,7 +33,7 @@ const OrderWIthDetails = (order: IOrder) => {
 
   const getDetails = async (orderId: number) => {
     try {
-      const response = await axios.get(`${apiBaseUrl}order/details/${orderId}`,{headers: getHeaders()});
+      const response = await axios.get(`${apiBaseUrl}order/details/${orderId}`, { headers: getHeaders() });
       setOrderDetails(response.data.data);
       return response.data;
     } catch (e) {
@@ -44,7 +47,10 @@ const OrderWIthDetails = (order: IOrder) => {
     getDetails(order.idOrden);
   }, [])
 
-  console.log(orderDetails);
+  const renderProductName = (idProducto: number) => {
+    const product = products.find(product => product.idProductos === idProducto);
+    return <h2>{product?.nombre}</h2>
+  }
 
   return (
     <section>
@@ -79,11 +85,16 @@ const OrderWIthDetails = (order: IOrder) => {
                 <span>Q {formattedPrice(order.total_orden)}</span>
               </p>
             </div>
-
+            <h3>Detalles</h3>
             {
               orderDetails.map(detail => (
                 <div className="order--card" key={detail.idOrdenDetalles}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <h2>Product: #{detail.idProductos}</h2>
+                  {
+                    renderProductName(detail.idProductos)
+                  }
+                  </div>
                   <p>
                     <span>Price:</span>
                     <span>Q {formattedPrice(detail.precio)}</span>
