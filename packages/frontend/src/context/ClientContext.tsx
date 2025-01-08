@@ -75,7 +75,9 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
   const getUserOrders = async () => {
     try {
       const response = await getOrdersByUser(Number(idUsuario));
-      setUserOrders(response.data);
+
+      const userOrdersConfirmedAndDelivered = response.data.filter((order: IOrder) => order.estados_idestados === 7 || order.estados_idestados === 8);
+      setUserOrders(userOrdersConfirmedAndDelivered);
     } catch (error) {
       setError(error instanceof Error ? error : new Error('Failed to fetch orders'));
     }
@@ -96,6 +98,7 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
       totalPrice,
       setTotalPrice,
 
+      setUserOrders,
       userOrders,
       getUserOrders,
 

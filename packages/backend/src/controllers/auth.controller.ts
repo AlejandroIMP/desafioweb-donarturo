@@ -43,6 +43,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (theUser.estados_idestados !== 1) {
+      
+      res.status(401).json({
+        success: false,
+        message: 'El usuario no se encuentra activo'
+      });
+      return;
+    }
+
 
     const payload: TokenPayload = {
       id: theUser.idusuarios,

@@ -18,9 +18,10 @@ const UserFormCreate = () => {
 
   const onSubmit = async (data: CreateUserForm) => {
 
-    console.log(data);
     try {
+      
       await createUser(data);
+
       reset();
       location.reload();
       
@@ -99,15 +100,7 @@ const UserFormCreate = () => {
         error={!!errors.fecha_nacimiento}
         helperText={errors.fecha_nacimiento ? errors.fecha_nacimiento.message : null}
       />
-      <TextField
-        {...register("Clientes_idClientes")}
-        label="Cliente"
-        type="number"
-        defaultValue={1}
-        fullWidth
-        error={!!errors.Clientes_idClientes}
-        helperText={errors.Clientes_idClientes ? errors.Clientes_idClientes.message : null}
-      />
+
       <Button
         variant="contained"
         color="primary"

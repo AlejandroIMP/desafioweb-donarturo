@@ -62,27 +62,12 @@ const OrdersManagment = () => {
     setOpenModalEdit(false);
   };
 
-
-  const desactivarOrden = async (id: number) => {
-    try {
-      await updateOrderState(id, 2);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const activarOrden = async (id: number) => {
-    try {
-      await updateOrderState(id, 1);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const isOrderActive = (order: IOrder) => {
-    return order.estados_idestados === 1;
+  if (orders.length === 0) {
+    return (
+      <AdminLayout>
+        <div className='empty-state'>No hay ordenes</div>
+      </AdminLayout>
+    )
   }
 
   return (
@@ -119,7 +104,7 @@ const OrdersManagment = () => {
                   <tr key={order.idOrden}>
                     <td aria-label='id'>{order.idOrden}</td>
                     <td data-label="Estado">
-                      <span className={`product-status ${order.estados_idestados === 1 ? 'status-active' : 'status-inactive'}`}>
+                      <span className={`product-status ${order.estados_idestados === 1 || order.estados_idestados === 7 || order.estados_idestados === 8 ? 'status-active' : order.estados_idestados === 3 ? 'status-pending' : 'status-inactive'}`}>
                         {formattedState(order.estados_idestados)}
                       </span>
                     </td>
@@ -139,22 +124,7 @@ const OrdersManagment = () => {
                       >
                         Editar
                       </Button>
-                      <Button
-                        variant="text"
-                        color="success"
-                        disabled={isOrderActive(order)}
-                        onClick={() => activarOrden(order.idOrden)}
-                      >
-                        Activar
-                      </Button>
-                      <Button
-                        variant="text"
-                        color="error"
-                        disabled={!isOrderActive(order)}
-                        onClick={() => desactivarOrden(order.idOrden)}
-                      >
-                        Desactivar
-                      </Button>
+
                     </td>
                   </tr>
                 ))}

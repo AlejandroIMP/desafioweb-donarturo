@@ -17,12 +17,16 @@ DROP DATABASE [GDA004-OT-DavidSian];
 CREATE DATABASE [GDA004-OT-DavidSian];
 
 USE [GDA004-OT-DavidSian];
+
+SELECT * From usuarios;
 -- 2. CREACION DE TABLAS, CAMPOS Y LLAVES PRIMARIAS
 
 -- Creacion de tabla Productos
 
 ALTER TABLE Productos
-ALTER COLUMN foto NVARCHAR(100);
+ALTER COLUMN foto NVARCHAR(max);
+
+
 
 CREATE TABLE Productos(
 	idProductos INT IDENTITY(1,1) not null,
@@ -992,7 +996,7 @@ SELECT * FROM TOP_10_PRODUCTOS_MAS_VENDIDOS;
 /* 6. INSERTAR DATOS EN LAS TABLAS UTILIZANDO LOS PROCEDIMIENTOS */
 
 exec insertNewEstado 'Activo';
-exec insertNewEstado 'Inactivo';
+exec insertNewEstado 'Entregado';
 
 exec insertNewRol 'Administrado';
 exec insertNewRol 'Usuario';
@@ -1069,21 +1073,21 @@ exec insertProductos 18, 9, 'Lámpara Inteligente', 'Marca O', 'ZAB234', 300, 2,
 exec insertProductos 1, 1, 'Batería Portátil', 'Marca P', 'CDE567', 800, 1, 40.00, '2024-08-21', NULL;
 exec insertProductos 2, 2, 'Cargador Inalámbrico', 'Marca Q', 'FGH890', 400, 2, 30.00, '2024-08-21', NULL;
 
-
 CREATE OR ALTER TRIGGER trg_UpdateProductStatus
 ON CategoriaProductos
 AFTER UPDATE
 AS
 BEGIN
-    -- Verificar si se actualizó el campo 'estados_idestados'
     IF UPDATE(estados_idestados)
     BEGIN
-        -- Actualizar los productos relacionados si la categoría se marca como inactiva
         UPDATE P
-        SET P.estados_idestados = 2 -- Estado inactivo para los productos
+        SET P.estados_idestados = I.estados_idestados
         FROM Productos P
-        INNER JOIN CategoriaProductos C ON P.CategoriaProductos_idCategoriaProductos = C.idCategoriaProductos
-        WHERE C.estados_idestados = 2; 
+        INNER JOIN CategoriaProductos C 
+            ON P.CategoriaProductos_idCategoriaProductos = C.idCategoriaProductos
+        INNER JOIN inserted I 
+            ON C.idCategoriaProductos = I.idCategoriaProductos
+        WHERE I.estados_idestados IN (1, 2);
     END
 END;
 GO
@@ -1095,13 +1099,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Verificar si el estado cambió a 'Rechazado' 
+    -- Verificar si el estado cambió a 'Rechazado'
     IF EXISTS (
         SELECT 1
         FROM inserted i
         JOIN deleted d ON i.idOrden = d.idOrden
-        WHERE i.estados_idestados = 4
-          AND d.estados_idestados <> 4
+        WHERE i.estados_idestados = (SELECT idestados FROM estados WHERE idestados = 6)
+          AND d.estados_idestados <> i.estados_idestados
     )
     BEGIN
         -- Revertir el stock para los productos relacionados con las órdenes rechazadas
@@ -1110,15 +1114,15 @@ BEGIN
         FROM Productos p
         JOIN OrdenDetalles od ON p.idProductos = od.idProductos
         JOIN inserted i ON od.idOrden = i.idOrden
-        WHERE i.estados_idestados = 4;
+        WHERE i.estados_idestados = (SELECT idestados FROM estados WHERE idestados = 6);
     END
 
-    -- Verificar si el estado cambió a 'Activo' o cualquier otro estado que no requiere ajuste
+    -- Verificar si el estado cambió a 'Autorizado' o cualquier otro estado que no requiere ajuste
     IF EXISTS (
         SELECT 1
         FROM inserted i
         JOIN deleted d ON i.idOrden = d.idOrden
-        WHERE i.estados_idestados NOT IN (4) 
+        WHERE i.estados_idestados = (SELECT idestados FROM estados WHERE idestados = 7)
           AND d.estados_idestados <> i.estados_idestados
     )
     BEGIN
@@ -1126,3 +1130,6 @@ BEGIN
         RETURN;
     END
 END;
+GO
+
+select*from estados

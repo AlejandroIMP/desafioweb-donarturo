@@ -10,10 +10,11 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CategoryIcon from '@mui/icons-material/Category';
 import GroupIcon from '@mui/icons-material/Group';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { set } from 'react-hook-form';
 
 
 const NavbarAdmin = () => {
-  const { setCount, setCartProducts, closeCheckoutSideMenuHandler } = useClientContext();
+  const { setCount, setCartProducts, closeCheckoutSideMenuHandler, setTotalPrice, setUserOrders } = useClientContext();
   const [theme, setTheme] = useState(localStorage.getItem('theme-mode') || 'system');
   const [mainMenuAnchor, setMainMenuAnchor] = useState<null | HTMLElement>(null);
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
@@ -53,6 +54,8 @@ const NavbarAdmin = () => {
     setCount(0);
     setCartProducts([]);
     closeCheckoutSideMenuHandler();
+    setTotalPrice(0);
+    setUserOrders([]);
   }
 
   return (

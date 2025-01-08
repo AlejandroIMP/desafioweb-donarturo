@@ -24,21 +24,33 @@ const OrderApproval = () => {
     fetchOrders();
   }, []);
 
-  const OrdersNeedsApproval = orders.filter(order => order.estados_idestados !== 1);
+  const OrdersNeedsApproval = orders.filter(order => order.estados_idestados === 3);
 
   const acceptOrder = (orderId: number) => {
-    updateOrderState(orderId, 1);
+    updateOrderState(orderId, 7);
     location.reload();
   }
 
   const rejectOrder = (orderId: number) => {
-    updateOrderState(orderId, 4);
+    updateOrderState(orderId, 6);
     location.reload();
   }
 
+  if (OrdersNeedsApproval.length === 0) {
+    return (
+      <AdminLayout>
+        <div className="empty-state">No hay pedidos pendientes de aprobación</div>
+      </AdminLayout>
+    )
+  }
+
+
+
   return (
     <AdminLayout>
-      OrderApproval
+      <h1>
+        Pedidos pendientes de aprobación
+      </h1>
       {
         loading ? (
           <div className="loading-state">Loading products...</div>
@@ -49,7 +61,7 @@ const OrderApproval = () => {
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Client</th>
+                <th>Usser</th>
                 <th>Order Date</th>
                 <th>Total</th>
                 <th>State</th>
@@ -61,11 +73,11 @@ const OrderApproval = () => {
                 OrdersNeedsApproval.map(order => (
                   <tr key={order.idOrden}>
                     <td>{order.idOrden}</td>
-                    <td>{order.Clientes_idClientes}</td>
+                    <td>{order.idusuarios}</td>
                     <td>{formattedDate(order.fecha_entrega)}</td>
                     <td>{order.total_orden}</td>
                     <td data-label="Estado">
-                      <span className={`product-status ${order.estados_idestados === 1 ? 'status-active' : 'status-inactive'}`}>
+                      <span className={`product-status ${order.estados_idestados === 1 || order.estados_idestados === 7 || order.estados_idestados === 8 ? 'status-active' : order.estados_idestados === 3 ? 'status-pending' : 'status-inactive'}`}>
                         {formattedState(order.estados_idestados)}
                       </span>
                     </td>
@@ -73,10 +85,12 @@ const OrderApproval = () => {
                       <Button
                         variant='text'
                         color='success'
+                        
                         onClick={() => acceptOrder(order.idOrden)}>Aprobar</Button>
                       <Button
                         variant='text'
                         color='error'
+                        
                         onClick={() => rejectOrder(order.idOrden)}>Rechazar</Button>
                     </td>
                   </tr>

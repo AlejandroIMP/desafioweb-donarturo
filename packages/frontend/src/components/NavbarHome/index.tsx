@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import './index.css';
 
 const NavbarHome = () => {
-  const { count, setCount, setCartProducts, closeCheckoutSideMenuHandler } = useClientContext();
+  const { count, setCount, setCartProducts, closeCheckoutSideMenuHandler, setTotalPrice, setUserOrders } = useClientContext();
   const [theme, setTheme] = useState(localStorage.getItem('theme-mode') || 'system');
   const [mainMenuAnchor, setMainMenuAnchor] = useState<null | HTMLElement>(null);
 
@@ -41,12 +41,14 @@ const NavbarHome = () => {
     setCount(0);
     setCartProducts([]);
     closeCheckoutSideMenuHandler();
+    setTotalPrice(0);
+    setUserOrders([]);
   }
 
   return (
-    <nav className="navbar">
+    <nav className="navbar ">
       <div className="desktop-menu">
-        <ul className="nav-list">
+        <ul className="nav-list navbar--client-list">
           <li className='nav-item'>
             <NavLink to='/home' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Home</NavLink>
           </li>

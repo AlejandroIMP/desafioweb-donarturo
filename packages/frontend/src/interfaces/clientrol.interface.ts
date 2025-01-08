@@ -11,6 +11,7 @@ export interface ClientContextType {
   totalPrice: number;
   setTotalPrice: (totalprice: number) => void;
 
+  setUserOrders: (orders: IOrder[]) => void;
   userOrders: IOrder[];
   getUserOrders: () => Promise<void>;
 

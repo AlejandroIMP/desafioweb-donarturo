@@ -73,7 +73,7 @@ const Checkout = () => {
         setCount(0);
 
         setTimeout(() => {
-          navigate(`/orders/${response.data}`);
+          navigate(`/orders`);
         }, 3000);
       }
     } catch (error) {

@@ -46,8 +46,6 @@ const Order = () => {
   }
 
   if (findOrderById().success === false) {
-
-
     return (
       <ClientLayout>
         <h1>Order</h1>
@@ -58,6 +56,10 @@ const Order = () => {
         </div>
       </ClientLayout>
     );
+  }
+
+  const isOrderDeclined = (order: IOrder) => {
+    return order.estados_idestados === 4;
   }
 
   return (
@@ -74,7 +76,7 @@ const Order = () => {
       <Button
         variant='contained'
         color='error'
-        disabled={Order.estados_idestados === 2}
+        disabled={isOrderDeclined(Order)}
         onClick={() => {
           inactiveOrder(Order.idOrden), location.reload()
           }

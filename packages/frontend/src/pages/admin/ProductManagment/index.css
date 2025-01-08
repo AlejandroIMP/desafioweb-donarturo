@@ -46,15 +46,22 @@
 }
 
 .status-active {
-  background: var(--nav-bg);
+  background: #00750622;
   color: #1e7e34;
   padding: 5px;
   border-radius: 0.5rem;
 }
 
 .status-inactive {
-  background: var(--nav-bg);
+  background: #fe000029;
   color: #dc3545;
+  padding: 5px;
+  border-radius: 0.5rem;
+}
+
+.status-pending {
+  background: #ffb70029;
+  color: #dc9435;
   padding: 5px;
   border-radius: 0.5rem;
 }

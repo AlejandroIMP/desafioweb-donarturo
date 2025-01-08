@@ -9,10 +9,8 @@ const OrderCard = (order: IOrder) => {
 
   const getStatusClass = (status: number) => {
     switch(status) {
-      case 1: return 'approved';
-      case 2: return 'delivered';
-      case 3: return 'pending';
-      case 4: return 'cancelled';
+      case 7: return 'approved';
+      case 8: return 'delivered';
       default: return 'pending';
     }
   };

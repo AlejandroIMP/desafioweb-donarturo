@@ -15,12 +15,17 @@ export const formattedState = (state: number) => {
       return 'Inactivo';
     case 3:
       return 'En proceso';
-    case 4:
+    case 6:
       return 'Rechazado';
+    case 7:
+      return 'Confirmado';
+    case 8:
+      return 'Entregado';
     default:
       return 'Desconocido';
   }
 }
+
 
 export const formattedRole = (role: number) => {
   switch (role) {

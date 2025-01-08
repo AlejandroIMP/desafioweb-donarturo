@@ -10,8 +10,7 @@ export const createUserSchema = z.object({
   .min(8, 'Teléfono debe tener al menos 8 caracteres')
   .max(9, 'Teléfono no debe exceder 9 caracteres')
   .regex(/^\d{4}-\d{4}$/, 'Formato inválido. Use: XXXX-XXXX'),
-  fecha_nacimiento: z.string(),
-  Clientes_idClientes: z.string().transform(val => Number(val)).nullable()
+  fecha_nacimiento: z.string()
 })
 
 export const updateUserSchema = z.object({
