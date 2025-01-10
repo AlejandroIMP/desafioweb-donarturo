@@ -12,7 +12,7 @@ const getHeaders = () => ({
 
 export const getCategories = async (): Promise<ProductCategoryResponseGet> => {
   try {
-    const response = await axios.get(`${apiBaseUrl}/productcategory`, {
+    const response = await axios.get(`${apiBaseUrl}productcategory`, {
       headers: getHeaders()
     });
     return response.data;
@@ -23,7 +23,7 @@ export const getCategories = async (): Promise<ProductCategoryResponseGet> => {
 
 export const createCategory = async (category: CategoryUpdateFormSchema): Promise<void> => {
   try {
-    await axios.post(`${apiBaseUrl}/productcategory`, category, {
+    await axios.post(`${apiBaseUrl}productcategory`, category, {
       headers: getHeaders()
     });
   } catch (error) {
@@ -33,7 +33,7 @@ export const createCategory = async (category: CategoryUpdateFormSchema): Promis
 
 export const updateCategory = async (id: number, category: CategoryUpdateFormSchema): Promise<void> => {
   try {
-    await axios.put(`${apiBaseUrl}/productcategory/${id}`, category, {
+    await axios.put(`${apiBaseUrl}productcategory/${id}`, category, {
       headers: getHeaders()
     });
   } catch (error) {
@@ -43,7 +43,7 @@ export const updateCategory = async (id: number, category: CategoryUpdateFormSch
 
 export const updateCategoryState = async (id: number, state: number): Promise<void> => {
   try {
-    await axios.put(`${apiBaseUrl}/productcategory/${id}`, { estados_idestados: state }, {
+    await axios.put(`${apiBaseUrl}productcategory/${id}`, { estados_idestados: state }, {
       headers: getHeaders()
     });
   } catch (error) {

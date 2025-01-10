@@ -88,12 +88,12 @@ const ClientsManagment = () => {
 							<table className='management-table'>
 								<thead>
 									<tr>
-										<th>Id</th>
-										<th>razon social</th>
-										<th>nombre comercial</th>
-										<th>direccion de entrega</th>
+										<th>ID</th>
+										<th>Razon social</th>
+										<th>Nombre comercial</th>
+										<th>Direccion de entrega</th>
 										<th>Telefono</th>
-										<th>email</th>
+										<th>Correo Electronico</th>
 										<th>Acciones</th>
 									</tr>
 								</thead>

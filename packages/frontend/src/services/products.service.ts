@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IProduct, ProductResponse } from '@/interfaces/product.interface'
+import { ProductResponse } from '@/interfaces/product.interface'
 import { IProductCreate } from '@/interfaces/product.interface'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;

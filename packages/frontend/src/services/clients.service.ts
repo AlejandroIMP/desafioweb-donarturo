@@ -11,7 +11,7 @@ const getHeaders = () => ({
 
 export const getClients = async (): Promise<ClientResponseGet> => {
   try{
-    const response = await axios.get(`${apiBaseUrl}/client`, {
+    const response = await axios.get(`${apiBaseUrl}client`, {
       headers: getHeaders()
     });
     return response.data;
@@ -22,7 +22,7 @@ export const getClients = async (): Promise<ClientResponseGet> => {
 
 export const createClient = async (clientData: IClientCreate): Promise<ClientResponseGet> => {
   try{
-    const response = await axios.post(`${apiBaseUrl}/client`, clientData, {
+    const response = await axios.post(`${apiBaseUrl}client`, clientData, {
       headers: getHeaders()
     });
     return response.data;
@@ -33,7 +33,7 @@ export const createClient = async (clientData: IClientCreate): Promise<ClientRes
 
 export const updateClient = async (id:number, clientData: IClientCreate): Promise<ClientResponseGet> => {
   try{
-    const response = await axios.put(`${apiBaseUrl}/client/${id}`, clientData, {
+    const response = await axios.put(`${apiBaseUrl}client/${id}`, clientData, {
       headers: getHeaders()
     });
     return response.data;

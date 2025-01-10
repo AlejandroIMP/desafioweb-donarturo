@@ -22,7 +22,7 @@
   background: var(--nav-bg);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  min-width: 650px;
+  min-width: 350px;
 }
 
 .management-table th,
@@ -78,7 +78,7 @@
   color: #666;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 960px) {
   .management-table thead {
     display: none;
   }

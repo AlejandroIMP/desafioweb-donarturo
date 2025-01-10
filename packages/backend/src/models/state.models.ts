@@ -24,7 +24,7 @@ State.init(
   {
     sequelize,
     modelName: 'estados',
-    tableName: 'estado',
+    tableName: 'estados',
     freezeTableName: true,
     timestamps: false,
   }

@@ -41,7 +41,18 @@ const ProductCreateForm = () => {
     reset,
   } = useForm<CreateProductForm>({
     resolver: zodResolver(createProductSchema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: {
+
+      CategoriaProductos_idCategoriaProductos: 1,
+      estados_idestados: '',
+      nombre: '',
+      marca: '',
+      codigo: '',
+      stock: '',
+      precio: '',
+      foto: '',
+    }
   });
 
   const onSubmit = async (data: CreateProductForm) => {

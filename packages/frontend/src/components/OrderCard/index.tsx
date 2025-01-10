@@ -16,7 +16,7 @@ const OrderCard = (order: IOrder) => {
   };
   return (
     <div className="order--card" onClick={() => navigate(`/orders/${order.idOrden}`)}>
-      <h2>Order: #{order.idOrden}</h2>
+      <h2>Orden: #{order.idOrden}</h2>
       <p>
         <span>Fecha de entrega:</span>
         <span>{formattedDate(order.fecha_entrega)}</span>

@@ -4,6 +4,7 @@ import { getAllOrders, updateOrderState } from '@/services/orders.service';
 import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import LabelState from '@/components/LabelState';
 
 const OrderApproval = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -76,11 +77,7 @@ const OrderApproval = () => {
                     <td>{order.idusuarios}</td>
                     <td>{formattedDate(order.fecha_entrega)}</td>
                     <td>{order.total_orden}</td>
-                    <td data-label="Estado">
-                      <span className={`product-status ${order.estados_idestados === 1 || order.estados_idestados === 7 || order.estados_idestados === 8 ? 'status-active' : order.estados_idestados === 3 ? 'status-pending' : 'status-inactive'}`}>
-                        {formattedState(order.estados_idestados)}
-                      </span>
-                    </td>
+                    <LabelState estados={order.estados_idestados} />
                     <td>
                       <Button
                         variant='text'

@@ -22,6 +22,8 @@ import CheckoutSideMenu from "@/components/CheckoutSideMenu";
 
 import { PrivateRoute, PublicRoute } from "@/utils/authUtils";
 
+import { ClientProvider } from './context/ClientContext.tsx'
+
 
 const App = () => {
   return (
@@ -119,7 +121,8 @@ const App = () => {
           >
             <OrderApproval />
           </PrivateRoute>} />
-
+        
+      
         {/* Client Routes */}
         <Route path="/home" element={
           <PrivateRoute
@@ -160,8 +163,6 @@ const App = () => {
             <Checkout />
           </PrivateRoute>
         } />
-
-
         <Route path="/*" element={<NotFound />} />
       </Routes>
       <CheckoutSideMenu />

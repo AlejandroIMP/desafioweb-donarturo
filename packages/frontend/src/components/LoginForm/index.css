@@ -8,3 +8,9 @@
 .auth-buttons button {
   margin-top: 10px;
 }
+
+.auth-message-error {
+  color: red;
+  text-align: center;
+  padding: 5px;
+}

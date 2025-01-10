@@ -9,7 +9,6 @@ interface CardProps {
 }
 
 const Card = ({ product }: CardProps) => {
-
   const { cartProducts, count, setCount, openCheckoutSideMenuHandler, addProduct } = useClientContext();
 
   interface AddProductToCartEvent extends React.MouseEvent<HTMLElement> { }
@@ -23,6 +22,17 @@ const Card = ({ product }: CardProps) => {
 
   const renderIcon = () => {
     const isProductInCart = cartProducts.find((cartProduct) => cartProduct.idProductos === product.idProductos);
+
+    const productWithoutStock = product.stock === 0;
+
+    if (productWithoutStock) {
+      return (
+        <span className="card--icon stock-disabled">
+          Agotado
+        </span>
+      )
+    }
+
     if (isProductInCart) {
       return (
         <span className="card--icon">

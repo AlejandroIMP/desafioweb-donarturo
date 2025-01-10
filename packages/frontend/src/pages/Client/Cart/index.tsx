@@ -39,14 +39,21 @@ if (cartProducts.length === 0) {
       </section>
       <div>
         <h2>Total: ${totalPrice}</h2>
-        <div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}>
           <Button variant='contained' color='primary'>
-            <Link to='/checkout'>Checkout</Link>
+            <Link to='/checkout' style={{
+              textDecoration: 'none',
+              color: 'white',
+            }}>Confirmar Compra</Link>
           </Button>
-          <Button variant='contained' color='secondary'
+          <Button variant='contained' color='error'
             onClick={handleCancelPurchase}
           >
-            Cancelar compra
+            Rechazar
           </Button>
         </div>
       </div>

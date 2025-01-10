@@ -1,12 +1,14 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { IProduct } from '@/interfaces/product.interface';
 import { getProducts, updateProductState } from '@/services/products.service';
-import { formattedState, formattedDate } from '@/utils/orderUtils';
+import LabelState from '@/components/LabelState';
+import { formattedDate } from '@/utils/orderUtils';
 import ProductCreateForm from '@/components/ProductCreateForm';
 import ProductUpdateForm from '@/components/ProductUpdateForm';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 import './index.css'
 
 const ProductManagment = () => {
@@ -67,8 +69,6 @@ const ProductManagment = () => {
     setOpenModalEdit(false);
   };
 
-  
-
   const handleopenModalAddP = () => {
     setopenModalAddP(true);
   };
@@ -121,13 +121,13 @@ const ProductManagment = () => {
           <table className="management-table">
             <thead>
               <tr>
-                <th>Id</th>
-                <th>Product</th>
-                <th>Price</th>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Precio</th>
                 <th>Stock</th>
-                <th>Status</th>
-                <th>Category</th>
-                <th>User</th>
+                <th>Estado</th>
+                <th>Categoria</th>
+                <th>Usuario</th>
                 <th>Fecha Creacion</th>
                 <th>Acciones</th>
               </tr>
@@ -140,11 +140,7 @@ const ProductManagment = () => {
                   <td data-label="Nombre">{product.nombre}</td>
                   <td data-label="Precio">{product.precio}</td>
                   <td data-label="Stock">{product.stock}</td>
-                  <td data-label="Estado">
-                    <span className={`product-status ${product.estados_idestados === 1 ? 'status-active' : 'status-inactive'}`}>
-                      {formattedState(product.estados_idestados)}
-                    </span>
-                  </td>
+                  <LabelState estados={product.estados_idestados} />
                   <td data-label="Categoría">{product.CategoriaProductos_idCategoriaProductos}</td>
                   <td data-label="Usuario">{product.usuarios_idusuarios}</td>
                   <td data-label="Fecha">{formattedDate(product.fecha_creacion)}</td>
@@ -156,7 +152,7 @@ const ProductManagment = () => {
                         handleOpenModalEdit(product)
                       }
                     >
-                      Editar
+                      <EditIcon />
                     </Button>
                     <Button
                       variant="text"

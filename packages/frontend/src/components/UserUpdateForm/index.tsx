@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UpdateUserForm, updateUserSchema } from '@/schemas/user.schemas';
 import { updateUsers } from '@/services/users.service';
 import { Button, TextField, Select, MenuItem } from '@mui/material';
 import { IUser } from '@/interfaces/auth.interface';
+import { IClient } from '@/interfaces/clients.interface';
+import { getClients } from '@/services/clients.service';
 
 interface UserFormUpdateProps {
   usuario: IUser;
@@ -13,6 +15,20 @@ interface UserFormUpdateProps {
 const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
   const [valueState, setValueState] = useState(usuario.estados_idestados);
   const [valueRol, setValueRol] = useState(usuario.rol_idrol);
+  const [clients, setClients] = useState<IClient[]>([]);
+  const [selectedClient, setSelectedClient] = useState(usuario.Clientes_idClientes?.toString() || '');
+
+  useEffect(() => {
+    const loadClients = async () => {
+      try {
+        const response = await getClients();
+        setClients(response.data);
+      } catch (error) {
+        console.error('Error loading clients:', error);
+      }
+    };
+    loadClients();
+  }, []);
 
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateUserForm>({
     resolver: zodResolver(updateUserSchema),
@@ -25,7 +41,7 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
       nombre_completo: usuario.nombre_completo,
       telefono: usuario.telefono,
       fecha_nacimiento: usuario.fecha_nacimiento,
-      Clientes_idClientes: usuario.Clientes_idClientes?.toString()
+      Clientes_idClientes: selectedClient ? Number(selectedClient) : null
     }
   });
 
@@ -35,11 +51,11 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
         ...data,
         rol_idrol: Number(data.rol_idrol),
         estados_idestados: Number(data.estados_idestados),
-        Clientes_idClientes: data.Clientes_idClientes?.toString() || null
+        Clientes_idClientes: selectedClient ? Number(selectedClient) : null
       };
 
       await updateUsers(usuario.idusuarios, formattedData);
-      
+
       location.reload();
     } catch (error) {
       console.error('Error updating user:', error);
@@ -108,6 +124,21 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
         error={!!errors.fecha_nacimiento}
         helperText={errors.fecha_nacimiento?.message}
       />
+      <Select
+        {...register("Clientes_idClientes")}
+        label="Cliente"
+        fullWidth
+        error={!!errors.Clientes_idClientes}
+        value={selectedClient}
+        onChange={(e) => setSelectedClient(e.target.value)}
+      >
+        <MenuItem value="">Ninguno</MenuItem>
+        {clients.map((client) => (
+          <MenuItem key={client.idClientes} value={client.idClientes}>
+            {client.nombre_comercial} - {client.razon_social}
+          </MenuItem>
+        ))}
+      </Select>
       <Button
         type="submit"
         variant="contained"

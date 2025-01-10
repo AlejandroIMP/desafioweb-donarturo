@@ -141,6 +141,7 @@ export const updateOrderState = async(req: Request, res: Response): Promise<void
     const { id } = req.params;
     const { estados_idestados } = req.body;
     const order = await Order.findByPk(id);
+    const rol = req.rol;
 
     if(!order){
       res.status(404).json({
@@ -149,6 +150,47 @@ export const updateOrderState = async(req: Request, res: Response): Promise<void
       });
       return;
     }
+
+    if( estados_idestados === 1 && rol !== 1){
+      res.status(403).json({
+        success: false,
+        message: 'No tiene permisos para cambiar el estado de la orden a "Activo"'
+      });
+      return;
+    }
+
+    if( estados_idestados === 2 && rol !== 1){
+      res.status(403).json({
+        success: false,
+        message: 'No tiene permisos para cambiar el estado de la orden a "Inactivo"'
+      });
+      return;
+    }
+
+    if( estados_idestados === 3 && rol !== 1){
+      res.status(403).json({
+        success: false,
+        message: 'No tiene permisos para cambiar el estado de la orden a "En proceso"'
+      });
+      return;
+    }
+
+    if( estados_idestados === 7 && rol !== 1){
+      res.status(403).json({
+        success: false,
+        message: 'No tiene permisos para cambiar el estado de la orden a "Confirmado"'
+      });
+      return;
+    }
+
+    if( estados_idestados === 8 && rol !== 1){
+      res.status(403).json({
+        success: false,
+        message: 'No tiene permisos para cambiar el estado de la orden a "Entregado"'
+      });
+      return;
+    }
+
 
     await order.update({ estados_idestados });
 

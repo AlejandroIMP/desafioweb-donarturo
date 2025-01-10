@@ -4,6 +4,7 @@ import { getAllOrders, updateOrderState } from '@/services/orders.service';
 import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import LabelState from '@/components/LabelState';
 
 const AdminHome = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -40,7 +41,6 @@ const AdminHome = () => {
     )
   }
 
-
   return (
     <AdminLayout>
       
@@ -54,12 +54,12 @@ const AdminHome = () => {
           <table className="management-table">
             <thead>
               <tr>
-                <th>Order ID</th>
-                <th>user</th>
-                <th>Order Date</th>
+                <th>ID</th>
+                <th>usuario</th>
+                <th>Entrega de orden</th>
                 <th>Total</th>
-                <th>State</th>
-                <th>Actions</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -70,17 +70,13 @@ const AdminHome = () => {
                     <td>{order.idusuarios}</td>
                     <td>{formattedDate(order.fecha_entrega)}</td>
                     <td>Q{order.total_orden}</td>
-                    <td data-label="Estado">
-                      <span className={`product-status ${order.estados_idestados === 7 ? 'status-active' : 'status-pending'}`}>
-                        {formattedState(order.estados_idestados)}
-                      </span>
-                    </td>
+                    <LabelState estados={order.estados_idestados} />
                     <td>
                       <Button
                         variant='contained'
                         color='success'
                         onClick={() => deliveredOrder(order.idOrden)}>Confirmar Entrega</Button>
-                      </td>
+                    </td>
                   </tr>
                 ))
               }

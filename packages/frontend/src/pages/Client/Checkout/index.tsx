@@ -10,8 +10,6 @@ import { postOrder } from "@/services/orders.service";
 import { calculateDeliveryDate } from "@/utils/checkoutUtils";
 import { CartProduct } from "@/interfaces/product.interface";
 import { useClientContext } from "@/hooks";
-import { formattedPrice } from "@/utils/orderUtils";
-
 
 const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +41,6 @@ const Checkout = () => {
       precio: (product.precio),
     }));
 
-    console.log(products)
 
     data.fecha_entrega = calculateDeliveryDate();
 
@@ -57,8 +54,6 @@ const Checkout = () => {
       Clientes_idClientes: 1,
       DetallesProductos: products,
     };
-
-    console.log(newOrder)
 
     try {
       const response: OrderResponse = await postOrder(newOrder);
@@ -90,7 +85,8 @@ const Checkout = () => {
   return (
     <ClientLayout>
       <h1>Checkout</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}
+      >
         <TextField
           {...register("nombre_completo")}
           label="Nombre completo"

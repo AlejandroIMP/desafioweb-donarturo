@@ -49,7 +49,7 @@ const Order = () => {
     return (
       <ClientLayout>
         <h1>Order</h1>
-        <p>No orders found</p>
+        <p>No se han encontrado</p>
         <div>
           <Button variant='contained' color='primary' onClick={() => location.reload()}>Recarga la pagina aqui</Button>
           <Button variant='contained' color='secondary' onClick={() => Navigate(-1)}>Ir atras</Button>
@@ -58,8 +58,8 @@ const Order = () => {
     );
   }
 
-  const isOrderDeclined = (order: IOrder) => {
-    return order.estados_idestados === 4;
+  const OrderState = (order: IOrder) => {
+    return order.estados_idestados === 8;
   }
 
   return (
@@ -76,7 +76,7 @@ const Order = () => {
       <Button
         variant='contained'
         color='error'
-        disabled={isOrderDeclined(Order)}
+        disabled={OrderState(Order)}
         onClick={() => {
           inactiveOrder(Order.idOrden), location.reload()
           }

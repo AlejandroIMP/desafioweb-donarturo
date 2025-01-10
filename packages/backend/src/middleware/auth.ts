@@ -8,6 +8,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: User;
+      rol?: number;
     }
   }
 }
@@ -39,6 +40,7 @@ export const verifyToken: RequestHandler = (
           return;
         }
         req.user = user;
+        req.rol = user.rol_idrol;
         next();
       })
       .catch(error => {

@@ -8,6 +8,7 @@ import axios from 'axios';
 import { LoginResponse } from '@/interfaces/auth.interface';
 import { navigateByRole } from '@/utils/loginUtils';
 import './index.css'
+import ButtonVisibility from '../ButtonVisibility';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -58,7 +59,6 @@ const LoginForm = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data?.message || 'Error al iniciar sesión');
-        console.error('Login error:', error.response?.data);
       }
     } finally {
       setIsLoading(false);
@@ -98,12 +98,7 @@ const LoginForm = () => {
             autoComplete='current-password'
             disabled={isLoading}
           />
-          <Button
-            type="button"
-            onClick={togglePasswordVisibility}
-          >
-            {showPassword ? '👁️' : '👁️‍🗨️'}
-          </Button>
+          <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility}/>
         </div>
         {errors.user_password && (
           <span className='auth-message-error'>{errors.user_password.message}</span>

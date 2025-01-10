@@ -7,6 +7,7 @@ import { TextField, Button, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { RegisterResponse } from '@/interfaces/auth.interface';
 import './index.css';
+import ButtonVisibility from '../ButtonVisibility';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -102,7 +103,7 @@ const RegisterForm = () => {
         />
       </div>
       <div>
-        <div>
+        <div className="auth-password-field">
           <TextField
             {...register('user_password')}
             type={showPassword ? 'text' : 'password'}
@@ -113,12 +114,7 @@ const RegisterForm = () => {
             error={!!errors.user_password}
             helperText={errors.user_password ? errors.user_password.message : null}
           />
-          <Button
-            type="button"
-            onClick={togglePasswordVisibility}
-          >
-            {showPassword ? '👁️' : '👁️‍🗨️'}
-          </Button>
+          <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility}/>
         </div>
       </div>
       <div>

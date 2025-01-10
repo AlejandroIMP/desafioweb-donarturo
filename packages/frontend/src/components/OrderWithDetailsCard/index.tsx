@@ -69,7 +69,7 @@ const OrderWIthDetails = (order: IOrder) => {
               className="order--card" 
               onClick={() => navigate(`/orders/${order.idOrden}`)}
             >
-              <h2>Order: #{order.idOrden}</h2>
+              <h2>Orden: #{order.idOrden}</h2>
               <p>
                 <span>Fecha de entrega:</span>
                 <span>{formattedDate(order.fecha_entrega)}</span>
@@ -89,7 +89,7 @@ const OrderWIthDetails = (order: IOrder) => {
                 <span>Q {formattedPrice(order.total_orden)}</span>
               </p>
             </div>
-            <h3>Detalles</h3>
+            <h3 style={{ textAlign:'center'}}>Detalles</h3>
             <section style={
               { display:'grid', marginTop: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', width: '100%', gap: '1rem' }  
             }>

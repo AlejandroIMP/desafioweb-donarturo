@@ -17,8 +17,8 @@ const Orders = () => {
   if (!userOrders.length) {
     return (
       <ClientLayout>
-        <h1>Orders</h1>
-        <p>No orders found</p>
+        <h1>Ordenes</h1>
+        <p>No se han encontrado Ordenes</p>
         <Button
           variant='contained' color='secondary' onClick={() => Navigate('/home')}
         >
@@ -32,7 +32,7 @@ const Orders = () => {
     <ClientLayout>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <ArrowBackIcon style={{ cursor: 'pointer' }} onClick={() => Navigate('/home')} />
-        <h1>Orders</h1>
+        <h1>Ordenes</h1>
       </div>
       <section className="orders--container">
         {

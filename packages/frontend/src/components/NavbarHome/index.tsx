@@ -4,6 +4,8 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useState, useEffect } from "react";
 import { Menu, IconButton, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from "react-router";
+import LogoutIcon from '@mui/icons-material/Logout';
 import './index.css';
 
 const NavbarHome = () => {
@@ -11,6 +13,7 @@ const NavbarHome = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme-mode') || 'system');
   const [mainMenuAnchor, setMainMenuAnchor] = useState<null | HTMLElement>(null);
 
+  const Navigate = useNavigate();
   const handleMainMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMainMenuAnchor(event.currentTarget);
   };
@@ -50,7 +53,7 @@ const NavbarHome = () => {
       <div className="desktop-menu">
         <ul className="nav-list navbar--client-list">
           <li className='nav-item'>
-            <NavLink to='/home' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Home</NavLink>
+            <NavLink to='/home' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Inicio</NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to="/my-account" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
@@ -58,14 +61,14 @@ const NavbarHome = () => {
             </NavLink>
           </li>
           <li className='nav-item'>
-            <NavLink to='/Cart' className={({ isActive }) => isActive ? 'nav-link active cart--link--container' : 'nav-link cart--link--container'}>   
+            <NavLink to='/Cart' className={({ isActive }) => isActive ? 'nav-link active cart--link--container' : 'nav-link cart--link--container'}>
               {count}
               <AddShoppingCartIcon />
               Carrito
             </NavLink>
           </li>
           <li className='nav-item'>
-            <NavLink to='/Orders' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Orders</NavLink>
+            <NavLink to='/Orders' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Ordenes</NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to='/auth/login' className='nav-link'
@@ -94,37 +97,55 @@ const NavbarHome = () => {
           anchorEl={mainMenuAnchor}
           keepMounted
           open={Boolean(mainMenuAnchor)}
-          onClose={() => setMainMenuAnchor(null)}
+          onClose={() => { setMainMenuAnchor(null) }}
         >
-          <MenuItem>
-            <NavLink to='/home' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Home</NavLink>
+          <MenuItem
+            onClick={() => {
+              Navigate('/home');
+              setMainMenuAnchor(null);
+            }
+            }
+          >
+            <p>Home</p>
           </MenuItem>
           <MenuItem>
-            <NavLink to="/my-account" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            <p>
               {email}
-            </NavLink>
+            </p>
           </MenuItem>
-          <MenuItem>
-            <NavLink to='/Cart' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+          <MenuItem
+            onClick={() => {
+              Navigate('/Cart');
+              setMainMenuAnchor(null);
+            }}>
+            <p>
               {count}
               <AddShoppingCartIcon />
               Carrito
-            </NavLink>
+            </p>
           </MenuItem>
-          <MenuItem>
-            <NavLink to='/Orders' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Orders</NavLink>
+          <MenuItem
+            onClick={() => {
+              Navigate('/Orders');
+              setMainMenuAnchor(null);
+            }}
+          >
+            <p>Orders</p>
           </MenuItem>
-          <MenuItem>
-            <NavLink to='/auth/login' className='nav-link'
-              onClick={() => {
-                Logout();
-              }}
-            >
+          <MenuItem
+            onClick={() => {
+              setMainMenuAnchor(null);
+              Logout();
+              Navigate('/auth/login');
+            }}
+          >
+            <p            >
               Cerrar sesion
-            </NavLink>
+            </p>
           </MenuItem>
         </Menu>
       </div>
+
     </nav>
   );
 }

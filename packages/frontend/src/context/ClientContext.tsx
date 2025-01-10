@@ -9,12 +9,16 @@ import { IOrder } from '@/interfaces/orderAndDetails.interface';
 export const ClientContext = createContext<ClientContextType>({} as ClientContextType);
 
 export const ClientProvider = ({ children }: { children: ReactNode }) => {
+
+  
   const [products, setProducts] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
+
   const fetchProducts = async () => {
     setIsLoading(true);
+    if (localStorage.getItem('idusuario') === null) return;
     try {
       const data = await getProducts();
       setProducts(data.data);
@@ -73,6 +77,7 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
   const idUsuario = localStorage.getItem('idUsuario');
 
   const getUserOrders = async () => {
+    if (localStorage.getItem('idusuario') === null) return;
     try {
       const response = await getOrdersByUser(Number(idUsuario));
 

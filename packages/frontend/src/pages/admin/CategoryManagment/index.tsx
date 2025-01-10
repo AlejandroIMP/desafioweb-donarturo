@@ -1,12 +1,13 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { IProductCategory } from '@/interfaces/productcategory.interface';
 import { getCategories, updateCategoryState } from '@/services/categories.service';
-import { formattedDate, formattedState } from '@/utils/orderUtils';
+import { formattedDate } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CategoryUpdateForm from '@/components/CategoryUpdateForm';
 import CategoryCreateForm from '@/components/CategoryCreateForm';
+import LabelState from '@/components/LabelState';
 
 const CategoryManagment = () => {
   const [categories, setCategories] = useState<IProductCategory[]>([]);
@@ -108,11 +109,11 @@ const CategoryManagment = () => {
               <table className='management-table'>
                 <thead>
                   <tr>
-                    <th>Id</th>
+                    <th>ID</th>
                     <th>Usuario</th>
-                    <th>nombre</th>
-                    <th>estado</th>
-                    <th>fecha de creacion</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Fecha de creacion</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -122,7 +123,7 @@ const CategoryManagment = () => {
                       <td>{category.idCategoriaProductos}</td>
                       <td>{category.usuarios_idusuarios}</td>
                       <td>{category.nombre}</td>
-                      <td>{formattedState(category.estados_idestados)}</td>
+                      <LabelState estados={category.estados_idestados} />
                       <td>{formattedDate(category.fecha_creacion)}</td>
                       <td>
                         <Button

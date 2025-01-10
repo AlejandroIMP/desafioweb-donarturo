@@ -3,10 +3,13 @@ import { IUser } from '@/interfaces/auth.interface';
 import { getUsers, updateUsersState } from '@/services/users.service';
 import UserFormCreate from '@/components/UserCreateForm';
 import UserFormUpdate from '@/components/UserUpdateForm';
-import { formattedDate, formattedRole, formattedState } from '@/utils/orderUtils';
+import { formattedDate, formattedRole } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import LabelState from '@/components/LabelState';
+import EditIcon from '@mui/icons-material/Edit';
+import './index.css';
 
 const UserManagment = () => {
   const [users, setUsers] = useState<IUser[]>([]);
@@ -115,14 +118,14 @@ const UserManagment = () => {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>rol</th>
+                  <th>Rol</th>
                   <th>Estado</th>
                   <th>correo electronico</th>
-                  <th>nombre completo</th>
-                  <th>telefono</th>
-                  <th>fecha nacimiento</th>
-                  <th>fecha creacion</th>
-                  <th>idClientes</th>
+                  <th>Nombre</th>
+                  <th>Telefono</th>
+                  <th>Fecha Nacimiento</th>
+                  <th>Fecha creacion</th>
+                  <th>Clientes</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -131,11 +134,7 @@ const UserManagment = () => {
                   <tr key={user.idusuarios}>
                     <td data-label='Id'>{user.idusuarios}</td>
                     <td data-label='Rol'>{formattedRole(user.rol_idrol)}</td>
-                    <td data-label="Estado">
-                      <span className={`product-status ${user.estados_idestados === 1 ? 'status-active' : 'status-inactive'}`}>
-                        {formattedState(user.estados_idestados)}
-                      </span>
-                    </td>
+                    <LabelState estados={user.estados_idestados} />
                     <td data-label='correo'>{user.correo_electronico}</td>
                     <td data-label='nombre'>{user.nombre_completo}</td>
                     <td data-label='telefono'>{user.telefono}</td>
@@ -148,7 +147,7 @@ const UserManagment = () => {
                         color='primary'
                         onClick={() => handleOpenModalEdit(user)}
                       >
-                        Editar
+                        <EditIcon />
                       </Button>
                       <Button
                         variant="text"

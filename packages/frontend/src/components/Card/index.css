@@ -109,3 +109,9 @@
         font-size: 1.1rem;
     }
 }
+
+.stock-disabled {
+    cursor: not-allowed;
+    background: #c00000;
+    color: white;
+}

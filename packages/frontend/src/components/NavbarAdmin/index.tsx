@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { useClientContext } from '@/hooks';
 import { useEffect, useState } from 'react';
@@ -10,14 +11,16 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CategoryIcon from '@mui/icons-material/Category';
 import GroupIcon from '@mui/icons-material/Group';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { set } from 'react-hook-form';
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import StoreIcon from '@mui/icons-material/Store';
 
 const NavbarAdmin = () => {
   const { setCount, setCartProducts, closeCheckoutSideMenuHandler, setTotalPrice, setUserOrders } = useClientContext();
-  const [theme, setTheme] = useState(localStorage.getItem('theme-mode') || 'system');
+  const [theme, setTheme] = useState(localStorage.getItem('theme-mode') || 'dark');
   const [mainMenuAnchor, setMainMenuAnchor] = useState<null | HTMLElement>(null);
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
+
+  const Navigate = useNavigate();
 
   const handleMainMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMainMenuAnchor(event.currentTarget);
@@ -30,7 +33,7 @@ const NavbarAdmin = () => {
 
   useEffect(() => {
     const updateTheme = () => {
-      const themeMode = localStorage.getItem('theme-mode') || 'system';
+      const themeMode = localStorage.getItem('theme-mode') || 'dark';
       const isDark = themeMode === 'dark' ||
         (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -64,37 +67,37 @@ const NavbarAdmin = () => {
         <ul className="nav-list">
           <li className='nav-item'>
             <NavLink to="/admin" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Home
+              Inicio
             </NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to="/admin/products" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Products
+              Productos
             </NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to="/admin/users" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Users
+              Usuarios
             </NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to="/admin/orders" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Orders
+              Ordenes
             </NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to='/admin/clients' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Clients
+              Clientes
             </NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to='/admin/categories' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Categories
+              Categorias
             </NavLink>
           </li>
           <li className='nav-item'>
             <NavLink to="/admin/orders/approval" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Order Approval
+              Aprobacion de Ordenes
             </NavLink>
           </li>
         </ul>
@@ -106,7 +109,7 @@ const NavbarAdmin = () => {
           </li >
           <li className='nav-item' >
             <NavLink to='/home' className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-              Store
+              Tienda
             </NavLink>
           </li>
           <li className='nav-item'>
@@ -115,7 +118,7 @@ const NavbarAdmin = () => {
                 Logout();
               }}
             >
-              Cerrar sesion
+              Cerrar sesion 
             </NavLink>
           </li>
         </ul>
@@ -133,31 +136,31 @@ const NavbarAdmin = () => {
           open={Boolean(mainMenuAnchor)}
           onClose={() => setMainMenuAnchor(null)}
         >
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
-            <NavLink to="/admin" className='nav-link'>Home</NavLink>
+          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin')}}>
+            <p>Inicio</p>
           </MenuItem>
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
-            <NavLink to="/admin/products" className='nav-link'>Products</NavLink>
+          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/products')}}>
+            <p>Productos</p>
           </MenuItem>
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/users')}}>
             <PeopleIcon className="menu-icon" />
-            <NavLink to="/admin/users" className='nav-link'>Users</NavLink>
+            <p>Usuarios</p>
           </MenuItem>
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
+          <MenuItem onClick={() =>{ setMainMenuAnchor(null), Navigate('/admin/orders')}}>
             <ShoppingCartIcon className="menu-icon" />
-            <NavLink to="/admin/orders" className='nav-link'>Orders</NavLink>
+            <p>Ordenes</p>
           </MenuItem>
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/clients')}}>
             <GroupIcon className="menu-icon" />
-            <NavLink to='/admin/clients' className='nav-link'>Clients</NavLink>
+            <p>Clientes</p>
           </MenuItem>
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/categories')}}>
             <CategoryIcon className="menu-icon" />
-            <NavLink to='/admin/categories' className='nav-link'>Categories</NavLink>
+            <p>Categorias</p>
           </MenuItem>
-          <MenuItem onClick={() => setMainMenuAnchor(null)}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/orders/approval')}}>
             <CheckCircleIcon className="menu-icon" />
-            <NavLink to="/admin/orders/approval" className='nav-link'>Order Approval</NavLink>
+            <p>Aprobacion de Ordenes</p>
           </MenuItem>
 
         </Menu>
@@ -173,18 +176,21 @@ const NavbarAdmin = () => {
           open={Boolean(userMenuAnchor)}
           onClose={() => setUserMenuAnchor(null)}
         >
-          <MenuItem onClick={() => setUserMenuAnchor(null)}>
+          <MenuItem onClick={() => {setUserMenuAnchor(null), Navigate('/admin/account')}}>
             <AccountCircleIcon className="menu-icon" />
-            <NavLink to="/admin/account" className='nav-link'>{email}</NavLink>
+            <p>{email}</p>
           </MenuItem>
-          <MenuItem onClick={() => setUserMenuAnchor(null)}>
-            <NavLink to='/home' className='nav-link'>Store</NavLink>
+          <MenuItem onClick={() => {setUserMenuAnchor(null), Navigate('/home')}}>
+            <StoreIcon className="menu-icon" />
+            <p>Tienda</p>
           </MenuItem>
           <MenuItem onClick={() => {
             setUserMenuAnchor(null);
             Logout();
+            Navigate('/auth/login');
           }}>
-            <NavLink to='/auth/login' className='nav-link'>Cerrar sesion</NavLink>
+            <LogoutIcon className="menu-icon" />
+            <p>Cerrar sesion</p>
           </MenuItem>
         </Menu>
       </div>
