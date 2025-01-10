@@ -78,7 +78,7 @@
   color: #666;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1024px) {
   .management-table thead {
     display: none;
   }

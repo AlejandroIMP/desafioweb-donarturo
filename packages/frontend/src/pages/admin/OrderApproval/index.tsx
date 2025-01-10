@@ -73,10 +73,10 @@ const OrderApproval = () => {
               {
                 OrdersNeedsApproval.map(order => (
                   <tr key={order.idOrden}>
-                    <td>{order.idOrden}</td>
-                    <td>{order.idusuarios}</td>
-                    <td>{formattedDate(order.fecha_entrega)}</td>
-                    <td>{order.total_orden}</td>
+                    <td data-label='ID'>{order.idOrden}</td>
+                    <td data-label='Usuario'>{order.idusuarios}</td>
+                    <td data-label='Fecha Entrega'>{formattedDate(order.fecha_entrega)}</td>
+                    <td data-label='Total'>{order.total_orden}</td>
                     <LabelState estados={order.estados_idestados} />
                     <td>
                       <Button

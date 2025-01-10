@@ -100,12 +100,12 @@ const ClientsManagment = () => {
 								<tbody>
 									{clients.map((client) => (
 										<tr key={client.idClientes}>
-											<td>{client.idClientes}</td>
-											<td>{client.razon_social}</td>
-											<td>{client.nombre_comercial}</td>
-											<td>{client.direccion_entrega}</td>
-											<td>{client.telefono}</td>
-											<td>{client.email}</td>
+											<td data-label='ID'>{client.idClientes}</td>
+											<td data-label='Razon Social'>{client.razon_social}</td>
+											<td data-label='Nombre comercial'>{client.nombre_comercial}</td>
+											<td data-label='Direccion entrega'>{client.direccion_entrega}</td>
+											<td data-label='Telefono'>{client.telefono}</td>
+											<td data-label='Correo Electronico'>{client.email}</td>
 											<td className='product-actions'>
 												<Button
 													variant='text'

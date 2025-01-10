@@ -97,8 +97,7 @@ const UserManagment = () => {
 
   return (
     <AdminLayout>
-      <div className='management-container'>
-        <div className='management-header'>
+
           <h1 className="management-title">Manejo de usuarios</h1>
           <Button
             variant='contained'
@@ -107,7 +106,7 @@ const UserManagment = () => {
           >
             Agregar usuario
           </Button>
-        </div>
+
         {
           loading ? (
             <div className='loading-state'>Cargando Usuarios...</div>
@@ -138,7 +137,7 @@ const UserManagment = () => {
                     <td data-label='correo'>{user.correo_electronico}</td>
                     <td data-label='nombre'>{user.nombre_completo}</td>
                     <td data-label='telefono'>{user.telefono}</td>
-                    <td data-label='fecha_nacimiento'>{formattedDate(user.fecha_nacimiento)}</td>
+                    <td data-label='Nacimiento'>{formattedDate(user.fecha_nacimiento)}</td>
                     <td data-label='fecha_creacion'>{formattedDate(user.fecha_creacion)}</td>
                     <td data-label='clientes'>{user.Clientes_idClientes}</td>
                     <td className='product-actions'>
@@ -216,7 +215,6 @@ const UserManagment = () => {
             <UserFormCreate />
           </div>
         </Dialog>
-      </div>
     </AdminLayout>
   );
 };

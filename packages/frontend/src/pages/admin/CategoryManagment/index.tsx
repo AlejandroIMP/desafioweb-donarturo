@@ -120,11 +120,11 @@ const CategoryManagment = () => {
                 <tbody>
                   {categories.map((category) => (
                     <tr key={category.idCategoriaProductos}>
-                      <td>{category.idCategoriaProductos}</td>
-                      <td>{category.usuarios_idusuarios}</td>
-                      <td>{category.nombre}</td>
+                      <td data-label='Categoria'>{category.idCategoriaProductos}</td>
+                      <td data-label='Usuario'>{category.usuarios_idusuarios}</td>
+                      <td data-label='Nombre'>{category.nombre}</td>
                       <LabelState estados={category.estados_idestados} />
-                      <td>{formattedDate(category.fecha_creacion)}</td>
+                      <td data-label='Fecha Creacion'>{formattedDate(category.fecha_creacion)}</td>
                       <td>
                         <Button
                           variant='text'
