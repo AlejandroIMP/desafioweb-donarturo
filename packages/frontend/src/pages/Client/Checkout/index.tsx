@@ -85,7 +85,7 @@ const Checkout = () => {
   return (
     <ClientLayout>
       <h1>Checkout</h1>
-      <form onSubmit={handleSubmit(onSubmit)}
+      <form className="form-container--general" onSubmit={handleSubmit(onSubmit)}
       >
         <TextField
           {...register("nombre_completo")}
@@ -132,17 +132,38 @@ const Checkout = () => {
           variant="contained"
           color="primary"
           disabled={!isValid || isLoading}
+          fullWidth
         >
           Ir a pagar
         </Button>
         {
-          isLoading && <p>Loading...</p>
+          isLoading && <p
+            style={{
+              color: 'blue',
+              textAlign: 'center',
+              marginTop: '1rem',
+            }}
+          >Loading...</p>
         }
         {
           success === true &&
-          <div>
-            <p>Order placed successfully!</p>
-            <p>Redirectin to your orders...</p>
+          <div
+            style={{
+              color: 'green',
+              textAlign: 'center',
+              marginTop: '1rem',
+            }}
+          >
+            <p
+            style={{
+              fontSize: '1.5rem',
+            }}
+            >Order placed successfully!</p>
+            <p
+            style={{
+              fontSize: '1.5rem',
+            }}
+            >Redirectin to Home...</p>
           </div>
         }
       </form>
