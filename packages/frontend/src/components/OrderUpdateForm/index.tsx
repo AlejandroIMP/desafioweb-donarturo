@@ -75,9 +75,6 @@ const OrderFormUpdate = ({ order }: OrderFormUpdateProps) => {
         <MenuItem value={'1'}>Activo</MenuItem>
         <MenuItem value={'2'}>Inactivo</MenuItem>
         <MenuItem value={'3'}>En proceso</MenuItem>
-        <MenuItem value={'6'}>Rechazado</MenuItem>
-        <MenuItem value={'7'}>Confirmado</MenuItem>
-        <MenuItem value={'8'}>Entregado</MenuItem>
       </Select>
       <TextField
         label="Nombre completo"
