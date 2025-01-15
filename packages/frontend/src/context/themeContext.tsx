@@ -2,27 +2,26 @@ import { createContext, useContext, useState, useMemo } from 'react';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 
 type ThemeContextType = {
-  mode: 'light' | 'dark' | 'system';
-  toggleTheme: (mode: 'light' | 'dark' | 'system') => void;
+  mode: 'light' | 'dark';
+  toggleTheme: (mode: 'light' | 'dark') => void;
 };
 
 const ThemeContext = createContext<ThemeContextType>({} as ThemeContextType);
 
-const getInitialMode = (): 'light' | 'dark' | 'system' => {
+const getInitialMode = (): 'light' | 'dark' => {
   const savedMode = localStorage.getItem('theme-mode');
-  return (savedMode as 'light' | 'dark' | 'system') || 'system';
+  return (savedMode as 'light' | 'dark') || 'light';
 };
 
+
 export const ThemeProviderWrapper = ({ children }: { children: React.ReactNode }) => {
-  const [mode, setMode] = useState<'light' | 'dark' | 'system'>(getInitialMode());
+  const [mode, setMode] = useState<'light' | 'dark'>(getInitialMode());
 
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: mode === 'system' 
-            ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-            : mode,
+          mode: mode,
           background: {
             paper: mode === 'dark' ? '#1e1e1e' : '#ffffff'
           }
@@ -31,7 +30,7 @@ export const ThemeProviderWrapper = ({ children }: { children: React.ReactNode }
     [mode]
   );
 
-  const toggleTheme = (newMode: 'light' | 'dark' | 'system') => {
+  const toggleTheme = (newMode: 'light' | 'dark') => {
     localStorage.setItem('theme-mode', newMode);
     setMode(newMode);
   };

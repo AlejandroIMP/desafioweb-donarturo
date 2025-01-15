@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { getProducts } from '../services/products.service';
 import { getOrdersByUser } from '@/services/orders.service';
-import { IProduct, CartProduct } from '../interfaces/product.interface';
+import { IProduct, CartProduct, DataProduct } from '../interfaces/product.interface';
 import { ClientContextType } from '@/interfaces/clientrol.interface';
 import { IOrder } from '@/interfaces/orderAndDetails.interface';
 
@@ -11,7 +11,7 @@ export const ClientContext = createContext<ClientContextType>({} as ClientContex
 export const ClientProvider = ({ children }: { children: ReactNode }) => {
 
   
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<DataProduct[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
