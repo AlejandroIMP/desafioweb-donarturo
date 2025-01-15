@@ -1,4 +1,4 @@
-import { IProduct, CartProduct } from './product.interface';
+import { IProduct, CartProduct, DataProduct } from './product.interface';
 import { IOrder } from './orderAndDetails.interface';
 
 export interface ClientContextType {
@@ -20,7 +20,7 @@ export interface ClientContextType {
   openCheckoutSideMenuHandler: () => void;
   closeCheckoutSideMenuHandler: () => void;
 
-  products: IProduct[];
+  products: DataProduct[];
   getProducts: () => Promise<void>; 
   isLoading: boolean;
   error: Error | null;  

@@ -16,11 +16,11 @@ export interface IProduct {
 
 export interface ProductResponse {
   success: boolean;
-  data: IProduct[];
+  data: DataProduct[];
   count: number;
 }
 
-export interface CartProduct extends IProduct {
+export interface CartProduct extends DataProduct {
   quantity?: number;
 }
 
@@ -34,4 +34,27 @@ export interface IProductCreate {
   estados_idestados: string;
   precio: string;
   foto: string;
+}
+
+export interface DataProduct {
+  idProductos: number;
+  nombre: string;
+  marca: string;
+  codigo: string;
+  stock: number;
+  precio: number;
+  foto: string;
+  fecha_creacion: string;
+  categoria: {
+    nombre: string;
+    idCategoriaProductos: number;
+  }
+  usuario: {
+    nombre_completo: string;
+    idusuarios: number;
+  }
+  estado: {
+    nombre: string;
+    idestados: number;
+  }
 }
