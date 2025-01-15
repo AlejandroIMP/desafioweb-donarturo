@@ -7,6 +7,7 @@ import { Button, TextField, Select, MenuItem } from "@mui/material";
 import { getClients } from "@/services/clients.service";
 import { IClient } from "@/interfaces/clients.interface";
 import ButtonVisibility from "../ButtonVisibility";
+import './index.css'
 
 const UserFormCreate = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateUserForm>({
@@ -16,7 +17,7 @@ const UserFormCreate = () => {
   const [valueState, setValueState] = useState('');
   const [valueRol, setValueRol] = useState('');
   const [clients, setClients] = useState<IClient[]>([]);
-  const [selectedClient, setSelectedClient] = useState<string>('');
+  const [selectedClient, setSelectedClient] = useState<string>('0');
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   useEffect(() => {
@@ -33,11 +34,16 @@ const UserFormCreate = () => {
 
   const onSubmit = async (data: CreateUserForm) => {
     try {
+
+      if (data.Clientes_idClientes === 0) {
+        data.Clientes_idClientes = null;
+      }
+
       const formData = {
         ...data,
         Clientes_idClientes: selectedClient ? Number(selectedClient) : null
       };
-      
+
       await createUser(formData);
       reset();
       location.reload();
@@ -48,30 +54,39 @@ const UserFormCreate = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Select
-        {...register("rol_idrol")}
-        fullWidth
-        label="Rol"
-        error={!!errors.rol_idrol}
-        value={valueRol}
-        onChange={(e) => setValueRol(e.target.value)}
-      >
-        <MenuItem value={1}>Operador</MenuItem>
-        <MenuItem value={2}>Usuario</MenuItem>
-        <MenuItem value={3}>Cliente</MenuItem>
-      </Select>
-      <Select
-        {...register("estados_idestados")}
-        label="Estado"
-        fullWidth
-        error={!!errors.estados_idestados}
-        value={valueState}
-        onChange={(e) => setValueState(e.target.value)}
-      >
-        <MenuItem value={1}>Activo</MenuItem>
-        <MenuItem value={2}>Inactivo</MenuItem>
-      </Select>
-      <Select
+      <div className='user-form-create'>
+        <p className='rol-user'>Rol del usuario</p>
+        <Select
+          {...register("rol_idrol")}
+          fullWidth
+          label="Rol"
+          error={!!errors.rol_idrol}
+          value={valueRol}
+          onChange={(e) => setValueRol(e.target.value)}
+        >
+          <MenuItem value={1}>Operador</MenuItem>
+          <MenuItem value={2}>Usuario</MenuItem>
+          <MenuItem value={3}>Cliente</MenuItem>
+        </Select>
+        {errors.rol_idrol && <p>{errors.rol_idrol.message}</p>}
+      </div>
+      <div className='user-form-create'>
+        <p className='state-user'>Estado del usuario</p>
+        <Select
+          {...register("estados_idestados")}
+          label="Estado"
+          fullWidth
+          error={!!errors.estados_idestados}
+          value={valueState}
+          onChange={(e) => setValueState(e.target.value)}
+        >
+          <MenuItem value={1}>Activo</MenuItem>
+          <MenuItem value={2}>Inactivo</MenuItem>
+        </Select>
+      </div>
+      <div className='user-form-create'>
+        <p className='client-user'>Cliente</p>
+        <Select
         {...register("Clientes_idClientes")}
         label="Cliente"
         fullWidth
@@ -79,13 +94,15 @@ const UserFormCreate = () => {
         value={selectedClient}
         onChange={(e) => setSelectedClient(e.target.value)}
       >
-        <MenuItem value="">Ninguno</MenuItem>
+        <MenuItem value={0}>Ninguno</MenuItem>
         {clients.map((client) => (
           <MenuItem key={client.idClientes} value={client.idClientes}>
             {client.nombre_comercial} - {client.razon_social}
           </MenuItem>
         ))}
       </Select>
+      {errors.Clientes_idClientes && <p>{errors.Clientes_idClientes.message}</p>}
+      </div>
       <TextField
         {...register("correo_electronico")}
         label="Correo electronico"
@@ -101,7 +118,7 @@ const UserFormCreate = () => {
         helperText={errors.nombre_completo ? errors.nombre_completo.message : null}
       />
       <div
-      className="auth-password-field">
+        className="auth-password-field">
         <TextField
           {...register('user_password')}
           type={showPassword ? 'text' : 'password'}
@@ -112,7 +129,7 @@ const UserFormCreate = () => {
           error={!!errors.user_password}
           helperText={errors.user_password ? errors.user_password.message : null}
         />
-        <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility}/>
+        <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility} />
       </div>
       <TextField
         {...register("telefono")}

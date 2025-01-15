@@ -16,7 +16,7 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
   const [valueState, setValueState] = useState(usuario.estados_idestados);
   const [valueRol, setValueRol] = useState(usuario.rol_idrol);
   const [clients, setClients] = useState<IClient[]>([]);
-  const [selectedClient, setSelectedClient] = useState(usuario.Clientes_idClientes?.toString() || '');
+  const [selectedClient, setSelectedClient] = useState(usuario.Clientes_idClientes?.toString() || 0);
 
   useEffect(() => {
     const loadClients = async () => {
@@ -47,6 +47,11 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
 
   const onSubmit = async (data: UpdateUserForm) => {
     try {
+      
+      if (data.Clientes_idClientes === 0) {
+        data.Clientes_idClientes = null;
+      }
+
       const formattedData = {
         ...data,
         rol_idrol: Number(data.rol_idrol),
@@ -132,7 +137,7 @@ const UserFormUpdate = ({ usuario }: UserFormUpdateProps) => {
         value={selectedClient}
         onChange={(e) => setSelectedClient(e.target.value)}
       >
-        <MenuItem value="">Ninguno</MenuItem>
+        <MenuItem value={0}>Ninguno</MenuItem>
         {clients.map((client) => (
           <MenuItem key={client.idClientes} value={client.idClientes}>
             {client.nombre_comercial} - {client.razon_social}
