@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Product from '../models/products.models';
 import { IProduct } from '../interfaces/product.interface';
+
+import { Product, ProductCategory, User, States } from '../models/index.models';
 
 export const getProducts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -18,6 +19,48 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
         });
     }
 };
+
+export const getProductsByAll = async (req:Request, res: Response, next: NextFunction): Promise<void> => {
+    try{
+        const products = await Product.findAll({
+            attributes: {
+                exclude: ['CategoriaProductos_idCategoriaProductos', 'usuarios_idusuarios', 'estados_idestados']
+            },
+            include: [
+                {
+                    model: ProductCategory,
+                    as: 'categoria',
+                    attributes: ['nombre', 'idCategoriaProductos']
+                },
+                {
+                    model: User,
+                    as: 'usuario',
+                    attributes: ['nombre_completo', 'idusuarios']
+                },
+                {
+                    model: States,
+                    as: 'estado',
+                    attributes: ['nombre', 'idestados']
+                }
+            ],
+            
+            
+        })
+
+        res.status(200).json({
+            success: true,
+            data: products,
+            count: products.length
+        });
+        
+    } catch(error){
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener productos',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+}   
 
 export const getProductById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

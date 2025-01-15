@@ -2,14 +2,14 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database/connection';
 import { IState } from '../interfaces/state.interface';
 
-type StateCreationAttributes = Optional<IState, 'idestados'>;
+type StatesCreationAttributes = Optional<IState, 'idestados'>;
 
-class State extends Model<IState, StateCreationAttributes> implements IState {
+class States extends Model<IState, StatesCreationAttributes> implements IState {
   declare idestados: number;
   declare nombre: string;
 }
 
-State.init(
+States.init(
   {
     idestados: {
       type: DataTypes.INTEGER,
@@ -30,4 +30,4 @@ State.init(
   }
 );
 
-export default State;
+export default States;
