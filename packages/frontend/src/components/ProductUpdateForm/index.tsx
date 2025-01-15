@@ -6,16 +6,16 @@ import { IProductCategory } from '@/interfaces/productcategory.interface';
 import { updateProduct } from '@/services/products.service';
 import { getCategories } from '@/services/categories.service';
 import { useState, useEffect } from 'react';
-import { IProduct } from '@/interfaces/product.interface';
+import { DataProduct } from '@/interfaces/product.interface';
 
 interface ProductUpdateFormProps {
-  product: IProduct;
+  product: DataProduct;
 }
 
 const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
   const [categories, setCategories] = useState<IProductCategory[]>([]);
-  const [valueState, setValueState] = useState(product.estados_idestados.toString());
-  const [valueCategory, setValueCategory] = useState(product.CategoriaProductos_idCategoriaProductos);
+  const [valueState, setValueState] = useState(product.estado.idestados.toString());
+  const [valueCategory, setValueCategory] = useState(product.categoria.idCategoriaProductos);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,8 +44,8 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
     resolver: zodResolver(createProductSchema),
     mode: 'onChange',
     defaultValues: {
-      CategoriaProductos_idCategoriaProductos: product.CategoriaProductos_idCategoriaProductos,
-      estados_idestados: product.estados_idestados.toString()
+      CategoriaProductos_idCategoriaProductos: product.categoria.idCategoriaProductos,
+      estados_idestados: product.estado.idestados.toString()
     }
   });
 
@@ -74,7 +74,7 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
         {...register('usuarios_idusuarios')}
         error={!!errors.usuarios_idusuarios}
         helperText={errors.usuarios_idusuarios?.message}
-        defaultValue={product.usuarios_idusuarios}
+        defaultValue={product.usuario.idusuarios}
         disabled={true}
         fullWidth
       />
