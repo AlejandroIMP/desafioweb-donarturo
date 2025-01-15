@@ -5,9 +5,11 @@ import ToggleColorMode from '@/components/ToggleColorMode';
 const Register = () => {
   return (
     <AuthLayout>
-      <h2>Register</h2>
-      <RegisterForm />
-      <ToggleColorMode />
+      <h1>Register</h1>
+      <div className='auth-form--container'>
+        <RegisterForm />
+        <ToggleColorMode />
+      </div>
     </AuthLayout>
   );
 };
