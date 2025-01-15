@@ -62,11 +62,11 @@ const OrderApproval = () => {
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Usser</th>
-                <th>Order Date</th>
+                <th>Usuario</th>
+                <th>Fecha de Orden</th>
                 <th>Total</th>
-                <th>State</th>
-                <th>Actions</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>

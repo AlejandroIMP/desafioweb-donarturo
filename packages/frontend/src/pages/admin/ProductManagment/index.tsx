@@ -1,5 +1,5 @@
 import AdminLayout from '@/layouts/AdminLayout';
-import { IProduct } from '@/interfaces/product.interface';
+import { DataProduct } from '@/interfaces/product.interface';
 import { getProducts, updateProductState } from '@/services/products.service';
 import LabelState from '@/components/LabelState';
 import { formattedDate } from '@/utils/orderUtils';
@@ -12,19 +12,28 @@ import EditIcon from '@mui/icons-material/Edit';
 import './index.css'
 
 const ProductManagment = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<DataProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [openModalAddP, setopenModalAddP] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<IProduct>({
+  const [selectedProduct, setSelectedProduct] = useState<DataProduct>({
     idProductos: 0,
     nombre: '',
     precio: 0,
     stock: 0,
-    estados_idestados: 0,
-    CategoriaProductos_idCategoriaProductos: 0,
-    usuarios_idusuarios: 0,
+    estado:{
+      nombre: '',
+      idestados: 0
+    },
+    categoria: {
+      nombre: '',
+      idCategoriaProductos: 0,
+    },
+    usuario: {
+      nombre_completo: '',
+      idusuarios: 0
+    },
     fecha_creacion: '',
     foto: '',
     marca: '',
@@ -47,7 +56,7 @@ const ProductManagment = () => {
 
   
 
-  const handleOpenModalEdit = (product: IProduct) => {
+  const handleOpenModalEdit = (product: DataProduct) => {
     setSelectedProduct(product);
     setOpenModalEdit(true);
   };
@@ -58,9 +67,18 @@ const ProductManagment = () => {
       nombre: '',
       precio: 0,
       stock: 0,
-      estados_idestados: 0,
-      CategoriaProductos_idCategoriaProductos: 0,
-      usuarios_idusuarios: 0,
+      estado:{
+        nombre: '',
+        idestados: 0
+      },
+      categoria: {
+        nombre: '',
+        idCategoriaProductos: 0,
+      },
+      usuario: {
+        nombre_completo: '',
+        idusuarios: 0
+      },
       fecha_creacion: '',
       foto: '',
       marca: '',
@@ -97,7 +115,7 @@ const ProductManagment = () => {
     }
   }
 
-  const isProductActive = (product: IProduct) => product.estados_idestados === 1;
+  const isProductActive = (product: DataProduct) => product.estado.idestados === 1;
 
   return (
     <AdminLayout>
@@ -140,9 +158,9 @@ const ProductManagment = () => {
                   <td data-label="Nombre">{product.nombre}</td>
                   <td data-label="Precio">{product.precio}</td>
                   <td data-label="Stock">{product.stock}</td>
-                  <LabelState estados={product.estados_idestados} />
-                  <td data-label="Categoría">{product.CategoriaProductos_idCategoriaProductos}</td>
-                  <td data-label="Usuario">{product.usuarios_idusuarios}</td>
+                  <LabelState estados={product.estado.idestados} />
+                  <td data-label="Categoría">{product.categoria.nombre}</td>
+                  <td data-label="Usuario">{product.usuario.nombre_completo}</td>
                   <td data-label="Fecha">{formattedDate(product.fecha_creacion)}</td>
                   <td className="product-actions">
                     <Button
