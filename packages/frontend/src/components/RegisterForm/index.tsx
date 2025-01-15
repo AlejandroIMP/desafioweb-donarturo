@@ -58,7 +58,7 @@ const RegisterForm = () => {
               email: data.correo_electronico
             }
           });
-          
+
         }, 2000);
       }
     } catch (error) {
@@ -72,7 +72,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className='auth-form--style' onSubmit={handleSubmit(onSubmit)}>
       {error && <div className="auth-message-error">{error}</div>}
       {success && <div className="auth-message-success">{success}</div>}
 
@@ -103,18 +103,25 @@ const RegisterForm = () => {
         />
       </div>
       <div>
-        <div className="auth-password-field">
+        <div className="auth-password-field" style={{ position: 'relative' }}>	
           <TextField
             {...register('user_password')}
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
             placeholder="Password"
             autoComplete='current-password'
+            fullWidth
             disabled={isLoading}
             error={!!errors.user_password}
             helperText={errors.user_password ? errors.user_password.message : null}
           />
-          <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility}/>
+          <div style={{
+            position: 'absolute',
+            right: '0',
+            top: '20%'
+          }}>
+            <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility} />
+          </div>
         </div>
       </div>
       <div>
@@ -125,6 +132,7 @@ const RegisterForm = () => {
             type={showPassword ? 'text' : 'password'}
             placeholder="Confirmar contraseña"
             autoComplete='new-password'
+            fullWidth
             disabled={isLoading}
             error={!!errors.confirm_password}
             helperText={errors.confirm_password ? errors.confirm_password.message : null}
