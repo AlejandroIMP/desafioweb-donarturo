@@ -9,7 +9,7 @@ const AuthLayout = ({ children }: LayoutProps) => {
 
   return (
     <>
-      <main className="main-container">
+      <main className="main-container--auth">
         {children}
       </main>
     </>
