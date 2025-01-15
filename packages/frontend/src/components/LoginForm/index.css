@@ -14,3 +14,10 @@
   text-align: center;
   padding: 5px;
 }
+
+.auth-form--style{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}

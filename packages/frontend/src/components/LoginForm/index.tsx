@@ -74,7 +74,7 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className='auth-form--style' onSubmit={handleSubmit(onSubmit)}>
       {error && <div className='auth-message-error'>{error}</div>}
       <div>
         <TextField
@@ -90,15 +90,28 @@ const LoginForm = () => {
         )}
       </div>
       <div>
-        <div>
+        <div
+          style={{
+            position: 'relative',
+          }}
+        >
           <TextField
             {...register('user_password')}
             type={showPassword ? 'text' : 'password'}
             placeholder="Password"
             autoComplete='current-password'
             disabled={isLoading}
+            fullWidth
           />
-          <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility}/>
+          <div
+            style={{
+              position: 'absolute',
+              right: '0',
+              top: '20%'
+            }}
+          >
+            <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility} />
+          </div>
         </div>
         {errors.user_password && (
           <span className='auth-message-error'>{errors.user_password.message}</span>
