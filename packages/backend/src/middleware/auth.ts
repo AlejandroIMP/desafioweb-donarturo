@@ -1,3 +1,25 @@
+/**
+ * Middleware for verifying JWT tokens in request headers.
+ * Extends Express.Request with user and rol properties.
+ * 
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ * @throws {403} If no token is provided
+ * @throws {500} If JWT_SECRET environment variable is not defined
+ * @throws {404} If user associated with token is not found
+ * @throws {401} If token is invalid
+ * @throws {500} If database query fails
+ */
+
+/**
+ * Middleware factory for role-based access control.
+ * Verifies if the authenticated user has one of the required roles.
+ * 
+ * @param roles - Array of role IDs that are allowed to access the route
+ * @returns RequestHandler middleware function
+ * @throws {403} If user's role is not included in the allowed roles
+ */
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/auth.models';

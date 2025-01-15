@@ -8,5 +8,5 @@ export interface IUser {
   telefono: string;
   fecha_nacimiento: Date;
   fecha_creacion?: Date;
-  Clientes_idClientes?: number;
+  Clientes_idClientes?: number | null;
 }

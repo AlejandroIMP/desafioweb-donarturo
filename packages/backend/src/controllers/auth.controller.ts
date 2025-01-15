@@ -1,3 +1,30 @@
+/**
+ * Authentication controller handling login and registration functionality
+ * @module AuthController
+ */
+
+/**
+ * Handles user login authentication
+ * @async
+ * @param {Request} req - Express request object containing login credentials
+ * @param {Response} res - Express response object
+ * @returns {Promise<void>} - Returns void with HTTP response
+ * 
+ * @throws {Error} - Returns 404 if email/password missing or user not found
+ * @throws {Error} - Returns 401 if password invalid or user inactive
+ * @throws {Error} - Returns 500 for server errors
+ */
+
+/**
+ * Handles new user registration
+ * @async
+ * @param {Request} req - Express request object containing user data
+ * @param {Response} res - Express response object
+ * @returns {Promise<void>} - Returns void with HTTP response
+ * 
+ * @throws {Error} - Returns 400 if required fields missing, invalid email, or email exists
+ * @throws {Error} - Returns 500 for server errors
+ */
 import { Request, Response } from 'express';
 import { TokenPayload } from '../interfaces/token.interface';
 import { IUser } from '../interfaces/auth.interface';
