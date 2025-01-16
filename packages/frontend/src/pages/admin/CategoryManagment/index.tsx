@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CategoryUpdateForm from '@/components/CategoryUpdateForm';
 import CategoryCreateForm from '@/components/CategoryCreateForm';
 import LabelState from '@/components/LabelState';
+import TableCategoriesManagment from '@/components/TableCategoriesManagment';
 
 const CategoryManagment = () => {
   const [categories, setCategories] = useState<IProductCategory[]>([]);
@@ -62,29 +63,6 @@ const CategoryManagment = () => {
     setOpenModalAdd(false);
   };
 
-  const desactivarCategoria = async (id: number) => {
-    try {
-      await updateCategoryState(id, 2);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const activarCategoria = async (id: number) => {
-    try {
-      await updateCategoryState(id, 1);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const isCategoryActive = (category: IProductCategory) => {
-    return category.estados_idestados === 1;
-  }
-
-
 
   return (
     <AdminLayout>
@@ -105,56 +83,10 @@ const CategoryManagment = () => {
           ) : error ? (
             <div>Error occurred</div>
           ) : (
-            <div>
-              <table className='management-table'>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th>Fecha de creacion</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {categories.map((category) => (
-                    <tr key={category.idCategoriaProductos}>
-                      <td data-label='Categoria'>{category.idCategoriaProductos}</td>
-                      <td data-label='Usuario'>{category.usuarios_idusuarios}</td>
-                      <td data-label='Nombre'>{category.nombre}</td>
-                      <LabelState estados={category.estados_idestados} />
-                      <td data-label='Fecha Creacion'>{formattedDate(category.fecha_creacion)}</td>
-                      <td>
-                        <Button
-                          variant='text'
-                          color='primary'
-                          onClick={() => handleOpenModalEdit(category)}
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          variant="text"
-                          color="success"
-                          disabled={isCategoryActive(category)}
-                          onClick={() => activarCategoria(category.idCategoriaProductos)}
-                        >
-                          Activar
-                        </Button>
-                        <Button
-                          variant="text"
-                          color="error"
-                          disabled={!isCategoryActive(category)}
-                          onClick={() => desactivarCategoria(category.idCategoriaProductos)}
-                        >
-                          Desactivar
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <TableCategoriesManagment
+              categories={categories}
+              handleOpenModalEdit={handleOpenModalEdit}
+            />
           )
         }
         <Dialog

@@ -1,11 +1,11 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { IOrder } from '@/interfaces/orderAndDetails.interface';
-import { getAllOrders, updateOrderState } from '@/services/orders.service';
-import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
+import { getAllOrders } from '@/services/orders.service';
 import { useState, useEffect } from 'react';
-import { Dialog, IconButton, Button } from '@mui/material';
+import { Dialog, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import OrderFormUpdate from '@/components/OrderUpdateForm';
+import TableOrdersManagment from '@/components/TableOrdersManagment';
 
 const OrdersManagment = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -79,53 +79,7 @@ const OrdersManagment = () => {
           ) : error ? (
             <div className='error-state'>Ha habido un error al cargar ordenes</div>
           ) : (
-            <table className="management-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Estado</th>
-                  <th>Fecha de creación</th>
-                  <th>Fecha de entrega</th>
-                  <th>Usuario</th>
-                  <th>Nombre</th>
-                  <th>Direccion</th>
-                  <th>Telefono</th>
-                  <th>Email</th>
-                  <th>Total</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order.idOrden}>
-                    <td data-label='id'>{order.idOrden}</td>
-                    <td data-label="Estado">
-                      <span className={`product-status ${order.estados_idestados === 1 || order.estados_idestados === 7 || order.estados_idestados === 8 ? 'status-active' : order.estados_idestados === 3 ? 'status-pending' : 'status-inactive'}`}>
-                        {formattedState(order.estados_idestados)}
-                      </span>
-                    </td>
-                    <td data-label='creacion'>{formattedDate(order.fecha_creacion)}</td>
-                    <td data-label='entrega'>{formattedDate(order.fecha_entrega)}</td>
-                    <td data-label='usuario'>{order.idusuarios}</td>
-                    <td data-label='nombre'>{order.nombre_completo}</td>
-                    <td data-label='direccion'>{order.direccion}</td>
-                    <td data-label='Telefono'>{order.telefono}</td>
-                    <td data-label='Corre'>{order.correo_electronico}</td>
-                    <td data-label='Total'>{formattedPrice(Number(order.total_orden))}</td>
-                    <td className='product-actions'>
-                      <Button
-                        variant='text'
-                        color='primary'
-                        onClick={() => handleOpenModalEdit(order)}
-                      >
-                        Editar
-                      </Button>
-
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <TableOrdersManagment orders={orders} handleOpenModalEdit={handleOpenModalEdit} />
           )
         }
         <Dialog

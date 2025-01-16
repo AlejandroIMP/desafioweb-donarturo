@@ -1,10 +1,8 @@
 import AdminLayout from '@/layouts/AdminLayout'
 import { IOrder } from '@/interfaces/orderAndDetails.interface';
-import { getAllOrders, updateOrderState } from '@/services/orders.service';
-import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
+import { getAllOrders } from '@/services/orders.service';
 import { useState, useEffect } from 'react';
-import { Button } from '@mui/material';
-import LabelState from '@/components/LabelState';
+import TableOrdersApproval from '@/components/TableOrderApproval';
 
 const OrderApproval = () => {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -27,15 +25,6 @@ const OrderApproval = () => {
 
   const OrdersNeedsApproval = orders.filter(order => order.estados_idestados === 3);
 
-  const acceptOrder = (orderId: number) => {
-    updateOrderState(orderId, 7);
-    location.reload();
-  }
-
-  const rejectOrder = (orderId: number) => {
-    updateOrderState(orderId, 6);
-    location.reload();
-  }
 
   if (OrdersNeedsApproval.length === 0) {
     return (
@@ -58,43 +47,7 @@ const OrderApproval = () => {
         ) : error ? (
           <div className="error-state">Error loading products</div>
         ) : (
-          <table className="management-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Usuario</th>
-                <th>Fecha de Orden</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                OrdersNeedsApproval.map(order => (
-                  <tr key={order.idOrden}>
-                    <td data-label='ID'>{order.idOrden}</td>
-                    <td data-label='Usuario'>{order.idusuarios}</td>
-                    <td data-label='Fecha Entrega'>{formattedDate(order.fecha_entrega)}</td>
-                    <td data-label='Total'>{order.total_orden}</td>
-                    <LabelState estados={order.estados_idestados} />
-                    <td>
-                      <Button
-                        variant='text'
-                        color='success'
-                        
-                        onClick={() => acceptOrder(order.idOrden)}>Aprobar</Button>
-                      <Button
-                        variant='text'
-                        color='error'
-                        
-                        onClick={() => rejectOrder(order.idOrden)}>Rechazar</Button>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+          <TableOrdersApproval orders={OrdersNeedsApproval} />
         )
       }
     </AdminLayout>

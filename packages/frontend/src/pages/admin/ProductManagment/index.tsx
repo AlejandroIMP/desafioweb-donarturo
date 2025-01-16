@@ -1,15 +1,14 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { DataProduct } from '@/interfaces/product.interface';
-import { getProducts, updateProductState } from '@/services/products.service';
-import LabelState from '@/components/LabelState';
-import { formattedDate } from '@/utils/orderUtils';
+import { getProducts } from '@/services/products.service';
+
 import ProductCreateForm from '@/components/ProductCreateForm';
 import ProductUpdateForm from '@/components/ProductUpdateForm';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
 import './index.css'
+import TableProductsManagment from '@/components/TableProductsManagment';
 
 const ProductManagment = () => {
   const [products, setProducts] = useState<DataProduct[]>([]);
@@ -95,28 +94,8 @@ const ProductManagment = () => {
     setopenModalAddP(false);
   };
 
-  const desactivarProducto = async(id: number) => {
-    try{
-      await updateProductState(id, 2);
-      location.reload();
-    } catch (error)
-    {
-      console.log(error);
-    }
-  };
 
-  const activarProducto = async(id: number) => {
-    try{
-      await updateProductState(id, 1);
-      location.reload();
-    } catch (error)
-    {
-      console.log(error);
-    }
-  }
-
-  const isProductActive = (product: DataProduct) => product.estado.idestados === 1;
-
+  
   return (
     <AdminLayout>
       <div className="management-container">
@@ -136,65 +115,8 @@ const ProductManagment = () => {
         ) : error ? (
           <div className="error-state">Error loading products</div>
         ) : (
-          <table className="management-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Estado</th>
-                <th>Categoria</th>
-                <th>Usuario</th>
-                <th>Fecha Creacion</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-              products.map((product) => (
-                <tr key={product.idProductos}>
-                  <td data-label="Id">{product.idProductos}</td>
-                  <td data-label="Nombre">{product.nombre}</td>
-                  <td data-label="Precio">{product.precio}</td>
-                  <td data-label="Stock">{product.stock}</td>
-                  <LabelState estados={product.estado.idestados} />
-                  <td data-label="Categoría">{product.categoria.nombre}</td>
-                  <td data-label="Usuario">{product.usuario.nombre_completo}</td>
-                  <td data-label="Fecha">{formattedDate(product.fecha_creacion)}</td>
-                  <td className="product-actions">
-                    <Button
-                      variant="text"
-                      color="primary"
-                      onClick={() => 
-                        handleOpenModalEdit(product)
-                      }
-                    >
-                      <EditIcon />
-                    </Button>
-                    <Button
-                      variant="text"
-                      color="success"
-                      disabled={isProductActive(product)}
-                      onClick={() => activarProducto(product.idProductos)}
-                    >
-                      Activar
-                    </Button>
-                    <Button
-                      variant="text"
-                      color="error"
-                      disabled={!isProductActive(product)}
-                      onClick={() => desactivarProducto(product.idProductos)}
-                    >
-                      Desactivar
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <TableProductsManagment products={products} handleOpenModalEdit={handleOpenModalEdit}/>
         )}
-
         <Dialog
           open={openModalEdit}
           onClose={handleCloseModalEdit}

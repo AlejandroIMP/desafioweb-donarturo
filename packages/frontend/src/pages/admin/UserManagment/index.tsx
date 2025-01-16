@@ -1,15 +1,13 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { IUser } from '@/interfaces/auth.interface';
-import { getUsers, updateUsersState } from '@/services/users.service';
+import { getUsers } from '@/services/users.service';
 import UserFormCreate from '@/components/UserCreateForm';
 import UserFormUpdate from '@/components/UserUpdateForm';
-import { formattedDate, formattedRole } from '@/utils/orderUtils';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import LabelState from '@/components/LabelState';
-import EditIcon from '@mui/icons-material/Edit';
 import './index.css';
+import TableUsersManagment from '@/components/TableUsersManagment';
 
 const UserManagment = () => {
   const [users, setUsers] = useState<IUser[]>([]);
@@ -73,31 +71,8 @@ const UserManagment = () => {
     setOpenModalAdd(false);
   };
 
-  const desactivarUsuario = async (id: number) => {
-    try {
-      await updateUsersState(id, 2);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const activarUsuario = async (id: number) => {
-    try {
-      await updateUsersState(id, 1);
-      location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const isUserActive = (user: IUser) => {
-    return user.estados_idestados === 1;
-  }
-
   return (
     <AdminLayout>
-
           <h1 className="management-title">Manejo de usuarios</h1>
           <Button
             variant='contained'
@@ -113,62 +88,10 @@ const UserManagment = () => {
           ) : error ? (
             <div className='error-state'>Ha habido un error al cargar usuarios</div>
           ) : (
-            <table className='management-table'>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Rol</th>
-                  <th>Estado</th>
-                  <th>correo electronico</th>
-                  <th>Nombre</th>
-                  <th>Telefono</th>
-                  <th>Fecha Nacimiento</th>
-                  <th>Fecha creacion</th>
-                  <th>Clientes</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody >
-                {users.map((user) => (
-                  <tr key={user.idusuarios}>
-                    <td data-label='Id'>{user.idusuarios}</td>
-                    <td data-label='Rol'>{formattedRole(user.rol_idrol)}</td>
-                    <LabelState estados={user.estados_idestados} />
-                    <td data-label='correo'>{user.correo_electronico}</td>
-                    <td data-label='nombre'>{user.nombre_completo}</td>
-                    <td data-label='telefono'>{user.telefono}</td>
-                    <td data-label='Nacimiento'>{formattedDate(user.fecha_nacimiento)}</td>
-                    <td data-label='fecha_creacion'>{formattedDate(user.fecha_creacion)}</td>
-                    <td data-label='clientes'>{user.Clientes_idClientes}</td>
-                    <td className='product-actions'>
-                      <Button
-                        variant='text'
-                        color='primary'
-                        onClick={() => handleOpenModalEdit(user)}
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Button
-                        variant="text"
-                        color="success"
-                        disabled={isUserActive(user)}
-                        onClick={() => activarUsuario(user.idusuarios)}
-                      >
-                        Activar
-                      </Button>
-                      <Button
-                        variant="text"
-                        color="error"
-                        disabled={!isUserActive(user)}
-                        onClick={() => desactivarUsuario(user.idusuarios)}
-                      >
-                        Desactivar
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+           <TableUsersManagment
+              users={users}
+              handleOpenModalEdit={handleOpenModalEdit}
+            />
           )
         }
         <Dialog

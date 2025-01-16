@@ -6,6 +6,7 @@ import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ClientCreateForm from '@/components/ClientCreateForm';
 import ClientUpdateForm from '@/components/ClientUpdateForm';
+import TableClientsManagment from '@/components/TableClientsManagment';
 
 
 const ClientsManagment = () => {
@@ -84,42 +85,9 @@ const ClientsManagment = () => {
 					) : error ? (
 						<div className='error-state'>Ha habido un error al cargar clientes</div>
 					) : (
-						<div>
-							<table className='management-table'>
-								<thead>
-									<tr>
-										<th>ID</th>
-										<th>Razon social</th>
-										<th>Nombre comercial</th>
-										<th>Direccion de entrega</th>
-										<th>Telefono</th>
-										<th>Correo Electronico</th>
-										<th>Acciones</th>
-									</tr>
-								</thead>
-								<tbody>
-									{clients.map((client) => (
-										<tr key={client.idClientes}>
-											<td data-label='ID'>{client.idClientes}</td>
-											<td data-label='Razon Social'>{client.razon_social}</td>
-											<td data-label='Nombre comercial'>{client.nombre_comercial}</td>
-											<td data-label='Direccion entrega'>{client.direccion_entrega}</td>
-											<td data-label='Telefono'>{client.telefono}</td>
-											<td data-label='Correo Electronico'>{client.email}</td>
-											<td className='product-actions'>
-												<Button
-													variant='text'
-													color='primary'
-													onClick={() => handleOpenModalEdit(client)}
-												>
-													Editar
-												</Button>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
+					
+							<TableClientsManagment clients={clients} handleOpenModalEdit={handleOpenModalEdit} />
+					
 					)
 				}
 				<Dialog
