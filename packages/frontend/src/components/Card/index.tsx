@@ -78,7 +78,7 @@ const Card = ({ product }: CardProps) => {
           </figcaption>
         </figure>
         <div>
-          <p>${product.precio.toFixed(2)}</p>
+          <p>Q{product.precio.toFixed(2)}</p>
           <p>{product.marca}</p>
         </div>
       </div>

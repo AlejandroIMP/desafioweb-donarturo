@@ -80,7 +80,7 @@ const TableOrdersDeliver = ({ orders }: TableOrdersDeliverProps) => {
                 <TableCell>
                   <LabelState estados={order.estados_idestados} />
                 </TableCell>
-                <TableCell>{order.total_orden}</TableCell>
+                <TableCell>Q {order.total_orden}</TableCell>
                 <TableCell>
                   <Button
                     variant='contained'
