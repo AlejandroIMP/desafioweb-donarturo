@@ -3,7 +3,6 @@ import ProductCategory from './productcategory.models';
 import User from './auth.models';
 import States from './state.models';
 
-// Define associations
 Product.belongsTo(ProductCategory, {
   foreignKey: 'CategoriaProductos_idCategoriaProductos',
   as: 'categoria'
@@ -19,7 +18,6 @@ Product.belongsTo(States, {
   as: 'estado'
 });
 
-// Reverse associations
 ProductCategory.hasMany(Product, {
   foreignKey: 'CategoriaProductos_idCategoriaProductos',
   as: 'productos'

@@ -138,7 +138,7 @@ const LoginForm = () => {
           variant="text"
           color="secondary"
           onClick={handleForgotPassword}
-          disabled={isLoading}
+          disabled={true}
         >
           Olvidé mi contraseña
         </Button>
