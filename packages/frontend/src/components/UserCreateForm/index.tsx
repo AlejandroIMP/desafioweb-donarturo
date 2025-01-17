@@ -150,6 +150,7 @@ const UserFormCreate = () => {
       <Button
         variant="contained"
         color="primary"
+        fullWidth
         type="submit">Crear</Button>
     </form>
   );

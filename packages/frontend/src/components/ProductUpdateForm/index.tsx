@@ -162,6 +162,7 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
       <Button
         type='submit'
         variant='contained'
+        fullWidth
       >
         Actualizar Producto
       </Button>

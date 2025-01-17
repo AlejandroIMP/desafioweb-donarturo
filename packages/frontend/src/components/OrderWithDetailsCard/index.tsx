@@ -1,6 +1,5 @@
 import { IOrder, IOrderDetails } from '@/interfaces/orderAndDetails.interface';
 import { formattedDate, formattedPrice, formattedState } from '@/utils/orderUtils';
-import { useNavigate } from 'react-router';
 import './index.css'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -20,8 +19,6 @@ const OrderWIthDetails = (order: IOrder) => {
   const [orderDetails, setOrderDetails] = useState<IOrderDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  const navigate = useNavigate();
 
   const getStatusClass = (status: number) => {
     switch (status) {
@@ -60,14 +57,16 @@ const OrderWIthDetails = (order: IOrder) => {
 
       {
         loading ? (
-          <div className="loading-state">Loading products...</div>
+          <div className="loading-state">Loading order...</div>
         ) : error ? (
-          <div className="error-state">Error loading products</div>
+          <div className="error-state">Error loading order</div>
         ) : (
-          <article          >
+          <article          
+            style={{
+              margin: '1rem',
+             }} >
             <div 
               className="order--card" 
-              onClick={() => navigate(`/orders/${order.idOrden}`)}
             >
               <h2>Orden: #{order.idOrden}</h2>
               <p>
@@ -91,7 +90,7 @@ const OrderWIthDetails = (order: IOrder) => {
             </div>
             <h3 style={{ textAlign:'center'}}>Detalles</h3>
             <section style={
-              { display:'grid', marginTop: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', width: '100%', gap: '1rem' }  
+              { display:'grid', marginTop: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', width: '100%', gap: '1rem' }  
             }>
 
             {

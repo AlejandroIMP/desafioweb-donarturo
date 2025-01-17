@@ -67,14 +67,12 @@ const CheckoutCard = ({ product }: CardProps) => {
       <div className='checkout--card__price'>
         <p>${product.precio * quantity}</p>
       </div>
-      <div>
-        <p>stock</p>
-        <p>{product.stock}</p>
-      </div>
+      
       <CloseIcon
         color='error'
         onClick={removeProductHandler}
-        sx={{ cursor: 'pointer' }}
+        fontSize='large'
+        sx={{ cursor: 'pointer', margin: '0 auto' }}
       />
 
     </div>
