@@ -85,88 +85,92 @@ const Checkout = () => {
   return (
     <ClientLayout>
       <h1>Checkout</h1>
-      <form className="form-container--general" onSubmit={handleSubmit(onSubmit)}
-      >
-        <TextField
-          {...register("nombre_completo")}
-          label="Nombre completo"
-          variant="outlined"
-          fullWidth
-          error={!!errors.nombre_completo}
-          helperText={errors.nombre_completo?.message}
-        >
-          Nombre Completo
-        </TextField>
-        <TextField
-          {...register("direccion")}
-          label="Dirección"
-          variant="outlined"
-          fullWidth
-          error={!!errors.direccion}
-          helperText={errors.direccion?.message}
-        >
-          Dirección
-        </TextField>
-        <TextField
-          {...register("telefono")}
-          label="Teléfono"
-          variant="outlined"
-          fullWidth
-          error={!!errors.telefono}
-          helperText={errors.telefono?.message}
-        >
-          Teléfono
-        </TextField>
-        <TextField
-          {...register("correo_electronico")}
-          label="Correo electrónico"
-          variant="outlined"
-          fullWidth
-          error={!!errors.correo_electronico}
-          helperText={errors.correo_electronico?.message}
-        >
-          Correo electrónico
-        </TextField>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={!isValid || isLoading}
-          fullWidth
-        >
-          Ir a pagar
-        </Button>
-        {
-          isLoading && <p
-            style={{
-              color: 'blue',
-              textAlign: 'center',
-              marginTop: '1rem',
-            }}
-          >Loading...</p>
-        }
-        {
-          success === true &&
-          <div
-            style={{
-              color: 'green',
-              textAlign: 'center',
-              marginTop: '1rem',
-            }}
+      {
+        error ? <p>Ha ocurrido un error en el proceso de la compra</p> : (
+          <form className="form-container--general" onSubmit={handleSubmit(onSubmit)}
           >
-            <p
-            style={{
-              fontSize: '1.5rem',
-            }}
-            >Order placed successfully!</p>
-            <p
-            style={{
-              fontSize: '1.5rem',
-            }}
-            >Redirectin to Home...</p>
-          </div>
-        }
-      </form>
+            <TextField
+              {...register("nombre_completo")}
+              label="Nombre completo"
+              variant="outlined"
+              fullWidth
+              error={!!errors.nombre_completo}
+              helperText={errors.nombre_completo?.message}
+            >
+              Nombre Completo
+            </TextField>
+            <TextField
+              {...register("direccion")}
+              label="Dirección"
+              variant="outlined"
+              fullWidth
+              error={!!errors.direccion}
+              helperText={errors.direccion?.message}
+            >
+              Dirección
+            </TextField>
+            <TextField
+              {...register("telefono")}
+              label="Teléfono"
+              variant="outlined"
+              fullWidth
+              error={!!errors.telefono}
+              helperText={errors.telefono?.message}
+            >
+              Teléfono
+            </TextField>
+            <TextField
+              {...register("correo_electronico")}
+              label="Correo electrónico"
+              variant="outlined"
+              fullWidth
+              error={!!errors.correo_electronico}
+              helperText={errors.correo_electronico?.message}
+            >
+              Correo electrónico
+            </TextField>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!isValid || isLoading}
+              fullWidth
+            >
+              Ir a pagar
+            </Button>
+            {
+              isLoading && <p
+                style={{
+                  color: 'blue',
+                  textAlign: 'center',
+                  marginTop: '1rem',
+                }}
+              >Loading...</p>
+            }
+            {
+              success === true &&
+              <div
+                style={{
+                  color: 'green',
+                  textAlign: 'center',
+                  marginTop: '1rem',
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: '1.5rem',
+                  }}
+                >Order placed successfully!</p>
+                <p
+                  style={{
+                    fontSize: '1.5rem',
+                  }}
+                >Redirectin to Home...</p>
+              </div>
+            }
+          </form>
+        )
+      }
     </ClientLayout>
   );
 }
