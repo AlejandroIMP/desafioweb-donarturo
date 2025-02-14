@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ClientContextType } from "@/interfaces/clientrol.interface";
-import { ClientContext } from "@/context/ClientContext";
+import { ClientContext } from "@/context/ClientContextDefinition";
 
 export const useClientContext = (): ClientContextType => {
   const context = useContext(ClientContext);

@@ -7,7 +7,6 @@ import { ClientContext } from './ClientContextDefinition';
 
 
 export const ClientProvider = ({ children }: { children: ReactNode }) => {
-
   
   const [products, setProducts] = useState<DataProduct[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
