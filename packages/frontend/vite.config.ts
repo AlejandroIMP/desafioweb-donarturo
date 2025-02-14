@@ -16,7 +16,7 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       // overwrite default .html entry
-      input: '/path/main.tsx',
+      input: path.resolve(__dirname, 'src', 'main.tsx'),
     },
   },
   server: {
