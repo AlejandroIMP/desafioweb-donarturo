@@ -36,7 +36,10 @@ User.init(
     estados_idestados: {
       type: DataTypes.INTEGER,
       allowNull: true,
-
+      references: {
+        model: 'estados',
+        key: 'idestados'
+      }
     },
     correo_electronico: {
       type: DataTypes.STRING(45),
