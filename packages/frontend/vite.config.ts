@@ -20,6 +20,6 @@ export default defineConfig({
     },
   },
   server: {
-    origin: env.VITE_API_BASE_URL,
+    origin: env.VITE_API_BASE_URL_CONFIG,
   },
 })
