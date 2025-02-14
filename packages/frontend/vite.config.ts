@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import * as path from 'path'
+import { env } from 'process'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,10 +16,10 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       // overwrite default .html entry
-      input: '/path/to/main.js',
+      input: '/path/main.tsx',
     },
   },
   server: {
-    origin: 'http://localhost:5000',
+    origin: env.VITE_API_BASE_URL,
   },
 })
