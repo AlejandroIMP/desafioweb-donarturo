@@ -35,9 +35,10 @@ const NavbarAdmin = () => {
     const updateTheme = () => {
       const themeMode = localStorage.getItem('theme-mode') || 'dark';
       const isDark = themeMode === 'dark' ||
-        (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        (themeMode === 'dark' && window.matchMedia('(prefers-color-scheme: dark)').matches);
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     };
+
 
     updateTheme();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
@@ -59,6 +60,7 @@ const NavbarAdmin = () => {
     closeCheckoutSideMenuHandler();
     setTotalPrice(0);
     setUserOrders([]);
+    setTheme('dark');
   }
 
   return (
@@ -136,29 +138,35 @@ const NavbarAdmin = () => {
           open={Boolean(mainMenuAnchor)}
           onClose={() => setMainMenuAnchor(null)}
         >
-          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin')}}>
+          <MenuItem onClick={() => {
+            setMainMenuAnchor(null);
+            Navigate('/admin');
+          }}>
             <p>Inicio</p>
           </MenuItem>
-          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/products')}}>
+          <MenuItem onClick={() => {
+              setMainMenuAnchor(null);
+              Navigate('/admin/products')
+            }}>
             <p>Productos</p>
           </MenuItem>
-          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/users')}}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null); Navigate('/admin/users')}}>
             <PeopleIcon className="menu-icon" />
             <p>Usuarios</p>
           </MenuItem>
-          <MenuItem onClick={() =>{ setMainMenuAnchor(null), Navigate('/admin/orders')}}>
+          <MenuItem onClick={() =>{ setMainMenuAnchor(null); Navigate('/admin/orders')}}>
             <ShoppingCartIcon className="menu-icon" />
             <p>Ordenes</p>
           </MenuItem>
-          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/clients')}}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null); Navigate('/admin/clients')}}>
             <GroupIcon className="menu-icon" />
             <p>Clientes</p>
           </MenuItem>
-          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/categories')}}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null); Navigate('/admin/categories')}}>
             <CategoryIcon className="menu-icon" />
             <p>Categorias</p>
           </MenuItem>
-          <MenuItem onClick={() => {setMainMenuAnchor(null), Navigate('/admin/orders/approval')}}>
+          <MenuItem onClick={() => {setMainMenuAnchor(null); Navigate('/admin/orders/approval')}}>
             <CheckCircleIcon className="menu-icon" />
             <p>Aprobacion de Ordenes</p>
           </MenuItem>
@@ -176,11 +184,11 @@ const NavbarAdmin = () => {
           open={Boolean(userMenuAnchor)}
           onClose={() => setUserMenuAnchor(null)}
         >
-          <MenuItem onClick={() => {setUserMenuAnchor(null), Navigate('/admin/account')}}>
+          <MenuItem onClick={() => {setUserMenuAnchor(null); Navigate('/admin/account')}}>
             <AccountCircleIcon className="menu-icon" />
             <p>{email}</p>
           </MenuItem>
-          <MenuItem onClick={() => {setUserMenuAnchor(null), Navigate('/home')}}>
+          <MenuItem onClick={() => {setUserMenuAnchor(null); Navigate('/home')}}>
             <StoreIcon className="menu-icon" />
             <p>Tienda</p>
           </MenuItem>

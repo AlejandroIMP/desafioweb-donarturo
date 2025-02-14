@@ -1,13 +1,11 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import { IProductCategory } from '@/interfaces/productcategory.interface';
-import { getCategories, updateCategoryState } from '@/services/categories.service';
-import { formattedDate } from '@/utils/orderUtils';
+import { getCategories } from '@/services/categories.service';
 import { useState, useEffect } from 'react';
 import { Dialog, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CategoryUpdateForm from '@/components/CategoryUpdateForm';
 import CategoryCreateForm from '@/components/CategoryCreateForm';
-import LabelState from '@/components/LabelState';
 import TableCategoriesManagment from '@/components/TableCategoriesManagment';
 
 const CategoryManagment = () => {
@@ -31,6 +29,7 @@ const CategoryManagment = () => {
         setCategories(response.data);
       } catch (error) {
         setError(true);
+        throw error;
       } finally {
         setLoading(false);
       }

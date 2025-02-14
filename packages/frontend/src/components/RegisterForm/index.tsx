@@ -17,9 +17,9 @@ const RegisterForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const [selectedRole, setSelectedRole] = useState(1);
-  const [selectedStatus, setSelectedStatus] = useState(1);
-  const [selectedClient, setSelectedClient] = useState(null);
+  const selectedRole = 1;
+  const selectedStatus = 1;
+  const selectedClient = null;
 
   const {
     register,

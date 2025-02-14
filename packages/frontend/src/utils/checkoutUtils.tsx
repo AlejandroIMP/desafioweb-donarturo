@@ -2,9 +2,8 @@
 export const calculateDeliveryDate = () => {
   const today = new Date();
   const minimumDays = 3;
-  const maximumDays = 7;
 
-  let deliveryDate = new Date(today);
+  const deliveryDate = new Date(today);
   let addedDays = 0;
 
   while (addedDays < minimumDays) {

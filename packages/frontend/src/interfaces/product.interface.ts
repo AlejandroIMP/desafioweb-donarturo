@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export interface IProduct {
   idProductos: number;
   CategoriaProductos_idCategoriaProductos: number;

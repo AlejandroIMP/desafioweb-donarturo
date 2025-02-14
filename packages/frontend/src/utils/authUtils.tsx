@@ -1,14 +1,12 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { navigateByRole } from './loginUtils';
+import { isAuthenticated, getUserRole } from './auth';
 
 interface PrivateRouteProps {
   children: ReactNode;
   roles?: number[];
 }
-
-export const isAuthenticated = () => !!localStorage.getItem("token");
-export const getUserRole = () => localStorage.getItem("role");
 
 export const PrivateRoute = ({ children, roles }: PrivateRouteProps) => {
   if (!isAuthenticated()) return <Navigate to="/auth/login" />;

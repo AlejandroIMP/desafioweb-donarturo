@@ -10,48 +10,27 @@ const getHeaders = () => ({
   'Pragma': 'no-cache'
 });
 
-
 export const getUsers = async (): Promise<userResponseGet> => {
-  try{
-    const response = await axios.get<userResponseGet>(`${apiBaseUrl}usuarios`, { headers: getHeaders() });
-    return response.data;
-  } catch (error){
-    throw error;
-  }
+  const response = await axios.get<userResponseGet>(`${apiBaseUrl}usuarios`, { headers: getHeaders() });
+  return response.data;
 }
 
 export const getUser = async (id: string): Promise<IUser> => {
-  try{
-    const response = await axios.get<IUser>(`${apiBaseUrl}usuarios/${id}`, { headers: getHeaders() });
-    return response.data;
-  } catch (error){
-    throw error;
-  }
+  const response = await axios.get<IUser>(`${apiBaseUrl}usuarios/${id}`, { headers: getHeaders() });
+  return response.data;
 }
 
 export const createUser = async (product: CreateUserForm): Promise<userResponsePost> => {
-  try{
-    const response = await axios.post<userResponsePost>(`${apiBaseUrl}usuarios`, product, { headers: getHeaders() });
-    return response.data;
-  } catch (error){
-    throw error;
-  }
+  const response = await axios.post<userResponsePost>(`${apiBaseUrl}usuarios`, product, { headers: getHeaders() });
+  return response.data;
 }
 
-export const updateUsers = async (id:number, user: UpdateUserForm): Promise<userResponsePost> => {
-  try{
-    const response = await axios.put<userResponsePost>(`${apiBaseUrl}usuarios/${id}`, user, { headers: getHeaders() });
-    return response.data;
-  } catch (error){
-    throw error;
-  }
+export const updateUsers = async (id: number, user: UpdateUserForm): Promise<userResponsePost> => {
+  const response = await axios.put<userResponsePost>(`${apiBaseUrl}usuarios/${id}`, user, { headers: getHeaders() });
+  return response.data;
 }
 
 export const updateUsersState = async (id: number, estados_idestados: number): Promise<IUser> => {
-  try{
-    const response = await axios.patch<IUser>(`${apiBaseUrl}usuarios/${id}`, {estados_idestados}, { headers: getHeaders() });
-    return response.data;
-  } catch (error){
-    throw error;
-  }
+  const response = await axios.patch<IUser>(`${apiBaseUrl}usuarios/${id}`, { estados_idestados }, { headers: getHeaders() });
+  return response.data;
 }

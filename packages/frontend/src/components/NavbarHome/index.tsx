@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { Menu, IconButton, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router";
-import LogoutIcon from '@mui/icons-material/Logout';
 import './index.css';
 
 const NavbarHome = () => {
@@ -46,6 +45,7 @@ const NavbarHome = () => {
     closeCheckoutSideMenuHandler();
     setTotalPrice(0);
     setUserOrders([]);
+    setTheme('dark');
   }
 
   return (

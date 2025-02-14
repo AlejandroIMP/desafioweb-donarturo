@@ -1,12 +1,10 @@
-import { createContext, useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, ReactNode, useCallback } from 'react';
 import { getProducts } from '../services/products.service';
 import { getOrdersByUser } from '@/services/orders.service';
-import { IProduct, CartProduct, DataProduct } from '../interfaces/product.interface';
-import { ClientContextType } from '@/interfaces/clientrol.interface';
+import { CartProduct, DataProduct } from '../interfaces/product.interface';
 import { IOrder } from '@/interfaces/orderAndDetails.interface';
+import { ClientContext } from './ClientContextDefinition';
 
-
-export const ClientContext = createContext<ClientContextType>({} as ClientContextType);
 
 export const ClientProvider = ({ children }: { children: ReactNode }) => {
 
@@ -76,7 +74,7 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
 
   const idUsuario = localStorage.getItem('idUsuario');
 
-  const getUserOrders = async () => {
+  const getUserOrders = useCallback(async () => {
     if (localStorage.getItem('idusuario') === null) return;
     try {
       const response = await getOrdersByUser(Number(idUsuario));
@@ -86,11 +84,11 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       setError(error instanceof Error ? error : new Error('Failed to fetch orders'));
     }
-  }
+  }, [idUsuario]);
 
   useEffect(() => {
     getUserOrders();
-  }, []);
+  }, [getUserOrders]);
 
   return (
     <ClientContext.Provider value={{ 

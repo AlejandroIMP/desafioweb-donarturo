@@ -2,7 +2,6 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, useMediaQuery, Typography, Box, TablePagination
 } from '@mui/material';
 import { IClient } from '@/interfaces/clients.interface';
-import { formattedDate } from '@/utils/orderUtils';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 

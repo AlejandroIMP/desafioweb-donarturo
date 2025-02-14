@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IClient, ClientResponseGet, IClientCreate } from '@/interfaces/clients.interface';
+import { ClientResponseGet, IClientCreate } from '@/interfaces/clients.interface';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 

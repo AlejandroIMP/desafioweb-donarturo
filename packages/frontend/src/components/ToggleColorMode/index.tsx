@@ -9,7 +9,7 @@ export default function ToggleColorMode() {
       <FormControl>
         <RadioGroup
           value={mode}
-          onChange={(e) => toggleTheme(e.target.value as 'light' | 'dark' | 'system')}
+          onChange={(e) => toggleTheme(e.target.value as 'light' | 'dark')}
         >
           <FormControlLabel value="light" control={<Radio />} label="Light" />
           <FormControlLabel value="dark" control={<Radio />} label="Dark" />

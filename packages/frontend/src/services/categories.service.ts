@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IProductCategory, ProductCategoryResponseGet } from '@/interfaces/productcategory.interface';
+import { ProductCategoryResponseGet } from '@/interfaces/productcategory.interface';
 import { CategoryUpdateFormSchema } from '@/schemas/categories.schemas';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;

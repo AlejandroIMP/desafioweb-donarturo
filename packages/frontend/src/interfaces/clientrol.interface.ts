@@ -1,4 +1,4 @@
-import { IProduct, CartProduct, DataProduct } from './product.interface';
+import { CartProduct, DataProduct } from './product.interface';
 import { IOrder } from './orderAndDetails.interface';
 
 export interface ClientContextType {
