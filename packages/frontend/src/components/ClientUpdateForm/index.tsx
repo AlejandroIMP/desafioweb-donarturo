@@ -20,17 +20,18 @@ const ClientUpdateForm = ({ client, onClose }: ClientUpdateFormProps) => {
     resolver: zodResolver(clientSchema),
     mode: 'onChange',
     defaultValues: {
-      razon_social: client.razon_social,
-      nombre_comercial: client.nombre_comercial,
-      direccion_entrega: client.direccion_entrega,
-      telefono: client.telefono,
-      email: client.email
+      business_name: client.business_name,
+      commercial_name: client.commercial_name,
+      delivery_address: client.delivery_address,
+      phone: client.phone,
+      email: client.email,
+      tax_id: client.tax_id || ''
     }
   });
 
   const onSubmit = async (data: ClientCreateFormSchema) => {
     try {
-      await updateClient(client.idClientes, data);
+      await updateClient(client.client_id, data);
       reset();
       onClose();
       location.reload();
@@ -42,33 +43,33 @@ const ClientUpdateForm = ({ client, onClose }: ClientUpdateFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        {...register('razon_social')}
-        label="Razón Social"
+        {...register('business_name')}
+        label="Nombre del Negocio"
         fullWidth
-        error={!!errors.razon_social}
-        helperText={errors.razon_social?.message}
+        error={!!errors.business_name}
+        helperText={errors.business_name?.message}
       />
       <TextField
-        {...register('nombre_comercial')}
+        {...register('commercial_name')}
         label="Nombre Comercial"
         fullWidth
-        error={!!errors.nombre_comercial}
-        helperText={errors.nombre_comercial?.message}
+        error={!!errors.commercial_name}
+        helperText={errors.commercial_name?.message}
       />
       <TextField
-        {...register('direccion_entrega')}
-        label="Dirección"
+        {...register('delivery_address')}
+        label="Dirección de Entrega"
         fullWidth
-        error={!!errors.direccion_entrega}
-        helperText={errors.direccion_entrega?.message}
+        error={!!errors.delivery_address}
+        helperText={errors.delivery_address?.message}
       />
       <TextField
-        {...register('telefono')}
+        {...register('phone')}
         label="Teléfono"
         fullWidth
-        placeholder="XXXX-XXXX"
-        error={!!errors.telefono}
-        helperText={errors.telefono?.message}
+        placeholder="+502 1234-5678"
+        error={!!errors.phone}
+        helperText={errors.phone?.message}
       />
       <TextField
         {...register('email')}
@@ -77,6 +78,13 @@ const ClientUpdateForm = ({ client, onClose }: ClientUpdateFormProps) => {
         fullWidth
         error={!!errors.email}
         helperText={errors.email?.message}
+      />
+      <TextField
+        {...register('tax_id')}
+        label="NIT (Opcional)"
+        fullWidth
+        error={!!errors.tax_id}
+        helperText={errors.tax_id?.message}
       />
       <Button
         type="submit"

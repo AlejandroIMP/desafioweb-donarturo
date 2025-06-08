@@ -15,25 +15,25 @@ const OrderCard = (order: IOrder) => {
     }
   };
   return (
-    <div className="order--card" onClick={() => navigate(`/orders/${order.idOrden}`)}>
-      <h2>Orden: #{order.idOrden}</h2>
+    <div className="order--card" onClick={() => navigate(`/orders/${order.order_id}`)}>
+      <h2>Orden: #{order.order_id}</h2>
       <p>
         <span>Fecha de entrega:</span>
-        <span>{formattedDate(order.fecha_entrega)}</span>
+        <span>{formattedDate(order.delivery_date)}</span>
       </p>
       <p>
         <span>Fecha de creación:</span>
-        <span>{formattedDate(order.fecha_creacion)}</span>
+        <span>{formattedDate(order.created_at)}</span>
       </p>
       <p>
         <span>Estado:</span>
-        <span className={`order--status ${getStatusClass(order.estados_idestados)}`}>
-          {formattedState(order.estados_idestados)}
+        <span className={`order--status ${getStatusClass(order.state_id)}`}>
+          {formattedState(order.state_id)}
         </span>
       </p>
       <p>
         <span>Total:</span>
-        <span>Q {formattedPrice(order.total_orden)}</span>
+        <span>Q {formattedPrice(order.order_total)}</span>
       </p>
     </div>
   )

@@ -37,7 +37,7 @@ const Orders = () => {
       <section className="orders--container">
         {
           userOrders.map(order => (
-            <OrderCard key={order.idOrden} {...order} />
+            <OrderCard key={order.order_id} {...order} />
           ))
         }
       </section>

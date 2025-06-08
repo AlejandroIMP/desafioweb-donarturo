@@ -1,14 +1,21 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, TextField, Select, MenuItem } from '@mui/material';
+import { Button, TextField, Select, MenuItem, Alert, CircularProgress } from '@mui/material';
 import { createProductSchema, CreateProductForm } from '@/schemas/product.schemas';
 import { IProductCategory } from '@/interfaces/productcategory.interface';
 import { createProduct } from '@/services/products.service';
 import { getCategories } from '@/services/categories.service';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-const ProductCreateForm = () => {
+interface ProductCreateFormProps {
+  onProductCreated?: () => Promise<void>;
+}
+
+const ProductCreateForm = ({ onProductCreated }: ProductCreateFormProps) => {
   const [categories, setCategories] = useState<IProductCategory[]>([]);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -16,15 +23,20 @@ const ProductCreateForm = () => {
         const { data } = await getCategories();
         setCategories(data);
       } catch (error) {
-        console.error(error);
+        console.error('Error al obtener categorías:', error);
+        setSubmitError(
+          error instanceof Error 
+            ? `Error al cargar categorías: ${error.message}`
+            : 'Error al cargar categorías. Por favor, recarga la página.'
+        );
       }
     };
     fetchCategories();
   }, []);
 
   const formattedCategories = categories.map((category) => (
-    <MenuItem key={category.idCategoriaProductos} value={category.idCategoriaProductos}>
-      {category.nombre}
+    <MenuItem key={category.category_id} value={category.category_id}>
+      {category.category_name}
     </MenuItem>
   ));
 
@@ -43,96 +55,139 @@ const ProductCreateForm = () => {
     resolver: zodResolver(createProductSchema),
     mode: 'onChange',
     defaultValues: {
-
-      CategoriaProductos_idCategoriaProductos: 1,
-      estados_idestados: '',
-      nombre: '',
-      marca: '',
-      codigo: '',
-      stock: '',
-      precio: '',
-      foto: '',
+      category_id: 1,
+      state_id: undefined,
+      product_name: '',
+      brand: '',
+      product_code: '',
+      stock_quantity: '',
+      unit_price: '',
+      image_url: '',
     }
   });
 
-  const onSubmit = async (data: CreateProductForm) => {
-
-
-    Number(data.CategoriaProductos_idCategoriaProductos);
-    Number(data.estados_idestados);
-    Number(data.stock);
-    Number(data.precio);
-    Number(data.usuarios_idusuarios);
-
+  const onSubmit = useCallback(async (data: CreateProductForm) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+    
     try {
+      if (!idUsuario) {
+        setSubmitError("Usuario no encontrado. Por favor, inicia sesión nuevamente.");
+        return;
+      }
+      
+      const formattedData = {
+        ...data,
+        category_id: Number(data.category_id),
+        state_id: Number(data.state_id),
+        stock_quantity: Number(data.stock_quantity),
+        unit_price: Number(data.unit_price),
+        user_id: String(idUsuario), // Asegurarse de que sea string según la interfaz IProductCreate
+      };
 
-      await createProduct(data);
+      // Validación adicional de datos antes de enviar al backend
+      if (formattedData.unit_price <= 0) {
+        throw new Error('El precio debe ser mayor que cero');
+      }
+      
+      if (formattedData.stock_quantity < 0) {
+        throw new Error('El stock no puede ser negativo');
+      }
+      
+      await createProduct(formattedData);
+      setSubmitSuccess(true);
       reset();
-      location.reload();
+      
+      // Mejor UX: mostrar mensaje de éxito y refrescar datos
+      if (onProductCreated) {
+        setTimeout(async () => {
+          await onProductCreated();
+        }, 2000);
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Error al crear producto:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Error al crear el producto. Inténtalo de nuevo.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  }, [idUsuario, reset, onProductCreated]);
 
   return (
     <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      {submitSuccess && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          ¡Producto creado correctamente! La página se recargará en unos segundos.
+        </Alert>
+      )}
+      
+      {submitError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {submitError}
+        </Alert>
+      )}
+
       <TextField
         label="Usuario"
         variant="outlined"
-        {...register('usuarios_idusuarios')}
-        error={!!errors.usuarios_idusuarios}
-        helperText={errors.usuarios_idusuarios?.message}
+        {...register('user_id')}
+        error={!!errors.user_id}
+        helperText={errors.user_id?.message}
         defaultValue={idUsuario}
         disabled={true}
         fullWidth
       />
       <TextField
-        label="Nombre"
+        label="Nombre del Producto"
         variant="outlined"
-        {...register('nombre')}
-        error={!!errors.nombre}
-        helperText={errors.nombre?.message}
+        {...register('product_name')}
+        error={!!errors.product_name}
+        helperText={errors.product_name?.message}
         fullWidth
       />
       <TextField
         label="Marca"
         variant="outlined"
-        {...register('marca')}
-        error={!!errors.marca}
-        helperText={errors.marca?.message}
+        {...register('brand')}
+        error={!!errors.brand}
+        helperText={errors.brand?.message}
         fullWidth
       />
       <TextField
         label="Código"
         variant="outlined"
-        {...register('codigo')}
-        error={!!errors.codigo}
-        helperText={errors.codigo?.message}
+        {...register('product_code')}
+        error={!!errors.product_code}
+        helperText={errors.product_code?.message}
         fullWidth
       />
       <TextField
         label="Stock"
         variant="outlined"
         type="number"
-        {...register('stock')}
-        error={!!errors.stock}
-        helperText={errors.stock?.message}
+        {...register('stock_quantity')}
+        error={!!errors.stock_quantity}
+        helperText={errors.stock_quantity?.message}
         fullWidth
       />
       <TextField
         label="Precio"
         variant="outlined"
         type="number"
-        {...register('precio')}
-        error={!!errors.precio}
-        helperText={errors.precio?.message}
+        {...register('unit_price')}
+        error={!!errors.unit_price}
+        helperText={errors.unit_price?.message}
         fullWidth
       />
       <Select
         label='Categoría'
         variant="outlined"
-        {...register('CategoriaProductos_idCategoriaProductos')}
-        error={!!errors.CategoriaProductos_idCategoriaProductos}
+        {...register('category_id')}
+        error={!!errors.category_id}
         fullWidth
         displayEmpty={true}
         defaultValue={valueCategory}
@@ -143,8 +198,8 @@ const ProductCreateForm = () => {
       <Select
         label='Estado'
         variant="outlined"
-        {...register('estados_idestados')}
-        error={!!errors.estados_idestados}
+        {...register('state_id')}
+        error={!!errors.state_id}
         fullWidth
         displayEmpty={true}
         defaultValue={valueState}
@@ -154,18 +209,20 @@ const ProductCreateForm = () => {
         <MenuItem value={'2'}>Inactivo</MenuItem>
       </Select>
       <TextField
-        label="Foto"
+        label="URL de Imagen"
         variant="outlined"
-        {...register('foto')}
-        error={!!errors.foto}
-        helperText={errors.foto?.message}
+        {...register('image_url')}
+        error={!!errors.image_url}
+        helperText={errors.image_url?.message}
         fullWidth
       />
       <Button
         type='submit'
         variant='contained'
+        disabled={isSubmitting}
+        startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
       >
-        Crear Producto
+        {isSubmitting ? 'Creando...' : 'Crear Producto'}
       </Button>
     </form>
   );

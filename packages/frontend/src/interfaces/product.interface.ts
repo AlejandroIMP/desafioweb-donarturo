@@ -1,15 +1,21 @@
 export interface IProduct {
-  idProductos: number;
-  CategoriaProductos_idCategoriaProductos: number;
-  usuarios_idusuarios: number;
-  nombre: string;
-  marca: string;
-  codigo: string;
-  stock: number;
-  estados_idestados: number;
-  precio: number;
-  fecha_creacion: string;
-  foto: string;
+  product_id: number;
+  category_id: number;
+  user_id: number;
+  product_name: string;
+  brand: string;
+  product_code: string;
+  stock_quantity: number;
+  state_id: number;
+  unit_price: number;
+  created_at: string;
+  image_url: string;
+  description?: string;
+  cloudinary_public_id?: string;
+  weight?: number;
+  dimensions?: string;
+  is_deleted?: boolean;
+  updated_at?: string;
 }
 
 export interface ProductResponse {
@@ -23,36 +29,41 @@ export interface CartProduct extends DataProduct {
 }
 
 export interface IProductCreate {
-  CategoriaProductos_idCategoriaProductos: number;
-  usuarios_idusuarios: string;
-  nombre: string;
-  marca: string;
-  codigo: string;
-  stock: string;
-  estados_idestados: string;
-  precio: string;
-  foto: string;
+  category_id: number;  // Convertido a number antes de enviarlo
+  user_id: string;      // Se mantiene como string en el formulario
+  product_name: string;
+  brand: string;
+  product_code: string;
+  stock_quantity: number; // Convertido a number antes de enviarlo
+  state_id: number;      // Convertido a number antes de enviarlo 
+  unit_price: number;    // Convertido a number antes de enviarlo
+  image_url: string;
+  description?: string;
 }
 
 export interface DataProduct {
-  idProductos: number;
-  nombre: string;
-  marca: string;
-  codigo: string;
-  stock: number;
-  precio: number;
-  foto: string;
-  fecha_creacion: string;
-  categoria: {
-    nombre: string;
-    idCategoriaProductos: number;
+  product_id: number;
+  product_name: string;
+  brand: string;
+  product_code: string;
+  stock_quantity: number;
+  unit_price: number;
+  image_url: string;
+  created_at: string;
+  description?: string;
+  cloudinary_public_id?: string;
+  weight?: number;
+  dimensions?: string;
+  category: {
+    category_name: string;
+    category_id: number;
   }
-  usuario: {
-    nombre_completo: string;
-    idusuarios: number;
+  user: {
+    full_name: string;
+    user_id: number;
   }
-  estado: {
-    nombre: string;
-    idestados: number;
+  state: {
+    state_name: string;
+    state_id: number;
   }
 }

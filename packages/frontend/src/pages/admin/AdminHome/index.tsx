@@ -23,7 +23,7 @@ const AdminHome = () => {
     fetchOrders();
   }, []);
 
-  const ordersNeedsDelivered = orders.filter(order => order.estados_idestados === 7);
+  const ordersNeedsDelivered = orders.filter(order => order.state_id === 7);
 
   if (ordersNeedsDelivered.length === 0) {
     return (

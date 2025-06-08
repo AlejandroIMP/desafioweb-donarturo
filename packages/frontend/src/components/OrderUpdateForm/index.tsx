@@ -11,30 +11,30 @@ interface OrderFormUpdateProps {
 }
 
 const OrderFormUpdate = ({ order }: OrderFormUpdateProps) => {
-  const [valueState, setValueState] = useState(order.estados_idestados);
-  const [clientValue, setClientValue] = useState(order.Clientes_idClientes.toString());
+  const [valueState, setValueState] = useState(order.state_id);
+  const [clientValue, setClientValue] = useState(order.client_id.toString());
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderSchemaUpdateForm>({
     resolver: zodResolver(OrderSchemaUpdate),
     mode: 'onChange',
     defaultValues: {
-      idusuario: order.idusuarios,
-      estados_idestados: valueState,
-      nombre_completo: order.nombre_completo,
-      direccion: order.direccion,
-      telefono: order.telefono,
-      correo_electronico: order.correo_electronico,
-      fecha_entrega: order.fecha_entrega,
-      Clientes_idClientes: order.Clientes_idClientes.toString()
+      user_id: order.user_id,
+      state_id: valueState,
+      customer_name: order.customer_name,
+      delivery_address: order.delivery_address,
+      phone: order.phone,
+      email: order.email,
+      delivery_date: order.delivery_date,
+      client_id: order.client_id.toString()
     }
   });
 
   const onSubmit = async (data: OrderSchemaUpdateForm) => {
-    Number(data.Clientes_idClientes) === 0 ? data.Clientes_idClientes = null : data.Clientes_idClientes;
-    Number(data.estados_idestados);
+    Number(data.client_id) === 0 ? data.client_id = null : data.client_id;
+    Number(data.state_id);
     console.log(data);
     try {
-      await updateOrder(order.idOrden, data);
+      await updateOrder(order.order_id, data);
       reset();
       location.reload();
     } catch (error) {
@@ -45,31 +45,31 @@ const OrderFormUpdate = ({ order }: OrderFormUpdateProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        label="IdOrden"
+        label="ID Orden"
         type="number"
         fullWidth
         disabled={true}
-        defaultValue={order.idOrden}
+        defaultValue={order.order_id}
       />
       <TextField
-        label="Fecha de creacion"
+        label="Fecha de creación"
         fullWidth
         disabled={true}
-        defaultValue={order.fecha_creacion}
+        defaultValue={order.created_at}
       />
       <TextField
         label="Usuario ID"
         type="number"
         fullWidth
         disabled={true}
-        defaultValue={order.idusuarios}
+        defaultValue={order.user_id}
       />
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={valueState}
         label="Estado"
-        {...register('estados_idestados')}
+        {...register('state_id')}
         onChange={(e) => setValueState(Number(e.target.value))}
       >
         <MenuItem value={'1'}>Activo</MenuItem>
@@ -77,53 +77,53 @@ const OrderFormUpdate = ({ order }: OrderFormUpdateProps) => {
         <MenuItem value={'3'}>En proceso</MenuItem>
       </Select>
       <TextField
-        label="Nombre completo"
+        label="Nombre del cliente"
         type="text"
         fullWidth
-        error={!!errors.nombre_completo}
-        helperText={errors.nombre_completo?.message}
-        {...register('nombre_completo')}
+        error={!!errors.customer_name}
+        helperText={errors.customer_name?.message}
+        {...register('customer_name')}
       />
       <TextField
-        label="Dirección"
+        label="Dirección de entrega"
         type="text"
         fullWidth
-        error={!!errors.direccion}
-        helperText={errors.direccion?.message}
-        {...register('direccion')}
+        error={!!errors.delivery_address}
+        helperText={errors.delivery_address?.message}
+        {...register('delivery_address')}
       />
       <TextField
         label="Teléfono"
         type="text"
         fullWidth
-        error={!!errors.telefono}
-        helperText={errors.telefono?.message}
-        {...register('telefono')}
+        error={!!errors.phone}
+        helperText={errors.phone?.message}
+        {...register('phone')}
       />
       <TextField
         label="Correo electrónico"
         type="email"
         fullWidth
-        error={!!errors.correo_electronico}
-        helperText={errors.correo_electronico?.message}
-        {...register('correo_electronico')}
+        error={!!errors.email}
+        helperText={errors.email?.message}
+        {...register('email')}
       />
       <TextField
         label="Fecha de entrega"
         type="text"
         fullWidth
-        error={!!errors.fecha_entrega}
-        helperText={errors.fecha_entrega?.message}
-        {...register('fecha_entrega')}
+        error={!!errors.delivery_date}
+        helperText={errors.delivery_date?.message}
+        {...register('delivery_date')}
       />
       <TextField
         label="Cliente ID"
         type="number"
         fullWidth
-        error={!!errors.Clientes_idClientes}
-        helperText={errors.Clientes_idClientes?.message}
+        error={!!errors.client_id}
+        helperText={errors.client_id?.message}
         defaultValue={clientValue}
-        {...register('Clientes_idClientes')}
+        {...register('client_id')}
         onChange={(e) => setClientValue(e.target.value)}
       />
       <Button variant='contained' color='primary' type='submit'>Actualizar</Button>

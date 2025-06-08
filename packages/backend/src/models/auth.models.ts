@@ -2,82 +2,130 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database/connection';
 import { IUser } from '../interfaces/auth.interface';
 
-type UserCreationAttributes = Optional<IUser, 'idusuarios' | 'fecha_creacion' | 'Clientes_idClientes'>;
+type UserCreationAttributes = Optional<IUser, 'user_id' | 'last_login' | 'failed_login_attempts' | 'locked_until' | 'password_changed_at' | 'deleted_at' | 'is_active' | 'created_at' | 'updated_at'>;
 
 class User extends Model<IUser, UserCreationAttributes> implements IUser {
-  declare idusuarios: number;
-  declare rol_idrol: number;
-  declare estados_idestados: number;
-  declare correo_electronico: string;
-  declare nombre_completo: string;
-  declare user_password: string;
-  declare telefono: string;
-  declare fecha_nacimiento: Date;
-  declare readonly fecha_creacion: Date;
-  declare Clientes_idClientes: number;
-
+  declare user_id: number;
+  declare role_id: number;
+  declare state_id: number;
+  declare email: string;
+  declare full_name: string;
+  declare password_hash: string;
+  declare phone: string;
+  declare birth_date: Date;
+  declare last_login: Date;
+  declare failed_login_attempts: number;
+  declare locked_until: Date;
+  declare password_changed_at: Date;
+  declare deleted_at: Date;
+  declare is_active: boolean;
+  declare readonly created_at: Date;
+  declare readonly updated_at: Date;
 }
 
 User.init(
   {
-    idusuarios: {
+    user_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    rol_idrol: {
+    role_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'rol',
-        key: 'idrol'
+        model: 'roles',
+        key: 'role_id'
       }
     },
-    estados_idestados: {
+    state_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-
+      allowNull: false,
+      references: {
+        model: 'states',
+        key: 'state_id'
+      }
     },
-    correo_electronico: {
-      type: DataTypes.STRING(45),
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true
+      }
+    },
+    full_name: {
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
-    nombre_completo: {
-      type: DataTypes.STRING(60),
+    password_hash: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING(20),
       allowNull: true,
     },
-    user_password: {
-      type: DataTypes.STRING(45),
+    birth_date: {
+      type: DataTypes.DATEONLY,
       allowNull: true,
     },
-    telefono: {
-      type: DataTypes.STRING(45),
+    last_login: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    failed_login_attempts: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },
-    fecha_nacimiento: {
+    locked_until: {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    fecha_creacion: {
+    password_changed_at: {
       type: DataTypes.DATE,
-      allowNull: true
-    },
-    Clientes_idClientes: {
-      type: DataTypes.INTEGER,
       allowNull: true,
-      references: {
-        model: 'clientes',
-        key: 'idClientes'
-      }
+      defaultValue: DataTypes.NOW,
+    },
+        deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     }
   },
   {
     sequelize,
-    modelName: 'usuarios',
-    tableName: 'usuarios',
-    timestamps: false,
+    modelName: 'User',
+    tableName: 'users',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
     freezeTableName: true,
+    defaultScope: {
+      where: {
+        is_active: true
+      }
+    },
+    scopes: {
+      withDeleted: {
+        where: {}
+      }
+    }
   }
 );
 

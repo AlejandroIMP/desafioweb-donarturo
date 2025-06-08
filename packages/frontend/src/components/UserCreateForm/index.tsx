@@ -35,13 +35,13 @@ const UserFormCreate = () => {
   const onSubmit = async (data: CreateUserForm) => {
     try {
 
-      if (data.Clientes_idClientes === 0) {
-        data.Clientes_idClientes = null;
+      if (data.client_id === 0) {
+        data.client_id = null;
       }
 
       const formData = {
         ...data,
-        Clientes_idClientes: selectedClient ? Number(selectedClient) : null
+        client_id: selectedClient ? Number(selectedClient) : null
       };
 
       await createUser(formData);
@@ -57,10 +57,10 @@ const UserFormCreate = () => {
       <div className='user-form-create'>
         <p className='rol-user'>Rol del usuario</p>
         <Select
-          {...register("rol_idrol")}
+          {...register("role_id")}
           fullWidth
           label="Rol"
-          error={!!errors.rol_idrol}
+          error={!!errors.role_id}
           value={valueRol}
           onChange={(e) => setValueRol(e.target.value)}
         >
@@ -68,15 +68,15 @@ const UserFormCreate = () => {
           <MenuItem value={2}>Usuario</MenuItem>
           <MenuItem value={3}>Cliente</MenuItem>
         </Select>
-        {errors.rol_idrol && <p>{errors.rol_idrol.message}</p>}
+        {errors.role_id && <p>{errors.role_id.message}</p>}
       </div>
       <div className='user-form-create'>
         <p className='state-user'>Estado del usuario</p>
         <Select
-          {...register("estados_idestados")}
+          {...register("state_id")}
           label="Estado"
           fullWidth
-          error={!!errors.estados_idestados}
+          error={!!errors.state_id}
           value={valueState}
           onChange={(e) => setValueState(e.target.value)}
         >
@@ -87,64 +87,64 @@ const UserFormCreate = () => {
       <div className='user-form-create'>
         <p className='client-user'>Cliente</p>
         <Select
-        {...register("Clientes_idClientes")}
+        {...register("client_id")}
         label="Cliente"
         fullWidth
-        error={!!errors.Clientes_idClientes}
+        error={!!errors.client_id}
         value={selectedClient}
         onChange={(e) => setSelectedClient(e.target.value)}
       >
         <MenuItem value={0}>Ninguno</MenuItem>
         {clients.map((client) => (
-          <MenuItem key={client.idClientes} value={client.idClientes}>
-            {client.nombre_comercial} - {client.razon_social}
+          <MenuItem key={client.client_id} value={client.client_id}>
+            {client.commercial_name} - {client.business_name}
           </MenuItem>
         ))}
       </Select>
-      {errors.Clientes_idClientes && <p>{errors.Clientes_idClientes.message}</p>}
+      {errors.client_id && <p>{errors.client_id.message}</p>}
       </div>
       <TextField
-        {...register("correo_electronico")}
+        {...register("email")}
         label="Correo electronico"
         fullWidth
-        error={!!errors.correo_electronico}
-        helperText={errors.correo_electronico ? errors.correo_electronico.message : null}
+        error={!!errors.email}
+        helperText={errors.email ? errors.email.message : null}
       />
       <TextField
-        {...register("nombre_completo")}
+        {...register("full_name")}
         label="Nombre completo"
         fullWidth
-        error={!!errors.nombre_completo}
-        helperText={errors.nombre_completo ? errors.nombre_completo.message : null}
+        error={!!errors.full_name}
+        helperText={errors.full_name ? errors.full_name.message : null}
       />
       <div
         className="auth-password-field">
         <TextField
-          {...register('user_password')}
+          {...register('password_hash')}
           type={showPassword ? 'text' : 'password'}
           variant="outlined"
           placeholder="Password"
           autoComplete='current-password'
           fullWidth
-          error={!!errors.user_password}
-          helperText={errors.user_password ? errors.user_password.message : null}
+          error={!!errors.password_hash}
+          helperText={errors.password_hash ? errors.password_hash.message : null}
         />
         <ButtonVisibility showPassword={showPassword} togglePasswordVisibility={togglePasswordVisibility} />
       </div>
       <TextField
-        {...register("telefono")}
+        {...register("phone")}
         label="Telefono"
         type="tel"
         fullWidth
-        error={!!errors.telefono}
-        helperText={errors.telefono ? errors.telefono.message : null}
+        error={!!errors.phone}
+        helperText={errors.phone ? errors.phone.message : null}
       />
       <TextField
-        {...register("fecha_nacimiento")}
+        {...register("birth_date")}
         label="Fecha de nacimiento"
         fullWidth
-        error={!!errors.fecha_nacimiento}
-        helperText={errors.fecha_nacimiento ? errors.fecha_nacimiento.message : null}
+        error={!!errors.birth_date}
+        helperText={errors.birth_date ? errors.birth_date.message : null}
       />
 
       <Button

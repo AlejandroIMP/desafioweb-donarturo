@@ -48,7 +48,7 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
   }
 
   const isUserActive = (user: IUser) => {
-    return user.estados_idestados === 1;
+    return user.state_id === 1;
   }
 
 
@@ -57,7 +57,7 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
   if (isMobile) {
     return (
       <Box>
-        {users.map((user, index) => (
+        {paginatedUsers.map((user, index) => (
           <Box key={index} p={2} border={1} borderColor='grey.300' borderRadius={1} mb={2}>
             <div
               style={{
@@ -66,8 +66,8 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h6">ID: {user.idusuarios}</Typography>
-              <Typography variant="h6">{user.nombre_completo}</Typography>
+              <Typography variant="h6">ID: {user.user_id}</Typography>
+              <Typography variant="h6">{user.full_name}</Typography>
             </div>
             <div
               style={{
@@ -77,10 +77,10 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
                 alignItems: 'center',
               }}
             >
-              <Typography variant="body1">Correo: {user.correo_electronico}</Typography>
-              <Typography variant="body1">Fecha de registro: {formattedDate(user.fecha_creacion)}</Typography>
-              <Typography variant="body1">Estado: <LabelState estados={user.estados_idestados} /></Typography>
-              <Typography variant="body1">Fecha de Nacimiento: {formattedDate(user.fecha_nacimiento)}</Typography>
+              <Typography variant="body1">Correo: {user.email}</Typography>
+              <Typography variant="body1">Fecha de registro: {formattedDate(user.created_at)}</Typography>
+              <Typography variant="body1">Estado: <LabelState estados={user.state_id} /></Typography>
+              <Typography variant="body1">Fecha de Nacimiento: {formattedDate(user.birth_date)}</Typography>
             </div>
             <div
               style={
@@ -104,7 +104,7 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
                 variant="text"
                 color="success"
                 disabled={isUserActive(user)}
-                onClick={() => activarUsuario(user.idusuarios)}
+                onClick={() => activarUsuario(user.user_id)}
               >
                 Activar
               </Button>
@@ -112,13 +112,22 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
                 variant="text"
                 color="error"
                 disabled={!isUserActive(user)}
-                onClick={() => desactivarUsuario(user.idusuarios)}
+                onClick={() => desactivarUsuario(user.user_id)}
               >
                 Desactivar
               </Button>
             </div>
           </Box>
         ))}
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={users.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Box>
     )
   }
@@ -141,14 +150,14 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
           <TableBody>
             {paginatedUsers.map((user, index) => (
               <TableRow key={index}>
-                <TableCell>{user.idusuarios}</TableCell>
-                <TableCell>{user.nombre_completo}</TableCell>
-                <TableCell>{user.correo_electronico}</TableCell>
-                <TableCell>{formattedDate(user.fecha_creacion)}</TableCell>
+                <TableCell>{user.user_id}</TableCell>
+                <TableCell>{user.full_name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{formattedDate(user.created_at)}</TableCell>
                 <TableCell>
-                  <LabelState estados={user.estados_idestados} />
+                  <LabelState estados={user.state_id} />
                 </TableCell>
-                <TableCell>{formattedDate(user.fecha_nacimiento)}</TableCell>
+                <TableCell>{formattedDate(user.birth_date)}</TableCell>
                 <TableCell>
                   <Button
                     variant="text"
@@ -163,7 +172,7 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
                     variant="text"
                     color="success"
                     disabled={isUserActive(user)}
-                    onClick={() => activarUsuario(user.idusuarios)}
+                    onClick={() => activarUsuario(user.user_id)}
                   >
                     Activar
                   </Button>
@@ -171,7 +180,7 @@ const TableProductsManagment = ({ users, handleOpenModalEdit }: TableUserProps )
                     variant="text"
                     color="error"
                     disabled={!isUserActive(user)}
-                    onClick={() => desactivarUsuario(user.idusuarios)}
+                    onClick={() => desactivarUsuario(user.user_id)}
                   >
                     Desactivar
                   </Button>

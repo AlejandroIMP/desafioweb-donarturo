@@ -1,289 +1,228 @@
+# 🛒 E-Commerce Platform
 
-# E-commerce
+Una plataforma de comercio electrónico completa desarrollada como parte del **Desafío Web360** de OprimaTecnología. El proyecto implementa un sistema full-stack con funcionalidades de administración y gestión de ventas.
 
-Un proyecto el cual esta elaborado desde cero siguiendo los requerimientos del desafio web360 por optimatecnologia.
+## 🚀 Características Principales
 
-## Routes
-```plaintext
-Directory structure:
-└── AlejandroIMP-desafioweb-donarturo/
-    ├── README.md
-    ├── package.json
-    ├── .env.example
-    ├── desafiosql/
-    │   └── GDA004-OT-DavidSian.sql
-    └── packages/
-        ├── backend/
-        │   ├── README.md
-        │   ├── nodemon.json
-        │   ├── package.json
-        │   ├── tsconfig.json
-        │   ├── POSTMAN/
-        │   │   ├── Category CRUD.postman_collection.json
-        │   │   ├── Clientes CRUD.postman_collection.json
-        │   │   ├── Estados CRUD.postman_collection.json
-        │   │   ├── Login&Register.postman_collection.json
-        │   │   ├── Orden y Detalles CRUD.postman_collection.json
-        │   │   └── Product CRUD.postman_collection.json
-        │   └── src/
-        │       ├── app.ts
-        │       ├── index.ts
-        │       ├── config/
-        │       │   └── roles.ts
-        │       ├── controllers/
-        │       │   ├── auth.controller.ts
-        │       │   ├── clients.controller.ts
-        │       │   ├── orderAndDetails.controller.ts
-        │       │   ├── productcategory.controller.ts
-        │       │   ├── products.controller.ts
-        │       │   ├── state.controller.ts
-        │       │   └── users.controller.ts
-        │       ├── database/
-        │       │   └── connection.ts
-        │       ├── interfaces/
-        │       │   ├── auth.interface.ts
-        │       │   ├── clients.interface.ts
-        │       │   ├── orderAndDetails.interface.ts
-        │       │   ├── product.interface.ts
-        │       │   ├── productcategory.interface.ts
-        │       │   ├── state.interface.ts
-        │       │   └── token.interface.ts
-        │       ├── middleware/
-        │       │   ├── auth.ts
-        │       │   └── validateOrder.ts
-        │       ├── models/
-        │       │   ├── auth.models.ts
-        │       │   ├── clients.models.ts
-        │       │   ├── orderAndDetails.models.ts
-        │       │   ├── productcategory.models.ts
-        │       │   ├── products.models.ts
-        │       │   └── state.models.ts
-        │       └── routes/
-        │           ├── auth.routes.ts
-        │           ├── clients.routes.ts
-        │           ├── orderAndDetails.routes.ts
-        │           ├── productcategory.routes.ts
-        │           ├── products.routes.ts
-        │           ├── state.routes.ts
-        │           └── users.routes.ts
-        └── frontend/
-            ├── README.md
-            ├── eslint.config.js
-            ├── index.html
-            ├── package.json
-            ├── tsconfig.app.json
-            ├── tsconfig.json
-            ├── tsconfig.node.json
-            ├── vite.config.ts
-            ├── .gitignore
-            ├── public/
-            │   └── 282599.webp
-            └── src/
-                ├── App.tsx
-                ├── main.tsx
-                ├── vite-env.d.ts
-                ├── assets/
-                ├── components/
-                │   ├── ButtonVisibility/
-                │   │   └── index.tsx
-                │   ├── Card/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── CategoryCreateForm/
-                │   │   └── index.tsx
-                │   ├── CategoryUpdateForm/
-                │   │   └── index.tsx
-                │   ├── CheckoutCard/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── CheckoutSideMenu/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── ClientCreateForm/
-                │   │   └── index.tsx
-                │   ├── ClientUpdateForm/
-                │   │   └── index.tsx
-                │   ├── Container/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── LabelState/
-                │   │   └── index.tsx
-                │   ├── LoginForm/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── NavbarAdmin/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── NavbarHome/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── NavbarLanding/
-                │   │   └── index.tsx
-                │   ├── OrderCard/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── OrderUpdateForm/
-                │   │   └── index.tsx
-                │   ├── OrderWithDetailsCard/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── ProductCreateForm/
-                │   │   └── index.tsx
-                │   ├── ProductUpdateForm/
-                │   │   └── index.tsx
-                │   ├── RegisterForm/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── ToggleColorMode/
-                │   │   └── index.tsx
-                │   ├── UserCreateForm/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   └── UserUpdateForm/
-                │       └── index.tsx
-                ├── context/
-                │   ├── ClientContext.tsx
-                │   ├── authContext.tsx
-                │   └── themeContext.tsx
-                ├── hooks/
-                │   ├── index.tsx
-                │   └── context/
-                │       └── useClientContext.tsx
-                ├── interfaces/
-                │   ├── auth.interface.ts
-                │   ├── clientrol.interface.ts
-                │   ├── clients.interface.ts
-                │   ├── orderAndDetails.interface.ts
-                │   ├── product.interface.ts
-                │   ├── productcategory.interface.ts
-                │   ├── state.interface.ts
-                │   ├── token.interface.ts
-                │   └── users.interface.ts
-                ├── layouts/
-                │   ├── AdminLayout.tsx
-                │   ├── AuthLayout.tsx
-                │   ├── ClientLayout.tsx
-                │   ├── LandingLayout.tsx
-                │   └── index.css
-                ├── pages/
-                │   ├── Client/
-                │   │   ├── Cart/
-                │   │   │   └── index.tsx
-                │   │   ├── Checkout/
-                │   │   │   └── index.tsx
-                │   │   ├── Home/
-                │   │   │   ├── index.css
-                │   │   │   └── index.tsx
-                │   │   ├── Order/
-                │   │   │   └── index.tsx
-                │   │   └── Orders/
-                │   │       └── index.tsx
-                │   ├── Landing/
-                │   │   └── index.tsx
-                │   ├── NotFound/
-                │   │   ├── index.css
-                │   │   └── index.tsx
-                │   ├── admin/
-                │   │   ├── AdminHome/
-                │   │   │   └── index.tsx
-                │   │   ├── CategoryManagment/
-                │   │   │   └── index.tsx
-                │   │   ├── ClientsManagment/
-                │   │   │   └── index.tsx
-                │   │   ├── OrderApproval/
-                │   │   │   └── index.tsx
-                │   │   ├── OrdersManagment/
-                │   │   │   └── index.tsx
-                │   │   ├── ProductManagment/
-                │   │   │   ├── index.css
-                │   │   │   └── index.tsx
-                │   │   └── UserManagment/
-                │   │       ├── index.css
-                │   │       └── index.tsx
-                │   └── auth/
-                │       ├── Login/
-                │       │   └── index.tsx
-                │       └── Register/
-                │           └── index.tsx
-                ├── schemas/
-                │   ├── auth.schemas.tsx
-                │   ├── categories.schemas.ts
-                │   ├── client.schemas.ts
-                │   ├── order.schemas.tsx
-                │   ├── product.schemas.ts
-                │   └── user.schemas.ts
-                ├── services/
-                │   ├── categories.service.ts
-                │   ├── clients.service.ts
-                │   ├── orders.service.ts
-                │   ├── products.service.ts
-                │   └── users.service.ts
-                └── utils/
-                    ├── authUtils.tsx
-                    ├── checkoutUtils.tsx
-                    ├── loginUtils.tsx
-                    ├── orderUtils.tsx
-                    └── registerUtils.tsx
+- **Sistema de Autenticación**: Login y registro con JWT
+- **Gestión de Productos**: CRUD completo con categorías
+- **📸 Subida de Imágenes**: Sistema completo de upload de imágenes con Cloudinary
+- **Gestión de Clientes**: Administración de información de clientes
+- **Sistema de Órdenes**: Creación y gestión de pedidos con detalles
+- **Panel de Administración**: Interfaz completa para administradores
+- **Estados Dinámicos**: Sistema de estados para productos, órdenes y usuarios
+- **Base de Datos Robusta**: Implementación con SQL Server y procedimientos almacenados
+
+## 🏗️ Arquitectura del Proyecto
 
 ```
+📁 desafioweb/
+├── 📁 desafiosql/              # Scripts de base de datos
+│   └── GDA004-OT-DavidSian.sql # Creación de BD, tablas y procedimientos
+├── 📁 packages/
+│   ├── 📁 backend/             # API REST con Node.js + Express
+│   │   ├── 📁 src/
+│   │   │   ├── 📁 controllers/ # Lógica de negocio
+│   │   │   ├── 📁 models/      # Modelos de datos
+│   │   │   ├── 📁 routes/      # Definición de rutas
+│   │   │   ├── 📁 middleware/  # Middlewares de autenticación
+│   │   │   └── 📁 database/    # Configuración de BD
+│   │   └── 📁 POSTMAN/         # Colecciones para testing
+│   ├── 📁 frontend/            # Aplicación React con Vite
+│   │   └── 📁 src/
+│   │       ├── 📁 components/  # Componentes reutilizables
+│   │       ├── 📁 pages/       # Páginas de la aplicación
+│   │       ├── 📁 services/    # Servicios API
+│   │       ├── 📁 context/     # Contextos de React
+│   │       └── 📁 interfaces/  # Definiciones TypeScript
+│   └── 📁 shared/              # Código compartido
+```
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-**Client:** React, CSS, MUI Components
+### Frontend
+- **React 18** - Biblioteca de interfaz de usuario
+- **TypeScript** - Tipado estático
+- **Vite** - Herramienta de construcción
+- **Material-UI (MUI)** - Componentes de interfaz
+- **CSS3** - Estilos personalizados
 
-**Server:** Node, Express, Microsoft SQL Server
+### Backend
+- **Node.js** - Entorno de ejecución
+- **Express.js** - Framework web
+- **Cloudinary** - Gestión y almacenamiento de imágenes
+- **Multer** - Middleware para manejo de archivos
+- **TypeScript** - Tipado estático
+- **JWT** - Autenticación
+- **bcrypt** - Encriptación de contraseñas
 
+### Base de Datos
+- **Microsoft SQL Server** - Base de datos principal
+- **Procedimientos Almacenados** - Lógica de base de datos
+- **Vistas** - Consultas optimizadas
 
-## Run Locally
+## 📋 Funcionalidades
 
-Clone the project
+### Para Administradores
+- ✅ Gestión completa de productos y categorías
+- ✅ Administración de usuarios y clientes
+- ✅ Aprobación y gestión de órdenes
+- ✅ Control de estados del sistema
+- ✅ Panel de administración intuitivo
+
+### Para Clientes
+- ✅ Navegación de productos por categorías
+- ✅ Carrito de compras
+- ✅ Proceso de checkout
+- ✅ Historial de órdenes
+- ✅ Gestión de perfil
+
+## 🚀 Instalación y Configuración
+
+### Prerrequisitos
+- Node.js >= 16.0.0
+- npm >= 8.0.0
+- SQL Server
+- Git
+
+### 1. Clonar el Repositorio
+```bash
+git clone https://github.com/AlejandroIMP/desafioweb-donarturo
+cd desafioweb-donarturo
+```
+
+### 2. Instalar Dependencias
+```bash
+# Instalar dependencias del workspace
+npm install
+```
+
+### 3. Configurar Base de Datos
+
+#### Opción A: Base de Datos Mejorada (Recomendada)
+1. Ejecuta el script SQL mejorado: [`desafiosql/GDA004-OT-DavidSian-IMPROVED.sql`](desafiosql/GDA004-OT-DavidSian-IMPROVED.sql)
+2. Opcionalmente, ejecuta los procedimientos adicionales: [`desafiosql/GDA004-OT-DavidSian-PROCEDURES.sql`](desafiosql/GDA004-OT-DavidSian-PROCEDURES.sql)
+3. Consulta la documentación completa: [`desafiosql/DATABASE_DOCUMENTATION.md`](desafiosql/DATABASE_DOCUMENTATION.md)
+
+**Mejoras incluidas:**
+- ✅ Nomenclatura estandarizada (snake_case)
+- ✅ Sistema completo de auditoría y logging
+- ✅ Validaciones de negocio en todos los procedimientos
+- ✅ Índices para optimización de rendimiento
+- ✅ Soft delete en lugar de eliminación física
+- ✅ Parámetros con tipos explícitos
+- ✅ Documentación completa de procedimientos
+- ✅ Separación de responsabilidades
+
+#### Opción B: Base de Datos Original
+1. Ejecuta el script SQL original: [`desafiosql/GDA004-OT-DavidSian.sql`](desafiosql/GDA004-OT-DavidSian.sql)
+2. Esto creará la base de datos, tablas, procedimientos y datos iniciales
+
+### 4. Variables de Entorno
+Crea un archivo `.env` en la raíz del proyecto basado en [`.env.example`](.env.example):
+
+```env
+# Base de Datos
+DB_USER=tu_usuario_sql
+DB_PASSWORD=tu_contraseña_sql
+DB_SERVER=localhost
+DB_DATABASE=GDA004-OT-DavidSian
+
+# Servidor
+PORT=3000
+
+# Autenticación
+JWT_SECRET=tu_clave_secreta_jwt
+```
+
+### 5. Ejecutar el Proyecto
 
 ```bash
-  git clone https://github.com/AlejandroIMP/desafioweb-donarturo
+# Ejecutar solo el backend
+npm run dev-back
+
+# Ejecutar solo el frontend
+npm run dev-front
+
+# Ejecutar ambos servidores simultáneamente
+npm run dev
 ```
 
-Go to the project directory
+## 📡 API Reference
 
-```bash
-  cd my-project
-```
+El backend expone una API REST completa. Consulta la documentación detallada en [`packages/backend/README.md`](packages/backend/README.md).
 
-Install dependencies
+### Endpoints Principales
+- `POST /api/auth/login` - Autenticación de usuarios
+- `POST /api/auth/register` - Registro de nuevos usuarios
+- `GET /api/productos` - Obtener productos
+- `POST /api/order` - Crear nueva orden
+- `GET /api/productCategory` - Obtener categorías
 
-```bash
-  npm install
-```
+### Testing con Postman
+El proyecto incluye colecciones de Postman para testing en [`packages/backend/POSTMAN/`](packages/backend/POSTMAN/):
+- Category CRUD
+- Clientes CRUD
+- Estados CRUD
+- Login & Register
+- Orden y Detalles CRUD
+- Product CRUD
 
-Start the backend server
+## 🎨 Frontend
 
-```bash
-  npm run dev-back
-```
+La aplicación frontend está construida con React y ofrece:
 
-Start the frontend server
+### Layouts
+- **LandingLayout** - Página de inicio
+- **AuthLayout** - Autenticación
+- **ClientLayout** - Interfaz de cliente
+- **AdminLayout** - Panel de administración
 
-```bash
-  npm run dev-front
-```
+### Componentes Principales
+- Formularios de CRUD para todas las entidades
+- Sistema de navegación adaptativo
+- Carrito de compras interactivo
+- Gestión de estados con Context API
 
-Start the both servers
+Consulta más detalles en [`packages/frontend/README.md`](packages/frontend/README.md).
 
-```bash
-  npm run dev
-```
+## 🗄️ Base de Datos
 
-## Environment Variables
+La base de datos incluye:
 
-To run this project, you will need to add the following environment variables to your .env file
+### Tablas Principales
+- `usuarios` - Gestión de usuarios del sistema
+- `Clientes` - Información de clientes
+- `Productos` - Catálogo de productos
+- `CategoriaProductos` - Categorías de productos
+- `Orden` - Órdenes de compra
+- `OrdenDetalles` - Detalles de productos por orden
+- `estados` - Estados del sistema
 
-`DB_USER`
-`DB_PASSWORD `
-`DB_SERVER` 
-`DB_DATABASE `
-`PORT `
-`JWT_SECRET`
+### Procedimientos Almacenados
+- CRUD completo para todas las entidades
+- Validaciones de negocio
+- Gestión de estados
+- Operaciones de órdenes complejas
 
-## License
+## 🤝 Contribución
 
-[MIT](https://choosealicense.com/licenses/mit/)
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-caracteristica`)
+3. Commit tus cambios (`git commit -m 'Agregar nueva característica'`)
+4. Push a la rama (`git push origin feature/nueva-caracteristica`)
+5. Abre un Pull Request
 
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## 👨‍💻 Autor
+
+**Alejandro IMP**
+- GitHub: [@AlejandroIMP](https://github.com/AlejandroIMP)
+- Proyecto: [desafioweb-donarturo](https://github.com/AlejandroIMP/desafioweb-donarturo)
+
+---
+
+Desarrollado con ❤️ como parte del Desafío Web360 de OprimaTecnología

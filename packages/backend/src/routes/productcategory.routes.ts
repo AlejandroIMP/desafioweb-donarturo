@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProductcategory, getProductCategoryById, createProductCategory, updateProductCategory, updateProductCategoryState } from "../controllers/productcategory.controller";
+import { getProductcategory, getProductCategoryById, createProductCategory, updateProductCategory, updateProductCategoryState, deleteProductCategory } from "../controllers/productcategory.controller";
 import { verifyToken, verifyRol } from "../middleware/auth";
 import { ROLES } from "../config/roles";
 
@@ -14,5 +14,7 @@ router.post('/productCategory', verifyToken, verifyRol([ROLES.ADMIN]), createPro
 router.put('/productCategory/:id', verifyToken, verifyRol([ROLES.ADMIN]), updateProductCategory);
 
 router.patch('/productCategory/:id', verifyToken, verifyRol([ROLES.ADMIN]), updateProductCategoryState);
+
+router.delete('/productCategory/:id', verifyToken, verifyRol([ROLES.ADMIN]), deleteProductCategory);
 
 export default router;

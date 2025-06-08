@@ -1,6 +1,6 @@
 /**
  * Middleware for verifying JWT tokens in request headers.
- * Extends Express.Request with user and rol properties.
+ * Extends Express.Request with user and role_id properties.
  * 
  * @param req - Express request object
  * @param res - Express response object
@@ -9,6 +9,8 @@
  * @throws {500} If JWT_SECRET environment variable is not defined
  * @throws {404} If user associated with token is not found
  * @throws {401} If token is invalid
+ * @throws {403} If user account is locked
+ * @throws {403} If user account is deleted
  * @throws {500} If database query fails
  */
 
@@ -30,7 +32,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: User;
-      rol?: number;
+      role_id?: number;
     }
   }
 }
@@ -55,14 +57,35 @@ export const verifyToken: RequestHandler = (
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     
-    User.findByPk((payload as TokenPayload).id)
+    User.findByPk((payload as TokenPayload).user_id)
       .then(user => {
         if (!user) {
           res.status(404).json({ message: 'Usuario no encontrado' });
           return;
         }
+
+        // Check if user account is deleted
+        if (user.deleted_at) {
+          res.status(403).json({ message: 'Cuenta de usuario eliminada' });
+          return;
+        }
+
+        // Check if user account is locked
+        if (user.locked_until && new Date() < user.locked_until) {
+          res.status(403).json({ 
+            message: 'Cuenta bloqueada temporalmente',
+            locked_until: user.locked_until
+          });
+          return;
+        }
+
+        // Update last login if account is not locked
+        if (!user.locked_until || new Date() >= user.locked_until) {
+          user.update({ last_login: new Date() }).catch(console.error);
+        }
+
         req.user = user;
-        req.rol = user.rol_idrol;
+        req.role_id = user.role_id;
         next();
       })
       .catch(error => {
@@ -80,7 +103,7 @@ export const verifyRol = (roles: number[]): RequestHandler => (
   res: Response,
   next: NextFunction
 ): void => {
-  if (!roles.includes(req.user?.rol_idrol || 0)) {
+  if (!roles.includes(req.user?.role_id || 0)) {
     res.status(403).json({ message: 'No tienes permisos para realizar esta acción' });
     return;
   }

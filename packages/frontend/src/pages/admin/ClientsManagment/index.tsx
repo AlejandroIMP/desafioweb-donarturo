@@ -16,12 +16,15 @@ const ClientsManagment = () => {
 	const [openModalAdd, setOpenModalAdd] = useState(false);
 	const [openModalEdit, setOpenModalEdit] = useState(false);
 	const [SelectedClient, setSelectedClient] = useState<IClient>({
-		idClientes: 0,
-		razon_social: '',
-		nombre_comercial: '',
-		direccion_entrega: '',
-		telefono: '',
-		email: ''
+		client_id: 0,
+		business_name: '',
+		commercial_name: '',
+		delivery_address: '',
+		phone: '',
+		email: '',
+		tax_id: '',
+		created_at: '',
+		updated_at: ''
 	});
 
 	useEffect(() => {
@@ -47,12 +50,15 @@ const ClientsManagment = () => {
 
 	const handleCloseModalEdit = () => {
 		setSelectedClient({
-			idClientes: 0,
-			razon_social: '',
-			nombre_comercial: '',
-			direccion_entrega: '',
-			telefono: '',
-			email: ''
+			client_id: 0,
+			business_name: '',
+			commercial_name: '',
+			delivery_address: '',
+			phone: '',
+			email: '',
+			tax_id: '',
+			created_at: '',
+			updated_at: ''
 		});
 		setOpenModalEdit(false);
 	};

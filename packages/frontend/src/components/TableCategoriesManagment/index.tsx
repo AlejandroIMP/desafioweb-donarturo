@@ -48,7 +48,7 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
   }
 
   const isCategoryActive = (category: IProductCategory) => {
-    return category.estados_idestados === 1;
+    return category.state_id === 1;
   }
 
 
@@ -66,8 +66,8 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
                 alignItems: 'center'
               }}
             >
-              <Typography variant="body1">{category.nombre}</Typography>
-              <LabelState estados={category.estados_idestados} />
+              <Typography variant="body1">{category.category_name}</Typography>
+              <LabelState estados={category.state_id} />
             </div>
             <div
               style={{
@@ -77,14 +77,16 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
                 alignItems: 'center',
               }}
             >
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Usuario:</span> <span>{category.usuarios_idusuarios}</span>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Usuario ID:</span> <span>{category.user_id}</span>
               </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Fecha de creacion:</span> <span>{formattedDate(category.fecha_creacion)}</span>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Fecha de creación:</span> <span>{formattedDate(category.created_at)}</span>
               </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Nombre:</span> <span>{category.nombre}</span>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Nombre:</span> <span>{category.category_name}</span>
               </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Creacion:</span> <span>{formattedDate(category.fecha_creacion)}</span>
-              </Typography>
+              {category.category_description && (
+                <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Descripción:</span> <span>{category.category_description}</span>
+                </Typography>
+              )}
             </div>
             <div
               style={
@@ -108,7 +110,7 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
                 variant="text"
                 color="success"
                 disabled={isCategoryActive(category)}
-                onClick={() => activarCategoria(category.idCategoriaProductos)}
+                onClick={() => activarCategoria(category.category_id)}
               >
                 Activar
               </Button>
@@ -116,7 +118,7 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
                 variant="text"
                 color="error"
                 disabled={!isCategoryActive(category)}
-                onClick={() => desactivarCategoria(category.idCategoriaProductos)}
+                onClick={() => desactivarCategoria(category.category_id)}
               >
                 Desactivar
               </Button>
@@ -144,11 +146,11 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
           <TableBody>
             {paginatedCategories.map((category, index) => (
               <TableRow key={index}>
-                <TableCell>{category.idCategoriaProductos}</TableCell>
-                <TableCell>{category.usuarios_idusuarios}</TableCell>
-                <TableCell>{category.nombre}</TableCell>
-                <TableCell><LabelState estados={category.estados_idestados} /></TableCell>
-                <TableCell>{formattedDate(category.fecha_creacion)}</TableCell>
+                <TableCell>{category.category_id}</TableCell>
+                <TableCell>{category.user_id}</TableCell>
+                <TableCell>{category.category_name}</TableCell>
+                <TableCell><LabelState estados={category.state_id} /></TableCell>
+                <TableCell>{formattedDate(category.created_at)}</TableCell>
                 <TableCell>
                   <Button
                     variant="text"
@@ -163,7 +165,7 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
                     variant="text"
                     color="success"
                     disabled={isCategoryActive(category)}
-                    onClick={() => activarCategoria(category.idCategoriaProductos)}
+                    onClick={() => activarCategoria(category.category_id)}
                   >
                     Activar
                   </Button>
@@ -171,7 +173,7 @@ const TableProductsManagment = ({ categories, handleOpenModalEdit }: TableCatego
                     variant="text"
                     color="error"
                     disabled={!isCategoryActive(category)}
-                    onClick={() => desactivarCategoria(category.idCategoriaProductos)}
+                    onClick={() => desactivarCategoria(category.category_id)}
                   >
                     Desactivar
                   </Button>

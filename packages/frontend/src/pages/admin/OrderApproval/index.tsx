@@ -23,7 +23,7 @@ const OrderApproval = () => {
     fetchOrders();
   }, []);
 
-  const OrdersNeedsApproval = orders.filter(order => order.estados_idestados === 3);
+  const OrdersNeedsApproval = orders.filter(order => order.state_id === 3);
 
 
   if (OrdersNeedsApproval.length === 0) {

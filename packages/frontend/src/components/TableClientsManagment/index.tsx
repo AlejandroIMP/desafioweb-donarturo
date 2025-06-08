@@ -30,93 +30,114 @@ const TableClientsManagment = ({ clients, handleOpenModalEdit }: TableClientsPro
 
   if (isMobile) {
     return (
-      <Box width={'100%'} display='grid' gridTemplateColumns='repeat(auto-fill, minmax(300px, 1fr))' gap={2}>
-        {clients.map((client, index) => (
-          <Box key={index} p={2} border={1} borderColor='grey.300' borderRadius={1} mb={2} minWidth={300}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-evenly',
-                alignItems: 'center'
-              }}
-            >
-              
-              <Typography variant="h6">
-                {`Cliente #${client.idClientes}`}
-              </Typography>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>
-                  Razon Social:
-                </span> 
-                <span>
-                  {client.razon_social}
-                </span>
-              </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>
-                  Nombre Comercial:
-                </span>
-                <span>
-                  {client.nombre_comercial}
-                </span>
-              </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>
-                  Direccion de entrega:
-                </span>
-                <span>
-                  {client.direccion_entrega}
-                </span>
-              </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>
-                  Telefono:
-                </span>
-                <span>
-                  {client.telefono}
-                </span>
-              </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>
-                  Correo:
-                </span>
-                <span>
-                  {client.email}
-                </span>
-              </Typography>
-            </div>
-            <div
-              style={
-                {
+      <>
+        <Box width={'100%'} display='grid' gridTemplateColumns='repeat(auto-fill, minmax(300px, 1fr))' gap={2}>
+          {paginatedClients.map((client, index) => (
+            <Box key={index} p={2} border={1} borderColor='grey.300' borderRadius={1} mb={2} minWidth={300}>
+              <div
+                style={{
                   display: 'flex',
                   justifyContent: 'space-evenly',
-                  marginTop: '10px'
-                }
-              }
-            >
-              <Button
-                variant="text"
-                color="primary"
-                onClick={() =>
-                  handleOpenModalEdit(client)
+                  alignItems: 'center'
+                }}
+              >
+                
+                <Typography variant="h6">
+                  {`Cliente #${client.client_id}`}
+                </Typography>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                  <span>
+                    Nombre del Negocio:
+                  </span> 
+                  <span>
+                    {client.business_name}
+                  </span>
+                </Typography>
+                <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                  <span>
+                    Nombre Comercial:
+                  </span>
+                  <span>
+                    {client.commercial_name}
+                  </span>
+                </Typography>
+                <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                  <span>
+                    Dirección de Entrega:
+                  </span>
+                  <span>
+                    {client.delivery_address}
+                  </span>
+                </Typography>
+                <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                  <span>
+                    Teléfono:
+                  </span>
+                  <span>
+                    {client.phone}
+                  </span>
+                </Typography>
+                <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                  <span>
+                    Correo:
+                  </span>
+                  <span>
+                    {client.email}
+                  </span>
+                </Typography>
+                {client.tax_id && (
+                  <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                    <span>
+                      NIT:
+                    </span>
+                    <span>
+                      {client.tax_id}
+                    </span>
+                  </Typography>
+                )}
+              </div>
+              <div
+                style={
+                  {
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    marginTop: '10px'
+                  }
                 }
               >
-                <EditIcon />
-              </Button>
-              
-            </div>
-          </Box>
-        ))}
-      </Box>
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={() =>
+                    handleOpenModalEdit(client)
+                  }
+                >
+                  <EditIcon />
+                </Button>
+                
+              </div>
+            </Box>
+          ))}
+        </Box>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={clients.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </>
     )
   }
 
@@ -127,28 +148,31 @@ const TableClientsManagment = ({ clients, handleOpenModalEdit }: TableClientsPro
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell>Razon Social</TableCell>
+              <TableCell>Razón Social</TableCell>
               <TableCell>Nombre Comercial</TableCell>
               <TableCell>Correo</TableCell>
-              <TableCell>Telefono</TableCell>
-              <TableCell>Direccion de entrega</TableCell>
+              <TableCell>Teléfono</TableCell>
+              <TableCell>Dirección de Entrega</TableCell>
+              <TableCell>NIT</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedClients.map((order, index) => (
+            {paginatedClients.map((client, index) => (
               <TableRow key={index}>
-                <TableCell>{order.idClientes}</TableCell>
-                <TableCell>{order.razon_social}</TableCell>
-                <TableCell>{order.nombre_comercial}</TableCell>
-                <TableCell>{order.email}</TableCell>
-                <TableCell>{order.telefono}</TableCell>
-                <TableCell>{order.direccion_entrega}</TableCell>
+                <TableCell>{client.client_id}</TableCell>
+                <TableCell>{client.business_name}</TableCell>
+                <TableCell>{client.commercial_name}</TableCell>
+                <TableCell>{client.email}</TableCell>
+                <TableCell>{client.phone}</TableCell>
+                <TableCell>{client.delivery_address}</TableCell>
+                <TableCell>{client.tax_id || 'N/A'}</TableCell>
                 <TableCell>
                   <Button
                     variant="text"
                     color="primary"
                     onClick={() =>
-                      handleOpenModalEdit(order)
+                      handleOpenModalEdit(client)
                     }
                   >
                     <EditIcon />

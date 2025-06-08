@@ -40,11 +40,11 @@ const TableOrdersApproval = ({ orders }: TableOrdersApprovalProps) => {
       <Box>
         {orders.map((order, index) => (
           <Box key={index} p={2} border={1} borderColor='grey.300' borderRadius={1} mb={2}>
-            <Typography variant='h5'>Pedido: {order.idOrden}</Typography>
-            <Typography variant='h6'>Nombre: {order.nombre_completo}</Typography>
-            <Typography variant='h6'>Fecha de entrega: {formattedDate(order.fecha_entrega)}</Typography>
-            <Typography variant='h6'>Estado: <LabelState estados={order.estados_idestados} /></Typography>
-            <Typography variant='h6'>Total: Q {order.total_orden}</Typography>
+            <Typography variant='h5'>Pedido: {order.order_id}</Typography>
+            <Typography variant='h6'>Nombre: {order.customer_name}</Typography>
+            <Typography variant='h6'>Fecha de entrega: {formattedDate(order.delivery_date)}</Typography>
+            <Typography variant='h6'>Estado: <LabelState estados={order.state_id} /></Typography>
+            <Typography variant='h6'>Total: Q {order.order_total}</Typography>
             <div
               style={
                 {
@@ -57,11 +57,11 @@ const TableOrdersApproval = ({ orders }: TableOrdersApprovalProps) => {
             <Button
               variant='contained'
               color='success'
-              onClick={() => acceptOrder(order.idOrden)}>Aprobar</Button>
+              onClick={() => acceptOrder(order.order_id)}>Aprobar</Button>
             <Button
               variant='contained'
               color='error'
-              onClick={() => rejectOrder(order.idOrden)}>Rechazar</Button>
+              onClick={() => rejectOrder(order.order_id)}>Rechazar</Button>
             </div>
           </Box>
         ))}
@@ -91,25 +91,25 @@ const TableOrdersApproval = ({ orders }: TableOrdersApprovalProps) => {
           <TableBody>
             {paginatedOrders.map((order, index) => (
               <TableRow key={index}>
-                <TableCell>{order.idOrden}</TableCell>
-                <TableCell>{order.nombre_completo}</TableCell>
-                <TableCell>{formattedDate(order.fecha_entrega)}</TableCell>
+                <TableCell>{order.order_id}</TableCell>
+                <TableCell>{order.customer_name}</TableCell>
+                <TableCell>{formattedDate(order.delivery_date)}</TableCell>
                 <TableCell>
-                  <LabelState estados={order.estados_idestados} />
+                  <LabelState estados={order.state_id} />
                 </TableCell>
-                <TableCell>Q {order.total_orden}</TableCell>
+                <TableCell>Q {order.order_total}</TableCell>
                 <TableCell>
                   <Button
                     variant='text'
                     color='success'
-                    onClick={() => acceptOrder(order.idOrden)}
+                    onClick={() => acceptOrder(order.order_id)}
                   >
                     Aprobar
                   </Button>
                   <Button
                     variant='text'
                     color='error'
-                    onClick={() => rejectOrder(order.idOrden)}
+                    onClick={() => rejectOrder(order.order_id)}
                   >
                     Rechazar
                   </Button>

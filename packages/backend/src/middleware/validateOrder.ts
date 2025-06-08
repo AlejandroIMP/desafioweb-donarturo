@@ -12,13 +12,12 @@ export const validateOrder: RequestHandler = (
 
     // Required fields validation
     const requiredFields = [
-      'estados_idestados',
-      'nombre_completo',
-      'direccion',
-      'telefono',
-      'correo_electronico',
-      'fecha_entrega',
-      'Clientes_idClientes'
+      'client_id',
+      'state_id',
+      'customer_name',
+      'delivery_address',
+      'phone',
+      'email'
     ];
 
     requiredFields.forEach(field => {
@@ -27,15 +26,46 @@ export const validateOrder: RequestHandler = (
       }
     });
 
-    // Validate detallesProductos
-    if (!Array.isArray(orderData.DetallesProductos) || orderData.DetallesProductos.length === 0) {
-      errors.push('detallesProductos debe ser un array no vacío');
+    // Email validation
+    if (orderData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(orderData.email)) {
+      errors.push('El formato del email es inválido');
+    }
+
+    // Phone validation
+    if (orderData.phone && orderData.phone.length < 8) {
+      errors.push('El teléfono debe tener al menos 8 caracteres');
+    }
+
+    // Validate product_details
+    if (!Array.isArray(orderData.product_details) || orderData.product_details.length === 0) {
+      errors.push('product_details debe ser un array no vacío');
     } else {
-      orderData.DetallesProductos.forEach((detalle, index) => {
-        if (!detalle.idProductos || !detalle.cantidad || !detalle.precio) {
-          errors.push(`Detalle producto ${index + 1} inválido`);
+      orderData.product_details.forEach((detail, index) => {
+        if (!detail.product_id || !detail.quantity || !detail.unit_price) {
+          errors.push(`Detalle de producto ${index + 1} inválido: faltan campos requeridos`);
+        }
+        
+        if (detail.quantity <= 0) {
+          errors.push(`Detalle de producto ${index + 1}: la cantidad debe ser mayor a 0`);
+        }
+        
+        if (detail.unit_price <= 0) {
+          errors.push(`Detalle de producto ${index + 1}: el precio debe ser mayor a 0`);
+        }
+
+        if (detail.discount_percentage && (detail.discount_percentage < 0 || detail.discount_percentage > 100)) {
+          errors.push(`Detalle de producto ${index + 1}: el descuento debe estar entre 0 y 100`);
         }
       });
+    }
+
+    // Validate delivery_date if provided
+    if (orderData.delivery_date) {
+      const deliveryDate = new Date(orderData.delivery_date);
+      const now = new Date();
+      if (deliveryDate <= now) {
+        errors.push('La fecha de entrega debe ser posterior a la fecha actual');
+      }
     }
 
     if (errors.length > 0) {

@@ -16,16 +16,16 @@ const UserManagment = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser>({
-    idusuarios: 0,
-    rol_idrol: 0,
-    estados_idestados: 0,
-    correo_electronico: '',
-    nombre_completo: '',
-    user_password: '',
-    telefono: '',
-    fecha_nacimiento: '',
-    fecha_creacion: '',
-    Clientes_idClientes: 0
+    user_id: 0,
+    role_id: 0,
+    state_id: 0,
+    email: '',
+    full_name: '',
+    password_hash: '',
+    phone: '',
+    birth_date: '',
+    created_at: '',
+    client_id: 0
   });
 
   useEffect(() => {
@@ -49,16 +49,16 @@ const UserManagment = () => {
 
   const handleCloseModalEdit = () => {
     setSelectedUser({
-      idusuarios: 0,
-      rol_idrol: 0,
-      estados_idestados: 0,
-      correo_electronico: '',
-      nombre_completo: '',
-      user_password: '',
-      telefono: '',
-      fecha_nacimiento: '',
-      fecha_creacion: '',
-      Clientes_idClientes: 0
+      user_id: 0,
+      role_id: 0,
+      state_id: 0,
+      email: '',
+      full_name: '',
+      password_hash: '',
+      phone: '',
+      birth_date: '',
+      created_at: '',
+      client_id: 0
     });
     setOpenModalEdit(false);
   };

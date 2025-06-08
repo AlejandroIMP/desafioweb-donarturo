@@ -2,145 +2,253 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database/connection';
 import { IOrder, IOrderDetails } from '../interfaces/orderAndDetails.interface';
 
-export type OrderCreationAttributes = Optional<IOrder, 'idOrden' | 'fecha_creacion'>;
+export type OrderCreationAttributes = Optional<IOrder, 'order_id' | 'order_number' | 'is_deleted' | 'created_at' | 'updated_at'>;
 
 export class Order extends Model<IOrder, OrderCreationAttributes> implements IOrder {
-  declare idOrden: number;
-  declare idusuarios: number;
-  declare estados_idestados: number;
-  declare nombre_completo: string;
-  declare direccion: string;
-  declare telefono: string;
-  declare correo_electronico: string;
-  declare readonly fecha_creacion: Date;
-  declare fecha_entrega: Date;
-  declare total_orden: number;
-  declare Clientes_idClientes: number;
+  declare order_id: number;
+  declare user_id: number;
+  declare client_id: number;
+  declare state_id: number;
+  declare order_number: string;
+  declare customer_name: string;
+  declare delivery_address: string;
+  declare phone: string;
+  declare email: string;
+  declare order_total: number;
+  declare tax_amount: number;
+  declare delivery_date: Date;
+  declare special_instructions: string;
+  declare is_deleted: boolean;
+  declare readonly created_at: Date;
+  declare readonly updated_at: Date;
 }
 
 Order.init(
   {
-    idOrden: {
+    order_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    idusuarios: {
+    user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'usuarios',
-        key: 'idusuarios',
+        model: 'users',
+        key: 'user_id',
       },
     },
-    estados_idestados: {
+    client_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'estados',
-        key: 'idestados',
+        model: 'clients',
+        key: 'client_id',
+      },
+    },
+    state_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'states',
+        key: 'state_id',
       }
     },
-    nombre_completo: {
-      type: DataTypes.STRING(60),
-      allowNull: true,
+    order_number: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `ORD-${String(this.order_id).padStart(6, '0')}`;
+      }
     },
-    direccion: {
-      type: DataTypes.STRING(60),
-      allowNull: true,
+    customer_name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
-    telefono: {
-      type: DataTypes.STRING(45),
-      allowNull: true,
+    delivery_address: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
-    correo_electronico: {
-      type: DataTypes.STRING(45),
-      allowNull: true,
+    phone: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
     },
-    fecha_creacion: {
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      validate: {
+        isEmail: true
+      }
+    },
+    order_total: {
+      type: DataTypes.DECIMAL(12,2),
+      allowNull: false,
+      defaultValue: 0,
+      validate: {
+        min: 0
+      }
+    },
+    tax_amount: {
+      type: DataTypes.DECIMAL(10,2),
+      allowNull: false,
+      defaultValue: 0,
+      validate: {
+        min: 0
+      }
+    },
+    delivery_date: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    special_instructions: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+    },
+    is_deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    fecha_entrega: {
+    updated_at: {
       type: DataTypes.DATE,
-      allowNull: true,
-    },
-    total_orden: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    Clientes_idClientes: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'Clientes',
-        key: 'idClientes',
-      },
-    },
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    }
   },
   {
     sequelize,
-    modelName: 'Orden',
-    tableName: 'Orden',
+    modelName: 'Order',
+    tableName: 'orders',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
     freezeTableName: true,
-    timestamps: false,
+    defaultScope: {
+      where: {
+        is_deleted: false
+      }
+    },
+    scopes: {
+      withDeleted: {
+        where: {}
+      }
+    }
   }
 )
 
-export type OrderDetailsCreationAttributes = Optional<IOrderDetails, 'idOrdenDetalles'>;
+export type OrderDetailsCreationAttributes = Optional<IOrderDetails, 'order_detail_id' | 'is_deleted' | 'created_at'>;
 
 export class OrderDetail extends Model<IOrderDetails, OrderDetailsCreationAttributes> implements IOrderDetails {
-  declare idOrdenDetalles: number;
-  declare idOrden: number;
-  declare idProductos: number;
-  declare cantidad: number;
-  declare precio: number;
-  declare subtotal: number;
+  declare order_detail_id: number;
+  declare order_id: number;
+  declare product_id: number;
+  declare quantity: number;
+  declare unit_price: number;
+  declare line_total: number;
+  declare discount_percentage: number;
+  declare discount_amount: number;
+  declare final_total: number;
+  declare is_deleted: boolean;
+  declare readonly created_at: Date;
 }
 
 OrderDetail.init(
   {
-    idOrdenDetalles: {
+    order_detail_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    idOrden: {
+    order_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'Orden',
-        key: 'idOrden',
+        model: 'orders',
+        key: 'order_id',
       },
     },
-    idProductos: {
+    product_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'Productos',
-        key: 'idProductos',
+        model: 'products',
+        key: 'product_id',
       },
     },
-    cantidad: {
+    quantity: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        min: 1
+      }
     },
-    precio: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
+    unit_price: {
+      type: DataTypes.DECIMAL(10,2),
+      allowNull: false,
+      validate: {
+        min: 0.01
+      }
     },
-    subtotal: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
+    line_total: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return this.quantity * this.unit_price;
+      }
     },
+    discount_percentage: {
+      type: DataTypes.DECIMAL(5,2),
+      allowNull: false,
+      defaultValue: 0,
+      validate: {
+        min: 0,
+        max: 100
+      }
+    },
+    discount_amount: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return (this.quantity * this.unit_price * this.discount_percentage) / 100;
+      }
+    },
+    final_total: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        const lineTotal = this.quantity * this.unit_price;
+        const discountAmount = (lineTotal * this.discount_percentage) / 100;
+        return lineTotal - discountAmount;
+      }
+    },
+    is_deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    }
   },
   {
     sequelize,
-    modelName: 'OrdenDetalles',
-    tableName: 'OrdenDetalles',
-    freezeTableName: true,
+    modelName: 'OrderDetail',
+    tableName: 'order_details',
     timestamps: false,
+    freezeTableName: true,
+    defaultScope: {
+      where: {
+        is_deleted: false
+      }
+    },
+    scopes: {
+      withDeleted: {
+        where: {}
+      }
+    }
   }
 )
 

@@ -1,20 +1,28 @@
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, useMediaQuery, Typography, Box, TablePagination
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, useMediaQuery, 
+  Typography, Box, TablePagination, Snackbar, Alert
 } from '@mui/material';
 import { DataProduct } from '@/interfaces/product.interface';
 import { formattedDate } from '@/utils/orderUtils';
 import { updateProductState } from '@/services/products.service';
 import LabelState from '../LabelState';
 import EditIcon from '@mui/icons-material/Edit';
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 
 interface TableProductsProps {
   products: DataProduct[];
   handleOpenModalEdit: (product: DataProduct) => void;
+  handleEditMenuClick?: (event: React.MouseEvent<HTMLElement>, product: DataProduct) => void;
+  refreshProducts?: () => Promise<void>;
 }
-const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProductsProps) => {
+const TableProductsManagment = ({ products, handleOpenModalEdit, handleEditMenuClick, refreshProducts }: TableProductsProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [alertInfo, setAlertInfo] = useState<{open: boolean, message: string, severity: 'success' | 'error'}>({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
@@ -29,24 +37,59 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
   const endIndex = startIndex + rowsPerPage;
   const paginatedProducts = products.slice(startIndex, endIndex);
 
-  const desactivarProducto = async (id: number) => {
+  const desactivarProducto = useCallback(async (id: number) => {
     try {
       await updateProductState(id, 2);
-      location.reload();
+      // Mejorar UX: mostrar feedback con Snackbar y actualizar datos sin recargar página
+      setAlertInfo({
+        open: true,
+        message: 'Producto desactivado con éxito',
+        severity: 'success'
+      });
+      if (refreshProducts) {
+        await refreshProducts();
+      }
     } catch (error) {
-      console.log(error);
+      console.error('Error al desactivar producto:', error);
+      setAlertInfo({
+        open: true,
+        message: error instanceof Error ? error.message : 'Error al desactivar producto',
+        severity: 'error'
+      });
     }
-  };
+  }, [refreshProducts]);
 
-  const activarProducto = async (id: number) => {
+  const activarProducto = useCallback(async (id: number) => {
     try {
       await updateProductState(id, 1);
-      location.reload();
+      // Mejorar UX: mostrar feedback con Snackbar y actualizar datos sin recargar página
+      setAlertInfo({
+        open: true,
+        message: 'Producto activado con éxito',
+        severity: 'success'
+      });
+      if (refreshProducts) {
+        await refreshProducts();
+      }
     } catch (error) {
-      console.log(error);
+      console.error('Error al activar producto:', error);
+      setAlertInfo({
+        open: true,
+        message: error instanceof Error ? error.message : 'Error al activar producto',
+        severity: 'error'
+      });
     }
-  }
-  const isProductActive = (product: DataProduct) => product.estado.idestados === 1;
+  }, [refreshProducts]);
+
+  // Utilizamos memo para evitar recálculos innecesarios
+  const isProductActive = useCallback((product: DataProduct) => 
+    product.state.state_id === 1
+  , []);
+  
+  // Manejador para cerrar la alerta
+  const handleCloseAlert = useCallback(() => {
+    setAlertInfo(prev => ({ ...prev, open: false }));
+  }, []);
 
 
 
@@ -55,6 +98,22 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
   if (isMobile) {
     return (
       <Box>
+        {/* Snackbar para mostrar mensajes al usuario en vista móvil */}
+        <Snackbar 
+          open={alertInfo.open} 
+          autoHideDuration={4000} 
+          onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert 
+            onClose={handleCloseAlert} 
+            severity={alertInfo.severity}
+            variant="filled" 
+            sx={{ width: '100%' }}
+          >
+            {alertInfo.message}
+          </Alert>
+        </Snackbar>
         {products.map((product, index) => (
           <Box key={index} p={2} border={1} borderColor='grey.300' borderRadius={1} mb={2}>
             <div
@@ -64,8 +123,8 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h6">ID: {product.idProductos}</Typography>
-              <Typography variant="h6">{product.nombre}</Typography>
+              <Typography variant="h6">ID: {product.product_id}</Typography>
+              <Typography variant="h6">{product.product_name}</Typography>
             </div>
             <div
               style={{
@@ -74,9 +133,9 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                 alignItems: 'center'
               }}
             >
-              <Typography variant="body1">Precio: Q{product.precio}</Typography>
-              <Typography variant="body1">Stock: {product.stock}</Typography>
-              <LabelState estados={product.estado.idestados} />
+              <Typography variant="body1">Precio: Q{product.unit_price}</Typography>
+              <Typography variant="body1">Stock: {product.stock_quantity}</Typography>
+              <LabelState estados={product.state.state_id} />
             </div>
             <div
               style={{
@@ -86,12 +145,12 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                 alignItems: 'center',
               }}
             >
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Creado:</span> <span>{formattedDate(product.fecha_creacion)}</span>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Creado:</span> <span>{formattedDate(product.created_at)}</span>
               </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Marca:</span> <span>{product.marca}</span> </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Codigo:</span> <span>{product.codigo}</span> </Typography>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Marca:</span> <span>{product.brand}</span> </Typography>
+              <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}><span>Codigo:</span> <span>{product.product_code}</span> </Typography>
 
-              <img src={product.foto} alt={product.nombre} width="100" height="100" />
+              <img src={product.image_url} alt={product.product_name} width="100" height="100" />
             </div>
             <div
               style={
@@ -105,9 +164,16 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
               <Button
                 variant="text"
                 color="primary"
-                onClick={() =>
-                  handleOpenModalEdit(product)
-                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (handleEditMenuClick) {
+                    handleEditMenuClick(e, product);
+                  } else {
+                    handleOpenModalEdit(product);
+                  }
+                }}
+                aria-label={`Editar producto ${product.product_name}`}
+                tabIndex={0}
               >
                 <EditIcon />
               </Button>
@@ -115,7 +181,9 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                 variant="text"
                 color="success"
                 disabled={isProductActive(product)}
-                onClick={() => activarProducto(product.idProductos)}
+                onClick={() => activarProducto(product.product_id)}
+                aria-label={`Activar producto ${product.product_name}`}
+                tabIndex={0}
               >
                 Activar
               </Button>
@@ -123,7 +191,9 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                 variant="text"
                 color="error"
                 disabled={!isProductActive(product)}
-                onClick={() => desactivarProducto(product.idProductos)}
+                onClick={() => desactivarProducto(product.product_id)}
+                aria-label={`Desactivar producto ${product.product_name}`}
+                tabIndex={0}
               >
                 Desactivar
               </Button>
@@ -136,40 +206,69 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      {/* Snackbar para mostrar mensajes al usuario */}
+      <Snackbar 
+        open={alertInfo.open} 
+        autoHideDuration={4000} 
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseAlert} 
+          severity={alertInfo.severity}
+          variant="filled" 
+          sx={{ width: '100%' }}
+        >
+          {alertInfo.message}
+        </Alert>
+      </Snackbar>
+      
       <TableContainer>
-        <Table>
+        <Table aria-label="Tabla de productos" role="grid">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Usuario</TableCell>
-              <TableCell>Producto</TableCell>
-              <TableCell>Categoria</TableCell>
-              <TableCell>Precio</TableCell>
-              <TableCell>Stock</TableCell>
-              <TableCell>Estado</TableCell>
-              <TableCell>Acciones</TableCell>
+              <TableCell scope="col">ID</TableCell>
+              <TableCell scope="col">Usuario</TableCell>
+              <TableCell scope="col">Producto</TableCell>
+              <TableCell scope="col">Categoria</TableCell>
+              <TableCell scope="col">Precio</TableCell>
+              <TableCell scope="col">Stock</TableCell>
+              <TableCell scope="col">Estado</TableCell>
+              <TableCell scope="col">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedProducts.map((product, index) => (
-              <TableRow key={index}>
-                <TableCell>{product.idProductos}</TableCell>
-                <TableCell>{product.usuario.nombre_completo}</TableCell>
-                <TableCell>{product.nombre}</TableCell>
-                <TableCell>{product.categoria.nombre}</TableCell>
-                <TableCell>Q{product.precio}</TableCell>
-                <TableCell>{product.stock}</TableCell>
-                <TableCell>
-                  <LabelState estados={product.estado.idestados} />
+              <TableRow 
+                key={index} 
+                hover 
+                tabIndex={0}
+                aria-label={`Producto: ${product.product_name}`}
+                role="row"
+              >
+                <TableCell role="cell">{product.product_id}</TableCell>
+                <TableCell role="cell">{product.user.full_name}</TableCell>
+                <TableCell role="cell">{product.product_name}</TableCell>
+                <TableCell role="cell">{product.category.category_name}</TableCell>
+                <TableCell role="cell">Q{product.unit_price}</TableCell>
+                <TableCell role="cell">{product.stock_quantity}</TableCell>
+                <TableCell role="cell">
+                  <LabelState estados={product.state.state_id} />
                 </TableCell>
 
                 <TableCell>
                   <Button
                     variant="text"
                     color="primary"
-                    onClick={() =>
-                      handleOpenModalEdit(product)
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (handleEditMenuClick) {
+                        handleEditMenuClick(e, product);
+                      } else {
+                        handleOpenModalEdit(product);
+                      }
+                    }}
+                    aria-label={`Editar producto ${product.product_name}`}
                   >
                     <EditIcon />
                   </Button>
@@ -177,7 +276,8 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                     variant="text"
                     color="success"
                     disabled={isProductActive(product)}
-                    onClick={() => activarProducto(product.idProductos)}
+                    onClick={() => activarProducto(product.product_id)}
+                    aria-label={`Activar producto ${product.product_name}`}
                   >
                     Activar
                   </Button>
@@ -185,7 +285,8 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
                     variant="text"
                     color="error"
                     disabled={!isProductActive(product)}
-                    onClick={() => desactivarProducto(product.idProductos)}
+                    onClick={() => desactivarProducto(product.product_id)}
+                    aria-label={`Desactivar producto ${product.product_name}`}
                   >
                     Desactivar
                   </Button>
@@ -203,9 +304,18 @@ const TableProductsManagment = ({ products, handleOpenModalEdit }: TableProducts
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Filas por página:"
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+        getItemAriaLabel={(type) => {
+          return type === 'first' ? 'Ir a la primera página' :
+                 type === 'last' ? 'Ir a la última página' :
+                 type === 'next' ? 'Ir a la página siguiente' :
+                 'Ir a la página anterior';
+        }}
       />
     </Paper>
   );
 };
 
-export default TableProductsManagment;
+// Exportamos un componente memoizado para evitar rerenderizados innecesarios
+export default memo(TableProductsManagment);

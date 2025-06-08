@@ -15,11 +15,11 @@ const CategoryManagment = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<IProductCategory>({
-    idCategoriaProductos: 0,
-    usuarios_idusuarios: 0,
-    nombre: '',
-    estados_idestados: 0,
-    fecha_creacion: ''
+    category_id: 0,
+    user_id: 0,
+    category_name: '',
+    state_id: 0,
+    created_at: ''
   });
   
   useEffect(() => {
@@ -45,11 +45,11 @@ const CategoryManagment = () => {
 
   const handleCloseModalEdit = () => {
     setSelectedCategory({
-      idCategoriaProductos: 0,
-      usuarios_idusuarios: 0,
-      nombre: '',
-      estados_idestados: 0,
-      fecha_creacion: ''
+      category_id: 0,
+      user_id: 0,
+      category_name: '',
+      state_id: 0,
+      created_at: ''
     });
     setOpenModalEdit(false);
   };

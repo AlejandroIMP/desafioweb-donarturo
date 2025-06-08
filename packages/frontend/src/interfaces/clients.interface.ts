@@ -1,10 +1,13 @@
 export interface IClient {
-  idClientes: number;
-  razon_social: string;
-  nombre_comercial: string;
-  direccion_entrega: string;
-  telefono: string;
+  client_id: number;
+  business_name: string;
+  commercial_name: string;
+  delivery_address: string;
+  phone: string;
   email: string;
+  tax_id?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface ClientResponseGet {
@@ -14,9 +17,10 @@ export interface ClientResponseGet {
 }
 
 export interface IClientCreate {
-  razon_social: string;
-  nombre_comercial: string;
-  direccion_entrega: string;
-  telefono: string;
+  business_name: string;
+  commercial_name: string;
+  delivery_address: string;
+  phone: string;
   email: string;
+  tax_id?: string;
 }

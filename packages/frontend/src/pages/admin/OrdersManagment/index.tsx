@@ -13,17 +13,17 @@ const OrdersManagment = () => {
   const [error, setError] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [SelectedOrder, setSelectedOrder] = useState<IOrder>({
-    idOrden: 0,
-    fecha_creacion: '',
-    fecha_entrega: '',
-    total_orden: 0,
-    estados_idestados: 0,
-    idusuarios: 0,
-    nombre_completo: '',
-    direccion: '',
-    telefono: '',
-    correo_electronico: '',
-    Clientes_idClientes: 0
+    order_id: 0,
+    created_at: '',
+    delivery_date: '',
+    order_total: 0,
+    state_id: 0,
+    user_id: 0,
+    customer_name: '',
+    delivery_address: '',
+    phone: '',
+    email: '',
+    client_id: 0
   });
 
   useEffect(() => {
@@ -47,17 +47,17 @@ const OrdersManagment = () => {
 
   const handleCloseModalEdit = () => {
     setSelectedOrder({
-      idOrden: 0,
-      fecha_creacion: '',
-      fecha_entrega: '',
-      total_orden: 0,
-      estados_idestados: 0,
-      idusuarios: 0,
-      nombre_completo: '',
-      direccion: '',
-      telefono: '',
-      correo_electronico: '',
-      Clientes_idClientes: 0
+      order_id: 0,
+      created_at: '',
+      delivery_date: '',
+      order_total: 0,
+      state_id: 0,
+      user_id: 0,
+      customer_name: '',
+      delivery_address: '',
+      phone: '',
+      email: '',
+      client_id: 0
     });
     setOpenModalEdit(false);
   };

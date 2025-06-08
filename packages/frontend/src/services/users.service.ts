@@ -30,7 +30,7 @@ export const updateUsers = async (id: number, user: UpdateUserForm): Promise<use
   return response.data;
 }
 
-export const updateUsersState = async (id: number, estados_idestados: number): Promise<IUser> => {
-  const response = await axios.patch<IUser>(`${apiBaseUrl}usuarios/${id}`, { estados_idestados }, { headers: getHeaders() });
+export const updateUsersState = async (id: number, state_id: number): Promise<IUser> => {
+  const response = await axios.patch<IUser>(`${apiBaseUrl}usuarios/${id}`, { state_id }, { headers: getHeaders() });
   return response.data;
 }

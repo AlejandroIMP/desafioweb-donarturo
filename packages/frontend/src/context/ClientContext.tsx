@@ -49,7 +49,7 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const newTotal = cartProducts.reduce((sum, product) => {
       // Add validation and default values
-      const price = Number(product.precio) || 0;
+      const price = Number(product.unit_price) || 0;
       const quantity = Number(product.quantity) || 0;
       return sum + (price * quantity);
     }, 0);
@@ -63,7 +63,7 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
       ...prev,
       {
         ...product,
-        precio: Number(product.precio),
+        price: Number(product.unit_price),
         quantity: Number(product.quantity) || 1
       }
     ]);
@@ -78,7 +78,7 @@ export const ClientProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await getOrdersByUser(Number(idUsuario));
 
-      const userOrdersConfirmedAndDelivered = response.data.filter((order: IOrder) => order.estados_idestados === 7 || order.estados_idestados === 8);
+      const userOrdersConfirmedAndDelivered = response.data.filter((order: IOrder) => order.state_id === 7 || order.state_id === 8);
       setUserOrders(userOrdersConfirmedAndDelivered);
     } catch (error) {
       setError(error instanceof Error ? error : new Error('Failed to fetch orders'));

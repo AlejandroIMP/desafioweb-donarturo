@@ -1,21 +1,22 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, TextField, Select, MenuItem } from '@mui/material';
+import { Button, TextField, Select, MenuItem, Alert, Box, CircularProgress } from '@mui/material';
 import { createProductSchema, CreateProductForm } from '@/schemas/product.schemas';
 import { IProductCategory } from '@/interfaces/productcategory.interface';
 import { updateProduct } from '@/services/products.service';
 import { getCategories } from '@/services/categories.service';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { DataProduct } from '@/interfaces/product.interface';
 
 interface ProductUpdateFormProps {
   product: DataProduct;
+  onProductUpdated?: () => Promise<void>;
 }
 
-const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
+const ProductUpdateForm = ({ product, onProductUpdated }: ProductUpdateFormProps) => {
   const [categories, setCategories] = useState<IProductCategory[]>([]);
-  const [valueState, setValueState] = useState(product.estado.idestados.toString());
-  const [valueCategory, setValueCategory] = useState(product.categoria.idCategoriaProductos);
+  const [valueState, setValueState] = useState(product.state.state_id.toString());
+  const [valueCategory, setValueCategory] = useState(product.category.category_id);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -30,8 +31,8 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
   }, []);
 
   const formattedCategories = categories.map((category) => (
-    <MenuItem key={category.idCategoriaProductos} value={category.idCategoriaProductos}>
-      {category.nombre}
+    <MenuItem key={category.category_id} value={category.category_id}>
+      {category.category_name}
     </MenuItem>
   ));
 
@@ -44,92 +45,138 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
     resolver: zodResolver(createProductSchema),
     mode: 'onChange',
     defaultValues: {
-      CategoriaProductos_idCategoriaProductos: product.categoria.idCategoriaProductos,
-      estados_idestados: product.estado.idestados.toString()
+      category_id: product.category.category_id,
+      state_id: product.state.state_id.toString() as "1" | "2"
     }
   });
 
-  const onSubmit = async (data: CreateProductForm) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
-    Number(data.CategoriaProductos_idCategoriaProductos);
-    Number(data.estados_idestados);
-    Number(data.stock);
-    Number(data.precio);
-    Number(data.usuarios_idusuarios);
-
+  const onSubmit = useCallback(async (data: CreateProductForm) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+    
     try {
-      await updateProduct(product.idProductos,data);
+      const formattedData = {
+        ...data,
+        category_id: Number(data.category_id),
+        state_id: Number(data.state_id),
+        stock_quantity: Number(data.stock_quantity),
+        unit_price: Number(data.unit_price),
+        user_id: String(product.user.user_id), // Cambiado a string para consistencia
+      };
+      
+      // Validación adicional de datos antes de enviar al backend
+      if (formattedData.unit_price <= 0) {
+        throw new Error('El precio debe ser mayor que cero');
+      }
+      
+      if (formattedData.stock_quantity < 0) {
+        throw new Error('El stock no puede ser negativo');
+      }
+
+      await updateProduct(product.product_id, formattedData);
+      setSubmitSuccess(true);
       reset();
-      location.reload();
+      
+      // Usar el callback para actualizar los datos
+      if (onProductUpdated) {
+        setTimeout(async () => {
+          await onProductUpdated();
+        }, 2000);
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Error al actualizar producto:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Error al actualizar el producto. Inténtalo de nuevo.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  }, [product.product_id, product.user.user_id, reset, onProductUpdated]);
 
   return (
-    <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+    <Box sx={{ p: 3 }}>
+      {submitSuccess && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          ¡Producto actualizado correctamente! La página se actualizará en unos segundos.
+        </Alert>
+      )}
+      
+      {submitError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {submitError}
+        </Alert>
+      )}
+
+      <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         label="Usuario"
         variant="outlined"
-        {...register('usuarios_idusuarios')}
-        error={!!errors.usuarios_idusuarios}
-        helperText={errors.usuarios_idusuarios?.message}
-        defaultValue={product.usuario.idusuarios}
+        {...register('user_id')}
+        error={!!errors.user_id}
+        helperText={errors.user_id?.message}
+        defaultValue={product.user.user_id}
         disabled={true}
         fullWidth
       />
       <TextField
-        label="Nombre"
+        label="Nombre del Producto"
         variant="outlined"
-        {...register('nombre')}
-        error={!!errors.nombre}
-        helperText={errors.nombre?.message}
+        {...register('product_name')}
+        error={!!errors.product_name}
+        helperText={errors.product_name?.message}
         fullWidth
-        defaultValue={product.nombre}
+        defaultValue={product.product_name}
       />
       <TextField
         label="Marca"
         variant="outlined"
-        {...register('marca')}
-        error={!!errors.marca}
-        helperText={errors.marca?.message}
+        {...register('brand')}
+        error={!!errors.brand}
+        helperText={errors.brand?.message}
         fullWidth
-        defaultValue={product.marca}
+        defaultValue={product.brand}
       />
       <TextField
         label="Código"
         variant="outlined"
-        {...register('codigo')}
-        error={!!errors.codigo}
-        helperText={errors.codigo?.message}
+        {...register('product_code')}
+        error={!!errors.product_code}
+        helperText={errors.product_code?.message}
         fullWidth
-        defaultValue={product.codigo}
+        defaultValue={product.product_code}
       />
       <TextField
         label="Stock"
         variant="outlined"
         type="number"
-        {...register('stock')}
-        error={!!errors.stock}
-        helperText={errors.stock?.message}
+        {...register('stock_quantity')}
+        error={!!errors.stock_quantity}
+        helperText={errors.stock_quantity?.message}
         fullWidth
-        defaultValue={product.stock}
+        defaultValue={product.stock_quantity}
       />
       <TextField
         label="Precio"
         variant="outlined"
         type="number"
-        {...register('precio')}
-        error={!!errors.precio}
-        helperText={errors.precio?.message}
+        {...register('unit_price')}
+        error={!!errors.unit_price}
+        helperText={errors.unit_price?.message}
         fullWidth
-        defaultValue={product.precio}
+        defaultValue={product.unit_price}
       />
       <Select
         label='Categoría'
         variant="outlined"
-        {...register('CategoriaProductos_idCategoriaProductos')}
-        error={!!errors.CategoriaProductos_idCategoriaProductos}
+        {...register('category_id')}
+        error={!!errors.category_id}
         fullWidth
         displayEmpty={true}
         defaultValue={valueCategory}
@@ -140,8 +187,8 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
       <Select
         label='Estado'
         variant="outlined"
-        {...register('estados_idestados')}
-        error={!!errors.estados_idestados}
+        {...register('state_id')}
+        error={!!errors.state_id}
         fullWidth
         displayEmpty={true}
         defaultValue={valueState}
@@ -151,22 +198,26 @@ const ProductUpdateForm = ({ product }: ProductUpdateFormProps) => {
         <MenuItem value={'2'}>Inactivo</MenuItem>
       </Select>
       <TextField
-        label="Foto"
+        label="URL de Imagen"
         variant="outlined"
-        {...register('foto')}
-        error={!!errors.foto}
-        helperText={errors.foto?.message}
+        {...register('image_url')}
+        error={!!errors.image_url}
+        helperText={errors.image_url?.message}
         fullWidth
-        defaultValue={product.foto}
+        defaultValue={product.image_url}
       />
       <Button
         type='submit'
         variant='contained'
+        disabled={isSubmitting}
         fullWidth
+        startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+        sx={{ mt: 2 }}
       >
-        Actualizar Producto
+        {isSubmitting ? 'Actualizando...' : 'Actualizar Producto'}
       </Button>
     </form>
+    </Box>
   );
 }
 

@@ -41,16 +41,16 @@ const TableOrdersDeliver = ({ orders }: TableOrdersDeliverProps) => {
       <Box>
         {orders.map((order, index) => (
           <Box key={index} p={2} border={1} borderColor='grey.300' borderRadius={1} mb={2}>
-            <Typography variant='h5'>Pedido: {order.idOrden}</Typography>
-            <Typography variant='h6'>Nombre: {order.nombre_completo}</Typography>
-            <Typography variant='h6'>Fecha de entrega: {formattedDate(order.fecha_entrega)}</Typography>
-            <Typography variant='h6'>Estado: <LabelState estados={order.estados_idestados} /></Typography>
-            <Typography variant='h6'>Total: {order.total_orden}</Typography>
+            <Typography variant='h5'>Pedido: {order.order_id}</Typography>
+            <Typography variant='h6'>Nombre: {order.customer_name}</Typography>
+            <Typography variant='h6'>Fecha de entrega: {formattedDate(order.delivery_date)}</Typography>
+            <Typography variant='h6'>Estado: <LabelState estados={order.state_id} /></Typography>
+            <Typography variant='h6'>Total: Q {order.order_total}</Typography>
             
             <Button
               variant='contained'
               color='success'
-              onClick={() => deliveredOrder(order.idOrden)}>Marcar Entregado</Button>
+              onClick={() => deliveredOrder(order.order_id)}>Marcar Entregado</Button>
           </Box>
         ))} 
       </Box>
@@ -74,18 +74,18 @@ const TableOrdersDeliver = ({ orders }: TableOrdersDeliverProps) => {
           <TableBody>
             {paginatedOrders.map((order, index) => (
               <TableRow key={index}>
-                <TableCell>{order.idOrden}</TableCell>
-                <TableCell>{order.nombre_completo}</TableCell>
-                <TableCell>{formattedDate(order.fecha_entrega)}</TableCell>
+                <TableCell>{order.order_id}</TableCell>
+                <TableCell>{order.customer_name}</TableCell>
+                <TableCell>{formattedDate(order.delivery_date)}</TableCell>
                 <TableCell>
-                  <LabelState estados={order.estados_idestados} />
+                  <LabelState estados={order.state_id} />
                 </TableCell>
-                <TableCell>Q {order.total_orden}</TableCell>
+                <TableCell>Q {order.order_total}</TableCell>
                 <TableCell>
                   <Button
                     variant='contained'
                     color='primary'
-                    onClick={() => deliveredOrder(order.idOrden)}>Marcar Entregado</Button>
+                    onClick={() => deliveredOrder(order.order_id)}>Marcar Entregado</Button>
                 </TableCell>
               </TableRow>
             ))}

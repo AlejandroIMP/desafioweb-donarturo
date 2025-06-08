@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUser, getUserById, updateUser, updateUserState, createUser } from "../controllers/users.controller";
+import { getUser, getUserById, updateUser, updateUserState, createUser, deleteUser } from "../controllers/users.controller";
 import { verifyToken, verifyRol } from "../middleware/auth";
 import { ROLES } from '../config/roles';
 
@@ -14,5 +14,7 @@ router.post('/usuarios', verifyToken, verifyRol([ROLES.ADMIN]), createUser);
 router.put('/usuarios/:id', verifyToken, verifyRol([ROLES.ADMIN]), updateUser);
 
 router.patch('/usuarios/:id', verifyToken, verifyRol([ROLES.ADMIN]), updateUserState);
+
+router.delete('/usuarios/:id', verifyToken, verifyRol([ROLES.ADMIN]), deleteUser);
 
 export default router;

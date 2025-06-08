@@ -12,7 +12,7 @@ interface CategoryUpdateFormProps {
 }
 
 const CategoryUpdateForm = ({ category, onClose }: CategoryUpdateFormProps) => {
-  const [valueState, setValueState] = useState(category.estados_idestados);
+  const [valueState, setValueState] = useState(category.state_id);
 
   const {
     register,
@@ -22,9 +22,9 @@ const CategoryUpdateForm = ({ category, onClose }: CategoryUpdateFormProps) => {
     resolver: zodResolver(categoryUpdateSchema),
     mode: 'onChange',
     defaultValues: {
-      usuarios_idusuarios: category.usuarios_idusuarios,
-      nombre: category.nombre,
-      estados_idestados: category.estados_idestados
+      user_id: category.user_id,
+      category_name: category.category_name,
+      state_id: category.state_id
     }
   });
 
@@ -32,10 +32,10 @@ const CategoryUpdateForm = ({ category, onClose }: CategoryUpdateFormProps) => {
     try {
       const formattedData = {
         ...data,
-        estados_idestados: Number(data.estados_idestados)
+        state_id: Number(data.state_id)
       };
       
-      await updateCategory(category.idCategoriaProductos, formattedData);
+      await updateCategory(category.category_id, formattedData);
       onClose();
       location.reload();
     } catch (error) {
@@ -50,25 +50,34 @@ const CategoryUpdateForm = ({ category, onClose }: CategoryUpdateFormProps) => {
         type="number"
         fullWidth
         disabled
-        defaultValue={category.usuarios_idusuarios}
+        defaultValue={category.user_id}
       />
       <TextField
-        {...register('nombre')}
+        {...register('category_name')}
         label="Nombre Categoría"
         fullWidth
-        error={!!errors.nombre}
-        helperText={errors.nombre?.message}
+        error={!!errors.category_name}
+        helperText={errors.category_name?.message}
+      />
+      <TextField
+        {...register('category_description')}
+        label="Descripción de Categoría (Opcional)"
+        fullWidth
+        error={!!errors.category_description}
+        helperText={errors.category_description?.message}
+        multiline
+        rows={3}
       />
       <Select
-        {...register('estados_idestados')}
+        {...register('state_id')}
         label="Estado"
         fullWidth
-        error={!!errors.estados_idestados}
+        error={!!errors.state_id}
         value={valueState}
         onChange={(e) => setValueState(Number(e.target.value))}
       >
-        <MenuItem value={"1"}>Activo</MenuItem>
-        <MenuItem value={"2"}>Inactivo</MenuItem>
+        <MenuItem value={1}>Activo</MenuItem>
+        <MenuItem value={2}>Inactivo</MenuItem>
       </Select>
       <Button
         type="submit"

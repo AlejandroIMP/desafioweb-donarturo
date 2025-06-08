@@ -56,15 +56,15 @@ export const updateOrder = async (id: number, data: OrderSchemaUpdateForm): Prom
   }
 }
 
-export const updateOrderState = async (id: number, estados_idestados: number): Promise<OrderResponse> => {
+export const updateOrderState = async (id: number, state_id: number): Promise<OrderResponse> => {
   try {
-    if (!id || !estados_idestados) {
+    if (!id || !state_id) {
       throw new Error('ID and state are required');
     }
 
     const response = await axios.patch<OrderResponse>(
       `${apiBaseUrl}order/${id}`, 
-      { estados_idestados }, 
+      { state_id }, 
       { 
         headers: getHeaders(),
         validateStatus: (status) => status < 500

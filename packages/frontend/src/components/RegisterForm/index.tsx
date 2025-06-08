@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormData, RegisterSchema } from '@/schemas/auth.schemas';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Alert } from '@mui/material';
 import axios from 'axios';
 import { RegisterResponse } from '@/interfaces/auth.interface';
 import './index.css';
@@ -17,9 +17,6 @@ const RegisterForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const selectedRole = 1;
-  const selectedStatus = 1;
-  const selectedClient = null;
 
   const {
     register,
@@ -31,40 +28,54 @@ const RegisterForm = () => {
     mode: 'onChange'
   });
 
-
-
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
       setError(null);
+      setSuccess(null);
+
+      console.log('Register attempt with data:', {
+        email: data.email,
+        full_name: data.full_name,
+        phone: data.phone,
+        birth_date: data.birth_date
+      });
 
       const response = await axios.post<RegisterResponse>(`${apiBaseUrl}auth/register`, {
-        correo_electronico: data.correo_electronico,
-        user_password: data.user_password,
-        nombre_completo: data.nombre_completo,
-        telefono: data.telefono,
-        fecha_nacimiento: data.fecha_nacimiento
+        email: data.email,
+        password_hash: data.password_hash,
+        full_name: data.full_name,
+        phone: data.phone,
+        birth_date: data.birth_date,
+        role_id: 2, // Default role for new users (customer)
+        state_id: 1 // Default state (active)
       });
+
       if (response.data.success) {
-        setSuccess('Registro exitoso! Redirigiendo al inicio de sesión...');
+        setSuccess('¡Registro exitoso! Redirigiendo al inicio de sesión...');
         reset();
 
         setTimeout(() => {
           navigate('/auth/login', {
             state: {
-              message: 'Registro exitoso! Por favor inicia sesión.',
-              email: data.correo_electronico
+              message: '¡Registro exitoso! Por favor inicia sesión con tus credenciales.',
+              email: data.email
             }
           });
-
         }, 2000);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError(error.response?.data?.message || 'Error al registrar el usuario');
+        const errorMessage = error.response?.data?.message || 
+                           error.response?.data?.error || 
+                           'Error al registrar el usuario';
+        setError(errorMessage);
         console.error('Register error:', error.response?.data);
+      } else {
+        setError('Error al conectar con el servidor');
+        console.error('Network error:', error);
       }
     } finally {
       setIsLoading(false);
@@ -73,47 +84,58 @@ const RegisterForm = () => {
 
   return (
     <form className='auth-form--style' onSubmit={handleSubmit(onSubmit)}>
-      {error && <div className="auth-message-error">{error}</div>}
-      {success && <div className="auth-message-success">{success}</div>}
+      {error && (
+        <Alert severity="error" sx={{ width: '100%', marginBottom: 2 }}>
+          {error}
+        </Alert>
+      )}
+      
+      {success && (
+        <Alert severity="success" sx={{ width: '100%', marginBottom: 2 }}>
+          {success}
+        </Alert>
+      )}
 
       <div>
         <TextField
-          {...register('nombre_completo')}
+          {...register('full_name')}
           variant="outlined"
           type="text"
-          placeholder="Nombre"
-          autoComplete="new-name"
+          placeholder="Nombre Completo"
+          autoComplete="name"
           disabled={isLoading}
           fullWidth
-          error={!!errors.nombre_completo}
-          helperText={errors.nombre_completo ? errors.nombre_completo.message : null}
+          error={!!errors.full_name}
+          helperText={errors.full_name ? errors.full_name.message : null}
         />
       </div>
+      
       <div>
         <TextField
-          {...register('correo_electronico')}
+          {...register('email')}
           variant="outlined"
           type="email"
           placeholder="Email"
-          autoComplete="new-email"
+          autoComplete="email"
           disabled={isLoading}
           fullWidth
-          error={!!errors.correo_electronico}
-          helperText={errors.correo_electronico ? errors.correo_electronico.message : null}
+          error={!!errors.email}
+          helperText={errors.email ? errors.email.message : null}
         />
       </div>
+      
       <div>
         <div className="auth-password-field" style={{ position: 'relative' }}>	
           <TextField
-            {...register('user_password')}
+            {...register('password_hash')}
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
-            placeholder="Password"
-            autoComplete='current-password'
+            placeholder="Contraseña"
+            autoComplete='new-password'
             fullWidth
             disabled={isLoading}
-            error={!!errors.user_password}
-            helperText={errors.user_password ? errors.user_password.message : null}
+            error={!!errors.password_hash}
+            helperText={errors.password_hash ? errors.password_hash.message : null}
           />
           <div style={{
             position: 'absolute',
@@ -124,8 +146,9 @@ const RegisterForm = () => {
           </div>
         </div>
       </div>
+      
       <div>
-        <div>
+        <div className="auth-password-field" style={{ position: 'relative' }}>
           <TextField
             {...register('confirm_password')}
             variant="outlined"
@@ -139,65 +162,36 @@ const RegisterForm = () => {
           />
         </div>
       </div>
+      
       <div>
         <TextField
-          {...register('telefono')}
+          {...register('phone')}
           variant="outlined"
           type="tel"
-          placeholder="Teléfono"
+          placeholder="Teléfono (opcional)"
           autoComplete="tel"
           disabled={isLoading}
           fullWidth
-          error={!!errors.telefono}
-          helperText={errors.telefono ? errors.telefono.message : null}
+          error={!!errors.phone}
+          helperText={errors.phone ? errors.phone.message : null}
         />
       </div>
+      
       <div>
         <TextField
-          {...register('fecha_nacimiento')}
+          {...register('birth_date')}
           variant="outlined"
           type="date"
-          placeholder="Fecha de nacimiento"
-          autoComplete="new-birthdate"
+          label="Fecha de nacimiento"
+          autoComplete="bday"
           disabled={isLoading}
           fullWidth
-          error={!!errors.fecha_nacimiento}
-          helperText={errors.fecha_nacimiento ? errors.fecha_nacimiento.message : null}
+          InputLabelProps={{ shrink: true }}
+          error={!!errors.birth_date}
+          helperText={errors.birth_date ? errors.birth_date.message : null}
         />
       </div>
-      <div className='auth-select-hidden'>
-        <TextField className='auth-select-hidden'>
-          <Select
-            {...register('estados_idestados')}
-            value={selectedStatus}
-            variant="outlined"
-            disabled={true}
-          >
-            <MenuItem value={1}>Activo</MenuItem>
-            <MenuItem value={2}>Inactivo</MenuItem>
-          </Select>
-        </TextField>
-        <TextField className='auth-select-hidden'>
-          <Select
-            {...register('Clientes_idClientes')}
-            value={selectedRole}
-            variant="outlined"
-            disabled={true}
-          >
-            <MenuItem value={1}>Cliente</MenuItem>
-          </Select>
-        </TextField>
-        <TextField className='auth-select-hidden'>
-          <Select
-            {...register('Clientes_idClientes')}
-            value={selectedClient}
-            variant="outlined"
-            disabled={true}
-          >
-            <MenuItem value={1}>Cliente</MenuItem>
-          </Select>
-        </TextField>
-      </div>
+
       <div className="auth-buttons">
         <Button
           type="submit"

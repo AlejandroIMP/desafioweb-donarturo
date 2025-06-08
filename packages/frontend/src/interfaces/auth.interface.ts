@@ -1,29 +1,48 @@
 export interface IUser {
-  idusuarios: number;
-  rol_idrol: number;
-  estados_idestados: number;
-  correo_electronico: string;
-  nombre_completo: string;
-  user_password: string;
-  telefono: string;
-  fecha_nacimiento: string;
-  fecha_creacion: string;
-  Clientes_idClientes: number;
+  user_id: number;
+  role_id: number;
+  state_id: number;
+  email: string;
+  full_name: string;
+  password_hash: string;
+  phone: string;
+  birth_date: string;
+  created_at: string;
+  client_id?: number;
+  failed_login_attempts?: number;
+  last_login?: Date;
+  locked_until?: Date;
 }
 
 export interface LoginResponse {
   success: boolean;
+  message: string;
   token: string;
   user: {
-    id: number;
-    rol: number;
+    user_id: number;
     email: string;
+    full_name: string;
+    role_id: number;
   };
 }
 
 export interface RegisterResponse {
   success: boolean;
   message: string;
+  user?: {
+    user_id: number;
+    email: string;
+    full_name: string;
+    role_id: number;
+    state_id: number;
+  };
+}
+
+export interface LoginErrorResponse {
+  success: false;
+  message: string;
+  attempts_remaining?: number;
+  locked_until?: Date;
 }
 
 export interface Country {
@@ -33,7 +52,7 @@ export interface Country {
 }
 
 export interface userResponseGet {
-  succcess: boolean;
+  success: boolean;
   data: IUser[];
   count: number;
 }

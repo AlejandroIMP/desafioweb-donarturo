@@ -1,9 +1,12 @@
 export interface IProductCategory {
-  idCategoriaProductos: number;
-  usuarios_idusuarios: number;
-  nombre: string;
-  estados_idestados: number;
-  fecha_creacion: string;
+  category_id: number;
+  user_id: number;
+  category_name: string;
+  state_id: number;
+  category_description?: string;
+  is_deleted?: boolean;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface ProductCategoryResponseGet {
@@ -13,14 +16,15 @@ export interface ProductCategoryResponseGet {
 }
 
 export interface ICategory {
-  idCategoriaProductos: number;
-  usuarios_idusuarios: number;
-  nombre: string;
-  estados_idestados: number;
+  category_id: number;
+  user_id: number;
+  category_name: string;
+  state_id: number;
 }
 
 export interface ICategoryCreate {
-  usuarios_idusuarios: number;
-  nombre: string;
-  estados_idestados: number;
+  user_id: number;
+  category_name: string;
+  state_id: number;
+  category_description?: string;
 }

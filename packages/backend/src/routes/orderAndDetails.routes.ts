@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOrder, getOrderById, createOrder, updateOrder, updateOrderState, getOrderByUser, getOrderDetailsById } from "../controllers/orderAndDetails.controller";
+import { getOrder, getOrderById, createOrder, updateOrder, updateOrderState, getOrderByUser, getOrderDetailsById, deleteOrder } from "../controllers/orderAndDetails.controller";
 import { verifyToken, verifyRol } from "../middleware/auth";
 import { validateOrder } from "../middleware/validateOrder";
 import { ROLES } from "../config/roles";
@@ -19,5 +19,7 @@ router.post('/order', verifyToken, verifyRol([ROLES.ADMIN, ROLES.USER, ROLES.CLI
 router.put('/order/:id', verifyToken, verifyRol([ROLES.ADMIN]), updateOrder);
 
 router.patch('/order/:id', verifyToken, verifyRol([ROLES.ADMIN, ROLES.CLIENTE, ROLES.USER]), updateOrderState);
+
+router.delete('/order/:id', verifyToken, verifyRol([ROLES.ADMIN]), deleteOrder);
 
 export default router;

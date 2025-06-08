@@ -1,7 +1,10 @@
 export interface IProductCategory {
-  idCategoriaProductos?: number;
-  usuarios_idusuarios: number;
-  nombre: string;
-  estados_idestados: number;
-  fecha_creacion?: Date;
+  category_id?: number;
+  user_id: number;
+  state_id: number;
+  category_name: string;
+  category_description?: string;
+  is_deleted?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
 }

@@ -28,33 +28,33 @@ const ClientCreateForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        {...register('razon_social')}
-        label="Razón Social"
+        {...register('business_name')}
+        label="Nombre del Negocio"
         fullWidth
-        error={!!errors.razon_social}
-        helperText={errors.razon_social?.message}
+        error={!!errors.business_name}
+        helperText={errors.business_name?.message}
       />
       <TextField
-        {...register('nombre_comercial')}
+        {...register('commercial_name')}
         label="Nombre Comercial"
         fullWidth
-        error={!!errors.nombre_comercial}
-        helperText={errors.nombre_comercial?.message}
+        error={!!errors.commercial_name}
+        helperText={errors.commercial_name?.message}
       />
       <TextField
-        {...register('direccion_entrega')}
-        label="Dirección"
+        {...register('delivery_address')}
+        label="Dirección de Entrega"
         fullWidth
-        error={!!errors.direccion_entrega}
-        helperText={errors.direccion_entrega?.message}
+        error={!!errors.delivery_address}
+        helperText={errors.delivery_address?.message}
       />
       <TextField
-        {...register('telefono')}
+        {...register('phone')}
         label="Teléfono"
         fullWidth
-        placeholder="XXXX-XXXX"
-        error={!!errors.telefono}
-        helperText={errors.telefono?.message}
+        placeholder="+502 1234-5678"
+        error={!!errors.phone}
+        helperText={errors.phone?.message}
       />
       <TextField
         {...register('email')}
@@ -63,6 +63,13 @@ const ClientCreateForm = () => {
         fullWidth
         error={!!errors.email}
         helperText={errors.email?.message}
+      />
+      <TextField
+        {...register('tax_id')}
+        label="NIT (Opcional)"
+        fullWidth
+        error={!!errors.tax_id}
+        helperText={errors.tax_id?.message}
       />
       <Button
         type="submit"

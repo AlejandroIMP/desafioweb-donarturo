@@ -20,7 +20,7 @@ const Order = () => {
 
   const findOrderById = (): findOrder => {
     const id = path.split('/')[2];
-    const data = userOrders.find(order => order.idOrden === parseInt(id));
+    const data = userOrders.find(order => order.order_id === parseInt(id));
 
     if (data) {
 
@@ -59,7 +59,7 @@ const Order = () => {
   }
 
   const OrderState = (order: IOrder) => {
-    return order.estados_idestados === 8;
+    return order.state_id === 8;
   }
 
   return (
@@ -70,7 +70,7 @@ const Order = () => {
       </div>
       {
         <OrderWIthDetails
-          key={Order.idOrden}
+          key={Order.order_id}
           {...Order} />
       }
       <Button
@@ -78,7 +78,7 @@ const Order = () => {
         color='error'
         disabled={OrderState(Order)}
         onClick={() => {
-          inactiveOrder(Order.idOrden), location.reload()
+          inactiveOrder(Order.order_id), location.reload()
           }
         }
       >
